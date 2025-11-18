@@ -31,7 +31,7 @@ if (isset($_POST['proponer_termino'])) {
         
         try {
             // 1. Insertar en bi_termino
-            $sql_termino = "INSERT INTO gls_jur_bi_termino (ejemplo_splicativo, deferencia_bibleory, estado, fecha_crescón, fecha_modificacion, id_Usuario) 
+            $sql_termino = "INSERT INTO termino (ejemplo_aplicativo, deferencia_bibliogr, estado, fecha_creacion, fecha_modificacion, id_Usuario) 
                            VALUES (?, ?, 'pendiente', NOW(), NOW(), ?)";
             $stmt_termino = mysqli_prepare($cn, $sql_termino);
             if (!$stmt_termino) {
@@ -42,7 +42,7 @@ if (isset($_POST['proponer_termino'])) {
             $id_termino = mysqli_insert_id($cn);
             
             // 2. Insertar traducción en español (idioma 1)
-            $sql_traduccion_es = "INSERT INTO gls_jur_bi_traduccion (palabra, pronunciacion, definicion, id_Termino, id_Idoma) 
+            $sql_traduccion_es = "INSERT INTO traduccion (palabra, pronunciacion, definicion, id_Termino, id_Idoma) 
                                  VALUES (?, ?, ?, ?, 1)";
             $stmt_traduccion_es = mysqli_prepare($cn, $sql_traduccion_es);
             if (!$stmt_traduccion_es) {
@@ -52,7 +52,7 @@ if (isset($_POST['proponer_termino'])) {
             mysqli_stmt_execute($stmt_traduccion_es);
             
             // 3. Insertar traducción en inglés (idioma 2)
-            $sql_traduccion_en = "INSERT INTO gls_jur_bi_traduccion (palabra, pronunciacion, definicion, id_Termino, id_Idoma) 
+            $sql_traduccion_en = "INSERT INTO traduccion (palabra, pronunciacion, definicion, id_Termino, id_Idoma) 
                                  VALUES (?, '', ?, ?, 2)";
             $stmt_traduccion_en = mysqli_prepare($cn, $sql_traduccion_en);
             if (!$stmt_traduccion_en) {
@@ -62,7 +62,7 @@ if (isset($_POST['proponer_termino'])) {
             mysqli_stmt_execute($stmt_traduccion_en);
             
             // 4. Insertar validación inicial
-            $sql_validacion = "INSERT INTO gls_jur_bi_valdacion (comenario, estado_valdacion, fecha_valdacion, id_Termino, id_Usuario) 
+            $sql_validacion = "INSERT INTO valdacion (comenario, estado_valdacion, fecha_valdacion, id_Termino, id_Usuario) 
                               VALUES ('', 'pendiente', NOW(), ?, ?)";
             $stmt_validacion = mysqli_prepare($cn, $sql_validacion);
             if (!$stmt_validacion) {
@@ -90,10 +90,10 @@ try {
                               t.fecha_crescón as fecha_propuesta,
                               v.estado_valdacion as estado,
                               v.comenario as comentario
-                       FROM gls_jur_bi_termino t
-                       LEFT JOIN gls_jur_bi_traduccion tes ON t.id_Termino = tes.id_Termino AND tes.id_Idoma = 1
-                       LEFT JOIN gls_jur_bi_traduccion ten ON t.id_Termino = ten.id_Termino AND ten.id_Idoma = 2
-                       LEFT JOIN gls_jur_bi_valdacion v ON t.id_Termino = v.id_Termino
+                       FROM termino t
+                       LEFT JOIN traduccion tes ON t.id_Termino = tes.id_Termino AND tes.id_Idoma = 1
+                       LEFT JOIN traduccion ten ON t.id_Termino = ten.id_Termino AND ten.id_Idoma = 2
+                       LEFT JOIN valdacion v ON t.id_Termino = v.id_Termino
                        WHERE t.id_Usuario = ?
                        ORDER BY t.fecha_crescón DESC";
     $stmt_propuestas = mysqli_prepare($cn, $sql_propuestas);
