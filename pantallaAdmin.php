@@ -1,7 +1,5 @@
 <?php
 
-
-
 // Usuario simulado para pruebas
 $current_user = [
     'id' => 1,
@@ -11,7 +9,7 @@ $current_user = [
 ];
 
 // Obtener sección activa
-$seccion = isset($_GET['seccion']) ? $_GET['seccion'] : 'dashboard';
+$seccion = isset($_GET['seccion']) ? $_GET['seccion'] : '';
 ?>
 
 <?php
@@ -36,7 +34,7 @@ $seccion = isset($_GET['seccion']) ? $_GET['seccion'] : 'dashboard';
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard - Glosario Jurídico Bilingüe</title>
+    <title>Pantalla Admin - Glosario Jurídico Bilingüe</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <style>
@@ -207,20 +205,13 @@ $seccion = isset($_GET['seccion']) ? $_GET['seccion'] : 'dashboard';
 </head>
 <body>
 
-    <!-- Sidebar Navigation - SOLO MENÚ MODIFICADO -->
+    <!--  MENÚ LATERAL   -->
     <div class="sidebar">
         <div class="logo">
-            <h1><i class="bi bi-shield-lock-fill"></i> <span>Admin Panel</span></h1>
+            <h1><i class="bi bi-shield-lock-fill"></i> <span> Panel Admin </span></h1>
         </div>
         
         <nav class="sidebar-nav">
-            <!-- Dashboard -->
-           <div class="menu-section">
-    <a href="?seccion=dashboard" class="menu-item <?php echo $seccion == 'dashboard' ? 'active' : ''; ?>">
-        <i class="bi bi-grid-fill"></i> <span>Panel</span>
-    </a>
-</div>
-            
             <!-- Términos -->
             <div class="menu-section">
                 <div class="section-title">Términos</div>
@@ -279,15 +270,12 @@ $seccion = isset($_GET['seccion']) ? $_GET['seccion'] : 'dashboard';
         </nav>
     </div>
 
-    <!-- Main Content - TODO MANTENIDO COMO ESTABA -->
+    <!-- Main Content -->
     <div id="content">
         <div id="main-content-area">
             <?php
             // Incluir la sección correspondiente
             switch($seccion) {
-                case 'dashboard':
-                    include 'secciones/dashboard.php';
-                    break;
                 case 'manage_users':
                     include 'secciones/gestUsuarios.php';
                     break;
@@ -308,11 +296,8 @@ $seccion = isset($_GET['seccion']) ? $_GET['seccion'] : 'dashboard';
                     include 'secciones/gestValida.php';
                     break;
                 default:
-                    echo '<div class="alert alert-danger">
-                            <h4><i class="bi bi-exclamation-triangle"></i> Página no encontrada</h4>
-                            <p>La sección solicitada no existe.</p>
-                            <a href="?seccion=dashboard" class="btn btn-primary">Volver al Dashboard</a>
-                          </div>';
+                    // Por defecto, mostrar la sección de traducciones
+                    include 'secciones/gestTraduc.php';
             }
             ?>
         </div>

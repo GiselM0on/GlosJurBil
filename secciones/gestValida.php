@@ -142,7 +142,7 @@ if(isset($_POST["btn_validaciones"])){
         <div class="row mb-3">
             <div class="col-md-6">
                 <label class="form-label">ID Término</label>
-                <input type="number" class="form-control" name="txtid_termino" value="<?php echo htmlspecialchars($id_termino); ?>" required>
+                <input type="number" class="form-control" name="txtid_termino" value="<?php echo htmlspecialchars($id_termino); ?>" >
             </div>
             <div class="col-md-6">
                 <label class="form-label">ID Usuario</label>
@@ -183,43 +183,4 @@ $query_validaciones = "SELECT v.*, t.nombreTer as termino, u.nombre as usuario
 $result_validaciones = mysqli_query($cn, $query_validaciones);
 ?>
 
-<h3 class="mb-3 text-primary">Validaciones Registradas</h3>
-<div class="table-responsive">
-    <table class="table table-striped align-middle mb-0">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Comentario</th>
-                <th>Estado</th>
-                <th>Término</th>
-                <th>Usuario</th>
-                <th>Fecha Validación</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php if ($result_validaciones && mysqli_num_rows($result_validaciones) > 0): ?>
-                <?php while ($validacion = mysqli_fetch_assoc($result_validaciones)): ?>
-                    <tr>
-                        <td><?php echo $validacion['id']; ?></td>
-                        <td><?php echo htmlspecialchars(substr($validacion['comentario'], 0, 50)) . '...'; ?></td>
-                        <td>
-                            <span class="badge bg-<?php 
-                                echo $validacion['estado_validacion'] == 'aprobado' ? 'success' : 
-                                     ($validacion['estado_validacion'] == 'pendiente' ? 'warning' : 'danger'); 
-                            ?>">
-                                <?php echo ucfirst($validacion['estado_validacion']); ?>
-                            </span>
-                        </td>
-                        <td><?php echo htmlspecialchars($validacion['termino']); ?></td>
-                        <td><?php echo htmlspecialchars($validacion['usuario']); ?></td>
-                        <td><?php echo date('d/m/Y H:i', strtotime($validacion['fecha_validacion'])); ?></td>
-                    </tr>
-                <?php endwhile; ?>
-            <?php else: ?>
-                <tr>
-                    <td colspan="6" class="text-center">No hay validaciones registradas</td>
-                </tr>
-            <?php endif; ?>
-        </tbody>
-    </table>
-</div>
+ 

@@ -45,7 +45,7 @@ if(isset($_POST["btn_usuarios"])){
     
     // AGREGAR
     if($btn == "Agregar"){
-        $id_usuario = $_POST["txtid_termino"];
+        $id_usuario = $_POST["txtid_usuario"];
         $nombre = $_POST["txtnombre"];
         $correo = $_POST["txtcorreo"];
         $contrasena = $_POST["txtcontrasena"];
@@ -65,7 +65,7 @@ if(isset($_POST["btn_usuarios"])){
     
     // MODIFICAR
     if($btn == "Modificar" && !empty($_POST["txtid"])){
-        $id_usuario = $_POST["txtid"];
+        $id_usuario = $_POST["txtid_usuario"];
         $nombre = $_POST["txtnombre"];
         $correo = $_POST["txtcorreo"];
         $contrasena = $_POST["txtcontrasena"];
@@ -88,9 +88,9 @@ if(isset($_POST["btn_usuarios"])){
     
     // ELIMINAR
     if($btn == "Eliminar" && !empty($_POST["txtid_usuario"])){
-        $id_usuario = $_POST["txtid"];
+        $id_usuario = $_POST["txtid_usuario"];
         
-        $sql = "DELETE FROM usuario WHERE id='$id_usuario'";
+        $sql = "DELETE FROM usuario WHERE id_usuario='$id_usuario'";
         $cs = mysqli_query($cn, $sql);
         if($cs) {
             echo "<script>alert('Usuario eliminado correctamente');</script>";
@@ -129,7 +129,7 @@ if(isset($_POST["btn_usuarios"])){
         <div class="row mb-3">
             <div class="col-md-6">
                 <label class="form-label">ID Usuario</label>
-                <input type="text" class="form-control" name="txtid_usuario" value="<?php echo htmlspecialchars($id_usuario); ?>" readonly>
+                <input type="text" class="form-control" name="txtid_usuario" value="<?php echo htmlspecialchars($id_usuario); ?>" >
             </div>
             <div class="col-md-6">
                 <label class="form-label">Nombre</label>
@@ -159,7 +159,7 @@ if(isset($_POST["btn_usuarios"])){
             </div>
             <div class="col-md-6">
                 <label class="form-label">Fecha Registro</label>
-                <input type="date" class="form-control" name="fecha_registro" readonly
+                <input type="date" class="form-control" name="fecha_registro" 
                        value="<?php echo htmlspecialchars($fecha_registro); ?>">
             </div>
         </div>
@@ -186,41 +186,3 @@ $query_usuarios = "SELECT * FROM usuario ORDER BY id DESC";
 $result_usuarios = mysqli_query($cn, $query_usuarios);
 ?>
 
-<h3 class="mb-3 text-primary">Usuarios Registrados</h3>
-<div class="table-responsive">
-    <table class="table table-striped align-middle mb-0">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Nombre</th>
-                <th>Correo</th>
-                <th>Rol</th>
-                <th>Fecha Registro</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php if ($result_usuarios && mysqli_num_rows($result_usuarios) > 0): ?>
-                <?php while ($usuario = mysqli_fetch_assoc($result_usuarios)): ?>
-                    <tr>
-                        <td><?php echo $usuario['id']; ?></td>
-                        <td><?php echo htmlspecialchars($usuario['nombre']); ?></td>
-                        <td><?php echo htmlspecialchars($usuario['correo']); ?></td>
-                        <td>
-                            <span class="badge bg-<?php 
-                                echo $usuario['rol'] == 'admin' ? 'danger' : 
-                                     ($usuario['rol'] == 'docente' ? 'primary' : 'success'); 
-                            ?>">
-                                <?php echo ucfirst($usuario['rol']); ?>
-                            </span>
-                        </td>
-                        <td><?php echo date('d/m/Y', strtotime($usuario['fecha_registro'])); ?></td>
-                    </tr>
-                <?php endwhile; ?>
-            <?php else: ?>
-                <tr>
-                    <td colspan="5" class="text-center">No hay usuarios registrados</td>
-                </tr>
-            <?php endif; ?>
-        </tbody>
-    </table>
-</div>

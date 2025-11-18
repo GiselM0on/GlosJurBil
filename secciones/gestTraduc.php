@@ -1,10 +1,11 @@
 <?php
+// secciones/gestion_traducciones.php
 
 //conexion a la db
 include ("conexion.php");
 
 // Variables para los campos
-$id_traduccion = "";
+$id = "";
 $palabra = "";
 $pronunciacion = "";
 $definicion = "";
@@ -17,11 +18,11 @@ if(isset($_POST["btn_buscar"]) && $_POST["btn_buscar"] == "Buscar"){
     if(isset($_POST["txtbus"]) && !empty($_POST["txtbus"])){
         $txtbus = $_POST["txtbus"];
         
-        $sql = "SELECT * FROM traduccion WHERE id_Traduccion='$txtbus'";
+        $sql = "SELECT * FROM traduccion WHERE id='$txtbus'";
         $cs = mysqli_query($cn, $sql);
         if($cs && mysqli_num_rows($cs) > 0) {
             $resul = mysqli_fetch_array($cs);
-            $id_traduccion = $resul[0];
+            $id = $resul[0];
             $palabra = $resul[1];
             $pronunciacion = $resul[2];
             $definicion = $resul[3];
@@ -31,7 +32,7 @@ if(isset($_POST["btn_buscar"]) && $_POST["btn_buscar"] == "Buscar"){
         } else {
             echo "<script>alert('Traducción no encontrada');</script>";
             // Limpiar campos si no se encuentra
-            $id_traduccion = $palabra = $pronunciacion = $definicion = $id_termino = $id_idioma = "";
+            $id = $palabra = $pronunciacion = $definicion = $id_termino = $id_idioma = "";
         }
     } else {
         echo "<script>alert('Ingrese un ID para buscar');</script>";
@@ -44,7 +45,6 @@ if(isset($_POST["btn_traducciones"])){
     
     // AGREGAR
     if($btn == "Agregar"){
-        $id_traduccion = $_POST["txtid_traduccion"];
         $palabra = $_POST["txtpalabra"];
         $pronunciacion = $_POST["txtpronunciacion"];
         $definicion = $_POST["txtdefinicion"];
@@ -57,15 +57,15 @@ if(isset($_POST["btn_traducciones"])){
         if($cs) {
             echo "<script>alert('Traducción agregada correctamente');</script>";
             // Limpiar campos
-            $id_traduccion = $palabra = $pronunciacion = $definicion = $id_termino = $id_idioma = $txtbus = "";
+            $id = $palabra = $pronunciacion = $definicion = $id_termino = $id_idioma = $txtbus = "";
         } else {
             echo "<script>alert('Error al agregar: " . mysqli_error($cn) . "');</script>";
         }
     }
     
     // MODIFICAR
-    if($btn == "Modificar" && !empty($_POST["txtid_traduccion"])){
-        $id_traduccion = $_POST["txtid_traduccion"];
+    if($btn == "Modificar" && !empty($_POST["txtid"])){
+        $id = $_POST["txtid"];
         $palabra = $_POST["txtpalabra"];
         $pronunciacion = $_POST["txtpronunciacion"];
         $definicion = $_POST["txtdefinicion"];
@@ -78,7 +78,7 @@ if(isset($_POST["btn_traducciones"])){
                 definicion='$definicion',
                 id_Termino='$id_termino',
                 id_Idioma='$id_idioma'
-                WHERE id='$id_traduccion'";
+                WHERE id='$id'";
         
         $cs = mysqli_query($cn, $sql);
         if($cs) {
@@ -89,15 +89,15 @@ if(isset($_POST["btn_traducciones"])){
     }
     
     // ELIMINAR
-    if($btn == "Eliminar" && !empty($_POST["txtid_traduccion"])){
-        $id_traduccion = $_POST["txtid_traduccion"];
+    if($btn == "Eliminar" && !empty($_POST["txtid"])){
+        $id = $_POST["txtid"];
         
-        $sql = "DELETE FROM traduccion WHERE id_termino='$id_traduccion'";
+        $sql = "DELETE FROM traduccion WHERE id='$id'";
         $cs = mysqli_query($cn, $sql);
         if($cs) {
             echo "<script>alert('Traducción eliminada correctamente');</script>";
             // Limpiar campos
-            $id_traduccion = $palabra = $pronunciacion = $definicion = $id_termino = $id_idioma = $txtbus = "";
+            $id = $palabra = $pronunciacion = $definicion = $id_termino = $id_idioma = $txtbus = "";
         } else {
             echo "<script>alert('Error al eliminar: " . mysqli_error($cn) . "');</script>";
         }
@@ -131,7 +131,7 @@ if(isset($_POST["btn_traducciones"])){
         <div class="row mb-3">
             <div class="col-md-6">
                 <label class="form-label">ID Traducción</label>
-                <input type="text" class="form-control" name="txtid_traduccion" value="<?php echo htmlspecialchars($id_traduccion); ?>" readonly>
+                <input type="text" class="form-control" name="txtid" value="<?php echo htmlspecialchars($id); ?>" readonly>
             </div>
             <div class="col-md-6">
                 <label class="form-label">Palabra</label>
@@ -183,10 +183,10 @@ if(isset($_POST["btn_traducciones"])){
 <!-- Mostrar lista de traducciones -->
 <?php
 $query_traduccion = "SELECT tr.*, t.nombreTer as termino, i.nombre_idioma as idioma 
-                       FROM traduccion tr 
-                       LEFT JOIN termino t ON tr.id_Termino = t.id 
-                       LEFT JOIN idioma i ON tr.id_Idioma = i.id 
-                       ORDER BY tr.id DESC";
+                      FROM traduccion tr 
+                      LEFT JOIN termino t ON tr.id_Termino = t.id 
+                      LEFT JOIN idioma i ON tr.id_Idioma = i.id 
+                      ORDER BY tr.id DESC";
 $result_traduccion = mysqli_query($cn, $query_traduccion);
 ?>
 

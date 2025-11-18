@@ -108,7 +108,7 @@ if(isset($_POST["btn_paises"])){
         <div class="row mb-3">
             <div class="col-md-6">
                 <label class="form-label">ID País</label>
-                <input type="text" class="form-control" name="txtid_pais" value="<?php echo htmlspecialchars($id_pais); ?>" readonly>
+                <input type="text" class="form-control" name="txtid_pais" value="<?php echo htmlspecialchars($id_pais); ?>" >
             </div>
             <div class="col-md-6">
                 <label class="form-label">Nombre del País</label>
@@ -138,28 +138,3 @@ $query_paises = "SELECT * FROM pais ORDER BY id DESC";
 $result_paises = mysqli_query($cn, $query_paises);
 ?>
 
-<h3 class="mb-3 text-primary">Países Registrados</h3>
-<div class="table-responsive">
-    <table class="table table-striped align-middle mb-0">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Nombre del País</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php if ($result_paises && mysqli_num_rows($result_paises) > 0): ?>
-                <?php while ($pais = mysqli_fetch_assoc($result_paises)): ?>
-                    <tr>
-                        <td><?php echo $pais['id']; ?></td>
-                        <td><?php echo htmlspecialchars($pais['nombre_pas']); ?></td>
-                    </tr>
-                <?php endwhile; ?>
-            <?php else: ?>
-                <tr>
-                    <td colspan="2" class="text-center">No hay países registrados</td>
-                </tr>
-            <?php endif; ?>
-        </tbody>
-    </table>
-</div>

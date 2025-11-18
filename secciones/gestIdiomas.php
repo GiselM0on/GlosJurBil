@@ -108,7 +108,7 @@ if(isset($_POST["btn_idiomas"])){
         <div class="row mb-3">
             <div class="col-md-6">
                 <label class="form-label">ID Idioma</label>
-                <input type="text" class="form-control" name="txtid_idioma" value="<?php echo htmlspecialchars($id_idioma); ?>" readonly>
+                <input type="text" class="form-control" name="txtid_idioma" value="<?php echo htmlspecialchars($id_idioma); ?>" >
             </div>
             <div class="col-md-6">
                 <label class="form-label">Nombre del Idioma</label>
@@ -138,28 +138,3 @@ $query_idiomas = "SELECT * FROM idioma ORDER BY id DESC";
 $result_idiomas = mysqli_query($cn, $query_idiomas);
 ?>
 
-<h3 class="mb-3 text-primary">Idiomas Registrados</h3>
-<div class="table-responsive">
-    <table class="table table-striped align-middle mb-0">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Nombre del Idioma</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php if ($result_idiomas && mysqli_num_rows($result_idiomas) > 0): ?>
-                <?php while ($idioma = mysqli_fetch_assoc($result_idiomas)): ?>
-                    <tr>
-                        <td><?php echo $idioma['id']; ?></td>
-                        <td><?php echo htmlspecialchars($idioma['nombre_idoma']); ?></td>
-                    </tr>
-                <?php endwhile; ?>
-            <?php else: ?>
-                <tr>
-                    <td colspan="2" class="text-center">No hay idiomas registrados</td>
-                </tr>
-            <?php endif; ?>
-        </tbody>
-    </table>
-</div>

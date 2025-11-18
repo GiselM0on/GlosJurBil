@@ -1,6 +1,7 @@
 <?php
 session_start();
 
+include ("conexion.php");
 
 if (isset($_SESSION['rol'])) {
     switch ($_SESSION['rol']) {

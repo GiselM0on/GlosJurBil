@@ -1,10 +1,23 @@
 <?php 
+session_start();
+
 //conexion db
 $conn = include ("conexion.php");       
 
 // Verificar si la conexión se estableció correctamente
 if (!isset($conn) || $conn->connect_error) {
     die("Error: No se pudo establecer conexión con la base de datos");
+}
+
+// Verificar si hay un usuario logueado
+$usuarioLogueado = false;
+$rolUsuario = '';
+$nombreUsuario = '';
+
+if (isset($_SESSION['usuario']) && isset($_SESSION['rol'])) {
+    $usuarioLogueado = true;
+    $rolUsuario = $_SESSION['rol'];
+    $nombreUsuario = $_SESSION['usuario'];
 }
 
 echo "<!-- Iniciando consulta de términos -->";
@@ -142,6 +155,20 @@ if ($result && $result->num_rows > 0) {
             padding: 40px;
             color: #6c757d;
         }
+        
+        .user-welcome {
+            color: white;
+            margin-right: 15px;
+        }
+        
+        .dashboard-btn {
+            background-color: #28a745;
+            border: none;
+            transition: background-color 0.3s;
+        }
+        .dashboard-btn:hover {
+            background-color: #218838;
+        }
     </style>
 </head>
 <body>
@@ -158,11 +185,39 @@ if ($result && $result->num_rows > 0) {
             
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto align-items-lg-center">
-                    <li class="nav-item">
-                        <a href="login.php" class="btn btn-outline-light rounded-pill ms-lg-3">
-                            <i class="bi bi-box-arrow-in-right"></i> Iniciar Sesión
-                        </a>
-                    </li>
+                    <?php if ($usuarioLogueado): ?>
+                        <!-- Mostrar información del usuario y botón de dashboard -->
+                        <li class="nav-item">
+                            <span class="user-welcome d-none d-lg-block">
+                                <i class="bi bi-person-circle"></i> 
+                                <?php echo htmlspecialchars($nombreUsuario); ?> 
+                                (<?php echo htmlspecialchars($rolUsuario); ?>)
+                            </span>
+                        </li>
+                        <li class="nav-item">
+                            <?php if ($rolUsuario === 'admin'): ?>
+                                <a href="pantallaAdmin.php" class="btn btn-success dashboard-btn rounded-pill ms-lg-3">
+                                    <i class="bi bi-speedometer2"></i> Panel Admin
+                                </a>
+                            <?php elseif ($rolUsuario === 'docente'): ?>
+                                <a href="pantallaDocente.php" class="btn btn-success dashboard-btn rounded-pill ms-lg-3">
+                                    <i class="bi bi-speedometer2"></i> Panel Docente
+                                </a>
+                            <?php endif; ?>
+                        </li>
+                        <li class="nav-item">
+                            <a href="logout.php" class="btn btn-outline-light rounded-pill ms-lg-2">
+                                <i class="bi bi-box-arrow-right"></i> Cerrar Sesión
+                            </a>
+                        </li>
+                    <?php else: ?>
+                        <!-- Mostrar botón de login si no hay usuario logueado -->
+                        <li class="nav-item">
+                            <a href="login.php" class="btn btn-outline-light rounded-pill ms-lg-3">
+                                <i class="bi bi-box-arrow-in-right"></i> Iniciar Sesión
+                            </a>
+                        </li>
+                    <?php endif; ?>
                 </ul>
             </div>
         </div>
@@ -257,7 +312,7 @@ if ($result && $result->num_rows > 0) {
 
     <footer class="mt-5 py-4 text-center text-muted border-top">
         <div class="container">
-            <p class="mb-0">&copy; 2025 Glosario Jurídico Bilingüe.</p>
+            <p class="mb-0"> Glosario Jurídico Bilingüe &copy; 2025.</p>
         </div>
     </footer>
 
@@ -377,7 +432,7 @@ if ($result && $result->num_rows > 0) {
         document.getElementById('searchTerm').addEventListener('input', function() {
             const searchTerm = this.value.trim();
             if (searchTerm.length >= 2 || searchTerm.length === 0) {
-                searchTerms();
+                searchTerms(); 
             }
         });
     </script>

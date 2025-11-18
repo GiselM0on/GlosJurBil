@@ -2,7 +2,7 @@
 // secciones/gestion_terminos.php
 
 //conexion del db
-include ("conexion.php");
+include ("./conexion.php");
 
 // Variables para los campos
 $id_termino = "";
@@ -135,7 +135,7 @@ if(isset($_POST["btn_termino"])){ // CORREGIDO: nombre del botón
         <div class="row mb-3">
             <div class="col-md-6">
                 <label class="form-label">ID Término</label>
-                <input type="text" class="form-control" name="txtid_termino" value="<?php echo htmlspecialchars($id_termino); ?>" readonly>
+                <input type="text" class="form-control" name="txtid_termino" value="<?php echo htmlspecialchars($id_termino); ?>" >
             </div>
         </div>
 
@@ -149,7 +149,7 @@ if(isset($_POST["btn_termino"])){ // CORREGIDO: nombre del botón
         <div class="row mb-3">
             <div class="col-md-6">
                 <label class="form-label">Referencia Bibliográfica</label>
-                <input type="text" class="form-control" name="txtreferencia" value="<?php echo htmlspecialchars($referencia_bibliogr); ?>" required>
+                <input type="text" class="form-control" name="txtreferencia" value="<?php echo htmlspecialchars($referencia_bibliogr); ?>" >
             </div>
             <div class="col-md-6">
                 <label class="form-label">Estado</label>
@@ -168,7 +168,7 @@ if(isset($_POST["btn_termino"])){ // CORREGIDO: nombre del botón
             </div>
             <div class="col-md-6">
                 <label class="form-label">Fecha Creación</label>
-                <input type="date" class="form-control" name="fecha_creacion" readonly
+                <input type="date" class="form-control" name="fecha_creacion" 
                        value="<?php echo htmlspecialchars($fecha_creacion); ?>">
             </div>
         </div>
@@ -197,41 +197,3 @@ $query_terminos = "SELECT t.*, u.nombre as usuario_nombre FROM termino t
 $result_terminos = mysqli_query($cn, $query_terminos);
 ?>
 
-<h3 class="mb-3 text-primary">Términos Registrados</h3>
-<div class="table-responsive">
-    <table class="table table-striped align-middle mb-0">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Ejemplo</th>
-                <th>Estado</th>
-                <th>Usuario</th>
-                <th>Fecha Creación</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php if ($result_terminos && mysqli_num_rows($result_terminos) > 0): ?>
-                <?php while ($termino = mysqli_fetch_assoc($result_terminos)): ?>
-                    <tr>
-                        <td><?php echo $termino['id']; ?></td>
-                        <td><?php echo htmlspecialchars(substr($termino['ejemplo_aplicativo'], 0, 50)) . '...'; ?></td>
-                        <td>
-                            <span class="badge bg-<?php 
-                                echo $termino['estado'] == 'aprobado' ? 'success' : 
-                                     ($termino['estado'] == 'pendiente' ? 'warning' : 'danger'); 
-                            ?>">
-                                <?php echo ucfirst($termino['estado']); ?>
-                            </span>
-                        </td>
-                        <td><?php echo htmlspecialchars($termino['usuario_nombre']); ?></td>
-                        <td><?php echo date('d/m/Y', strtotime($termino['fecha_creacion'])); ?></td>
-                    </tr>
-                <?php endwhile; ?>
-            <?php else: ?>
-                <tr>
-                    <td colspan="5" class="text-center">No hay términos registrados</td>
-                </tr>
-            <?php endif; ?>
-        </tbody>
-    </table>
-</div>

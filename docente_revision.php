@@ -1,4 +1,8 @@
 <?php
+
+//conexion a la db
+include ("conexion.php");
+
 $current_user = [
     'id' => 1,
     'rol' => 'docente'  
@@ -189,11 +193,11 @@ if ($_POST) {
        
         <nav class="sidebar-nav">
             <!-- Dashboard -->
-            <div class="menu-section">
+           <!-- <div class="menu-section">
                 <a href="?seccion=dashboard" class="menu-item">
                     <i class="bi bi-grid-fill"></i> <span>Panel</span>
                 </a>
-            </div>
+            </div> -->
            
             <!-- Términos -->
             <div class="menu-section">
@@ -285,6 +289,7 @@ if ($_POST) {
                                     </button>
                                 </td>
                             </tr>
+            
                             
                             <!-- Modal de Rechazo -->
                             <div class="modal fade" id="rechazoModal<?= $row['id_Termino'] ?>">
