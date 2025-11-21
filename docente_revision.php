@@ -324,7 +324,6 @@ if ($result) {
                                         </td>
                                     </tr>
                                     
-                                    <!-- Modal de Rechazo -->
                                     <div class="modal fade" id="rechazoModal<?= $row['id_Termino'] ?>">
                                         <div class="modal-dialog">
                                             <form method="POST">
