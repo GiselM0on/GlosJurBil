@@ -52,7 +52,7 @@ $error = isset($_GET['error']) ? $_GET['error'] : '';
             text-align: center;
         }
 
-        /
+        
         .login-card .avatar img {
             width: 180px;
             margin-bottom: 20px;
@@ -102,7 +102,7 @@ $error = isset($_GET['error']) ? $_GET['error'] : '';
 
 <div class="login-card">
 
-    
+    <!-- LOGO UPED -->
     <div class="avatar">
         <img src="logo_uped.png" alt="UPED">
     </div>
