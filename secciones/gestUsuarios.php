@@ -64,7 +64,7 @@ if(isset($_POST["btn_usuarios"])){
     }
     
     // MODIFICAR
-    if($btn == "Modificar" && !empty($_POST["txtid"])){
+    if($btn == "Modificar" ){
         $id_usuario = $_POST["txtid_usuario"];
         $nombre = $_POST["txtnombre"];
         $correo = $_POST["txtcorreo"];

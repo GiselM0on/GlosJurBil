@@ -38,9 +38,18 @@ $seccion = isset($_GET['seccion']) ? $_GET['seccion'] : 'dashboard';
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <style>
+        :root {
+            --color-amarillo: #fff06dff;
+            --color-azul-oscuro: #006694;
+            --color-gris: #636466;
+            --color-gris-claro: #f1f2f2;
+            --color-naranja: #ff9a15;
+            --color-azul-claro: #27a5df;
+        }
+        
         body {
-            background-color: #b6b9cd;
-            color: #333;
+            background-color: var(--color-gris-claro);
+            color: var(--color-azul-oscuro);
             min-height: 100vh;
             font-family: 'Inter', sans-serif;
             margin: 0;
@@ -49,7 +58,7 @@ $seccion = isset($_GET['seccion']) ? $_GET['seccion'] : 'dashboard';
 
         .sidebar {
             width: 260px;
-            background: linear-gradient(180deg, #1e3a8a 0%, #15255e 100%);
+            background: linear-gradient(180deg, var(--color-azul-oscuro) 0%, #004466 100%);
             color: white;
             height: 100vh;
             position: fixed;
@@ -73,6 +82,7 @@ $seccion = isset($_GET['seccion']) ? $_GET['seccion'] : 'dashboard';
             font-weight: 600;
             text-align: center;
             margin: 0;
+            color:white;
         }
 
         .menu-section {
@@ -82,7 +92,7 @@ $seccion = isset($_GET['seccion']) ? $_GET['seccion'] : 'dashboard';
         .section-title {
             padding: 0 20px 10px;
             font-size: 14px;
-            color: #8b9af0;
+            color: var(--color-azul-claro);
             text-transform: uppercase;
             letter-spacing: 1px;
             border-bottom: 1px solid rgba(255, 255, 255, 0.05);
@@ -101,18 +111,20 @@ $seccion = isset($_GET['seccion']) ? $_GET['seccion'] : 'dashboard';
             display: flex;
             align-items: center;
             text-decoration: none;
-            color: #dcdbeb;
+            color: var(--color-gris-claro);
             border-left: 3px solid transparent;
         }
 
         .menu-item:hover {
             background-color: rgba(255, 255, 255, 0.1);
-            border-left: 3px solid #4d579d;
+            border-left: 3px solid var(--color-amarillo);
+            color: white;
         }
 
         .menu-item.active {
-            background-color: rgba(77, 87, 157, 0.3);
-            border-left: 3px solid #4d579d;
+            background-color: rgba(255, 160, 109, 0.2);
+            border-left: 3px solid var(--color-amarillo);
+            color: white;
         }
 
         .menu-item i {
@@ -144,25 +156,30 @@ $seccion = isset($_GET['seccion']) ? $_GET['seccion'] : 'dashboard';
             padding: 20px;
             min-height: 100vh;
             transition: all 0.3s;
+            background-color: var(--color-gris-claro);
         }
 
         .admin-card {
             border-radius: 1rem;
-            background-color: #dcdbeb;
+            background-color: white;
             transition: transform 0.3s, box-shadow 0.3s;
             cursor: pointer;
             min-height: 180px;
+            border: 1px solid var(--color-gris);
+            color: var(--color-azul-oscuro);
+            border-left: 5px solid var(--color-amarillo);
         }
 
         .admin-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(30, 58, 138, 0.2);
+            box-shadow: 0 10px 20px rgba(255, 160, 109, 0.2);
+            border-color: var(--color-amarillo);
         }
 
         .icon-large {
             font-size: 3rem;
-            color: #1e3a8a;
-            opacity: 0.8;
+            color: var(--color-amarillo);
+            opacity: 0.9;
         }
 
         .table-responsive {
@@ -170,15 +187,175 @@ $seccion = isset($_GET['seccion']) ? $_GET['seccion'] : 'dashboard';
             overflow: hidden;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
             background-color: white;
+            border: 1px solid var(--color-gris);
         }
 
         .table thead {
-            background-color: #4d579d;
+            background-color: var(--color-azul-oscuro);
             color: white;
         }
 
         .table th, .table td {
             vertical-align: middle;
+            color: var(--color-azul-oscuro);
+        }
+
+        .table tbody tr:hover {
+            background-color: rgba(255, 160, 109, 0.1);
+        }
+        
+
+        /* BOTONES CON AMARILLO DESTACADO */
+        .btn-primary {
+            background-color: var(--color-amarillo);
+            border-color: var(--color-amarillo);
+            color: var(--color-azul-oscuro);
+            font-weight: 600;
+        }
+
+        .btn-primary:hover {
+            background-color: #ff8a3d;
+            border-color: #ff8a3d;
+            color: var(--color-azul-oscuro);
+        }
+
+        .btn-warning {
+            background-color: var(--color-naranja);
+            border-color: var(--color-naranja);
+            color: white;
+            font-weight: 600;
+        }
+
+        .btn-warning:hover {
+            background-color: #e88a10;
+            border-color: #e88a10;
+            color: white;
+        }
+
+        .btn-info {
+            background-color: var(--color-azul-claro);
+            border-color: var(--color-azul-claro);
+            color: white;
+        }
+
+        .btn-info:hover {
+            background-color: #1e8bc4;
+            border-color: #1e8bc4;
+        }
+
+        .alert-info {
+            background-color: rgba(255, 160, 109, 0.1);
+            border-color: var(--color-amarillo);
+            color: var(--color-azul-oscuro);
+        }
+
+        .alert-warning {
+            background-color: rgba(255, 154, 21, 0.1);
+            border-color: var(--color-naranja);
+            color: var(--color-azul-oscuro);
+        }
+
+        .alert-success {
+            background-color: rgba(0, 102, 148, 0.1);
+            border-color: var(--color-azul-oscuro);
+            color: var(--color-azul-oscuro);
+        }
+
+        .badge-primary {
+            background-color: var(--color-amarillo);
+            color: var(--color-azul-oscuro);
+        }
+
+        .badge-warning {
+            background-color: var(--color-naranja);
+            color: white;
+        }
+
+        .badge-info {
+            background-color: var(--color-azul-claro);
+            color: white;
+        }
+
+        .text-primary {
+            color: var(--color-azul-oscuro) !important;
+        }
+
+        .text-warning {
+            color: var(--color-amarillo) !important;
+        }
+
+        .text-info {
+            color: var(--color-azul-claro) !important;
+        }
+
+        .card {
+            border: 1px solid var(--color-gris);
+            background-color: white;
+        }
+
+        .card-header {
+            background-color: var(--color-azul-oscuro);
+            color: white;
+            border-bottom: 1px solid var(--color-gris);
+        }
+
+        .form-control:focus {
+            border-color: var(--color-amarillo);
+            box-shadow: 0 0 0 0.2rem rgba(255, 160, 109, 0.25);
+        }
+
+        .nav-pills .nav-link.active {
+            background-color: var(--color-amarillo);
+            color: var(--color-azul-oscuro);
+        }
+
+        .pagination .page-item.active .page-link {
+            background-color: var(--color-amarillo);
+            border-color: var(--color-amarillo);
+            color: var(--color-azul-oscuro);
+        }
+
+        .pagination .page-link {
+            color: var(--color-azul-oscuro);
+        }
+
+        .pagination .page-link:hover {
+            color: var(--color-amarillo);
+        }
+
+        /* ESTILOS ADICIONALES PARA BOTONES DE ACCIÓN */
+        .btn-action {
+            background-color: var(--color-amarillo);
+            border-color: var(--color-amarillo);
+            color: var(--color-azul-oscuro);
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .btn-action:hover {
+            background-color: #ff8a3d;
+            border-color: #ff8a3d;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(255, 160, 109, 0.3);
+        }
+
+        .status-badge {
+            padding: 0.5em 1em;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            font-size: 0.85rem;
+        }
+
+        .status-active {
+            background-color: rgba(255, 160, 109, 0.2);
+            color: var(--color-azul-oscuro);
+            border: 1px solid var(--color-amarillo);
+        }
+
+        .status-pending {
+            background-color: rgba(255, 154, 21, 0.2);
+            color: var(--color-azul-oscuro);
+            border: 1px solid var(--color-naranja);
         }
 
         @media (max-width: 992px) {

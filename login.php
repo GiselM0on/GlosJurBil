@@ -33,7 +33,7 @@ $error = isset($_GET['error']) ? $_GET['error'] : '';
         body {
             margin: 0;
             font-family: 'Segoe UI', sans-serif;
-            background: url("fondo.jpg") no-repeat center center fixed;
+            background: url("img/fondo.jpg") no-repeat center center fixed;
             background-size: cover;
 
             display: flex;
@@ -110,7 +110,7 @@ $error = isset($_GET['error']) ? $_GET['error'] : '';
 
    
     <div class="avatar">
-        <img src="logo_uped.png" alt="UPED">
+        <img src="img/logo_uped.jpg" alt="UPED">
     </div>
 
     <?php if ($error): ?>

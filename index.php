@@ -62,114 +62,255 @@ if ($result && $result->num_rows > 0) {
     <title>Glosario Jurídico Bilingüe - Consulta</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <style>
-        :root {
-            --color-primary: #1e3a8a;
-            --color-secondary: #4d579d;
-            --color-background: #b6b9cd;
-        }
+   <style>
+:root {
+    --color-amarillo: #ffa06;
+    --color-azul-oscuro: #006694;
+    --color-gris: #636466;
+    --color-naranja: #ff9a15;
+    --color-azul-claro: #27a5df;
+    --color-blanco: #f1f1f1f2f2;
+}
 
-        body {
-            background-color: var(--color-background);
-            font-family: 'Inter', sans-serif;
-            min-height: 100vh;
-        }
+body {
+    background-color: var(--color-blanco);
+    font-family: 'Inter', sans-serif;
+    min-height: 100vh;
+    color: var(--color-azul-oscuro);
+}
 
-        .navbar {
-            background-color: var(--color-primary);
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
+.navbar {
+    background-color: var(--color-azul-oscuro);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
 
-        .hero-section {
-            background: linear-gradient(135deg, var(--color-secondary) 0%, var(--color-primary) 100%);
-            padding: 5rem 0;
-            color: white;
-            border-radius: 0 0 1.5rem 1.5rem;
-            margin-bottom: 2rem;
-        }
+.hero-section {
+    background: linear-gradient(135deg, var(--color-azul-claro) 0%, var(--color-azul-oscuro) 100%);
+    padding: 5rem 0;
+    color: white;
+    border-radius: 0 0 1.5rem 1.5rem;
+    margin-bottom: 2rem;
+}
 
-        .search-container {
-            background-color: white;
-            border-radius: 1rem;
-            padding: 10px;
-            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
-            margin-top: -3rem;
-        }
+.search-container {
+    background-color: white;
+    border-radius: 1rem;
+    padding: 10px;
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+    margin-top: -3rem;
+    border: 1px solid var(--color-gris);
+}
 
-        .search-input {
-            border: none;
-            box-shadow: none;
-            height: 50px;
-            font-size: 1.1rem;
-        }
+.search-input {
+    border: none;
+    box-shadow: none;
+    height: 50px;
+    font-size: 1.1rem;
+    color: var(--color-azul-oscuro);
+}
 
-        .search-button {
-            background-color: var(--color-primary);
-            border: none;
-            height: 50px;
-            padding: 0 25px;
-            transition: background-color 0.3s;
-        }
-        .search-button:hover {
-            background-color: var(--color-secondary);
-        }
+.search-input:focus {
+    border-color: var(--color-azul-claro);
+    box-shadow: 0 0 0 0.2rem rgba(39, 165, 223, 0.25);
+}
 
-        .term-card {
-            border-radius: 0.75rem;
-            background-color: white;
-            border-left: 5px solid var(--color-primary);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
-            transition: transform 0.2s;
-        }
-        .term-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
-        }
 
-        .term-title {
-            color: var(--color-primary);
-            font-weight: bold;
-        }
+.search-button {
+    background-color: var(--color-amarillo);
+    border: none;
+    height: 50px;
+    padding: 0 25px;
+    transition: all 0.3s;
+    color: var(--color-azul-oscuro);
+    font-weight: 700;
+}
 
-        .lang-tag {
-            font-size: 0.75rem;
-            padding: 0.3em 0.6em;
-            border-radius: 0.5rem;
-            font-weight: 600;
-        }
-        
-        .pronunciation {
-            font-style: italic;
-            color: #6c757d;
-            font-size: 0.9rem;
-        }
-        
-        .highlight {
-            background-color: #fffacd;
-            padding: 2px 4px;
-            border-radius: 3px;
-        }
-        
-        .no-results {
-            text-align: center;
-            padding: 40px;
-            color: #6c757d;
-        }
-        
-        .user-welcome {
-            color: white;
-            margin-right: 15px;
-        }
-        
-        .dashboard-btn {
-            background-color: #28a745;
-            border: none;
-            transition: background-color 0.3s;
-        }
-        .dashboard-btn:hover {
-            background-color: #218838;
-        }
-    </style>
+.search-button:hover {
+    background-color: #ff8a3d; /* Amarillo más intenso en hover */
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(255, 160, 109, 0.3);
+    color: var(--color-azul-oscuro);
+}
+
+.term-card {
+    border-radius: 0.75rem;
+    background-color: white;
+    border-left: 5px solid var(--color-amarillo); /* Borde amarillo en lugar de azul */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+    transition: transform 0.2s;
+    border: 1px solid var(--color-gris);
+}
+
+.term-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 12px rgba(255, 160, 109, 0.2); /* Sombra amarilla */
+    border-left: 5px solid var(--color-amarillo);
+}
+
+.term-title {
+    color: var(--color-azul-oscuro);
+    font-weight: bold;
+}
+
+.lang-tag {
+    font-size: 0.75rem;
+    padding: 0.3em 0.6em;
+    border-radius: 0.5rem;
+    font-weight: 600;
+}
+
+/* ETIQUETAS DE IDIOMA CON AMARILLO MÁS DESTACADO */
+.lang-tag.es {
+    background-color: var(--color-amarillo); /* Amarillo en lugar de azul */
+    color: var(--color-azul-oscuro);
+}
+
+.lang-tag.en {
+    background-color: var(--color-naranja); /* Naranja secundario */
+    color: white;
+}
+
+.pronunciation {
+    font-style: italic;
+    color: var(--color-gris);
+    font-size: 0.9rem;
+}
+
+.highlight {
+    background-color: rgba(255, 160, 109, 0.3); /* Amarillo más intenso */
+    padding: 2px 4px;
+    border-radius: 3px;
+    color: var(--color-azul-oscuro);
+    font-weight: 500;
+}
+
+.no-results {
+    text-align: center;
+    padding: 40px;
+    color: var(--color-gris);
+}
+
+.user-welcome {
+    color: white;
+    margin-right: 15px;
+}
+
+/* BOTÓN DASHBOARD CON AMARILLO PRINCIPAL */
+.dashboard-btn {
+    background-color: var(--color-amarillo);
+    border: none;
+    transition: all 0.3s;
+    color: var(--color-azul-oscuro);
+    font-weight: 700;
+    padding: 8px 20px;
+    border-radius: 0.5rem;
+}
+
+.dashboard-btn:hover {
+    background-color: #ff8a3d; /* Amarillo más intenso */
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(255, 160, 109, 0.3);
+    color: var(--color-azul-oscuro);
+}
+
+.footer-logo-img {
+    width: 95%;
+    max-width: 90px; 
+    height: auto;
+    margin: 0 auto 10px auto; 
+    display: block;
+}
+
+/* BOTONES PRIMARIOS AHORA EN AMARILLO */
+.btn-primary {
+    background-color: var(--color-amarillo);
+    border-color: var(--color-amarillo);
+    color: var(--color-azul-oscuro);
+    font-weight: 600;
+}
+
+.btn-primary:hover {
+    background-color: #ff8a3d;
+    border-color: #ff8a3d;
+    color: var(--color-azul-oscuro);
+}
+
+.btn-warning {
+    background-color: var(--color-naranja);
+    border-color: var(--color-naranja);
+    color: white;
+    font-weight: 600;
+}
+
+.btn-warning:hover {
+    background-color: #e88a10;
+    border-color: #e88a10;
+    color: white;
+}
+
+.text-primary {
+    color: var(--color-azul-oscuro) !important;
+}
+
+.text-warning {
+    color: var(--color-amarillo) !important; /* Amarillo para textos de advertencia */
+}
+
+.badge-primary {
+    background-color: var(--color-amarillo); /* Badges en amarillo */
+    color: var(--color-azul-oscuro);
+}
+
+.badge-warning {
+    background-color: var(--color-naranja); /* Naranja para badges secundarios */
+    color: white;
+}
+
+.alert-info {
+    background-color: rgba(255, 160, 109, 0.1); /* Fondo alerta en amarillo suave */
+    border-color: var(--color-amarillo);
+    color: var(--color-azul-oscuro);
+}
+
+/* NAVBAR BRAND EN BLANCO */
+.navbar-brand {
+    color: white !important; /* Cambiado a blanco */
+    font-weight: bold;
+    font-size: 1.5rem;
+}
+
+.nav-link {
+    color: rgba(255, 255, 255, 0.9) !important;
+}
+
+.nav-link:hover {
+    color: var(--color-amarillo) !important; /* Hover en amarillo */
+}
+
+/* ELEMENTOS DESTACADOS ADICIONALES EN AMARILLO */
+.featured-term {
+    border: 2px solid var(--color-amarillo);
+    background: linear-gradient(135deg, white 0%, rgba(255, 160, 109, 0.05) 100%);
+}
+
+.stat-number {
+    color: var(--color-amarillo);
+    font-size: 2.5rem;
+    font-weight: bold;
+}
+
+.quick-action {
+    background-color: var(--color-amarillo);
+    color: var(--color-azul-oscuro);
+    border: none;
+    transition: all 0.3s;
+}
+
+.quick-action:hover {
+    background-color: #ff8a3d;
+    transform: scale(1.05);
+}
+</style>
 </head>
 <body>
 
@@ -309,12 +450,27 @@ if ($result && $result->num_rows > 0) {
             ?>
         </div>
     </main>
-
-    <footer class="mt-5 py-4 text-center text-muted border-top">
-        <div class="container">
-            <p class="mb-0"> Glosario Jurídico Bilingüe &copy; 2025.</p>
+<footer class="mt-5 py-4 text-center border-top" style="background-color: #f1f2f2; color: #636466;">
+    <div class="container">
+        
+       <footer class="mt-5 py-4 text-center border-top" style="background-color: #f1f2f2; color: #636466;">
+    <div class="container d-flex flex-column flex-md-row justify-content-center align-items-center">
+        
+        <div class="mb-3 mb-md-0 me-md-3"> 
+            <img src="img/LogoFCDING.png" 
+                 alt="Logo Facultad de Ingeniería" 
+                 class="footer-logo-img">
         </div>
-    </footer>
+        
+        <div class="text-center text-md-start">
+            <p class="mb-1">
+               &copy; Sistema Desarrollado por estudiantes de la 
+                <span style="color: #006694; font-weight: bold;">UPED</span>  2025
+            </p>
+        </div>
+        
+    </div>
+</footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
 

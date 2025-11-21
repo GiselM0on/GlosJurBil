@@ -1,11 +1,14 @@
 <?php
 // secciones/gestion_terminos.php
 
-//conexion del db
-include ("./conexion.php");
+// Conexión a la base de datos
+include("conexion.php");
 
 // Variables para los campos
 $id_termino = "";
+$palabra = "";
+$pronunciacion = "";
+$definicion = "";
 $ejemplo_aplicativo = "";
 $referencia_bibliogr = "";
 $estado = "";
@@ -14,75 +17,81 @@ $fecha_modificacion = "";
 $id_usuario = "";
 $txtbus = "";
 
-// Procesar BÚSQUEDA (formulario separado)
-if(isset($_POST["btn_buscar"]) && $_POST["btn_buscar"] == "Buscar"){
-    if(isset($_POST["txtbus"]) && !empty($_POST["txtbus"])){
-        $txtbus = $_POST["txtbus"];
+// Procesar todas las acciones con un solo botón
+if(isset($_POST["btn1"])){
+    $btn = $_POST["btn1"];
     
-        $sql = "SELECT * FROM termino WHERE id_termino='$txtbus'"; // CORREGIDO: usar 'id' en lugar de 'id_Termino'
+    // BÚSQUEDA
+    if($btn == "Buscar" && isset($_POST["txtbus"])){
+        $txtbus = $_POST["txtbus"];
+        
+        $sql = "SELECT * FROM termino WHERE id_termino='$txtbus'"; 
         $cs = mysqli_query($cn, $sql);
         if($cs && mysqli_num_rows($cs) > 0) {
-            $resul = mysqli_fetch_array($cs);
-            $id_termino = $resul[0];
-            $ejemplo_aplicativo = $resul[1];
-            $referencia_bibliogr = $resul[2];
-            $estado = $resul[3];
-            $fecha_creacion = $resul[4];
-            $fecha_modificacion = $resul[5];
-            $id_usuario = $resul[6];
-            echo "<script>alert('Término encontrado');</script>"; // CORREGIDO: mensaje
+            while($resul = mysqli_fetch_array($cs)){
+                $id_termino = $resul[0];
+                $palabra = $resul[1];
+                $pronunciacion = $resul[2];
+                $definicion = $resul[3];
+                $ejemplo_aplicativo = $resul[4];
+                $referencia_bibliogr = $resul[5];
+                $estado = $resul[6];
+                $fecha_creacion = $resul[7];
+                $fecha_modificacion = $resul[8];
+                $id_usuario = $resul[9];
+            }
         } else {
-            echo "<script>alert('Término no encontrado');</script>"; // CORREGIDO: mensaje
-            // Limpiar campos si no se encuentra
-            $id_termino = $ejemplo_aplicativo = $referencia_bibliogr = $estado = $fecha_creacion = $fecha_modificacion = $id_usuario = "";
+            echo "<script>alert('No se encontró ningún término con ese ID');</script>";
         }
-    } else {
-        echo "<script>alert('Ingrese un ID para buscar');</script>";
     }
-}
-
-// Procesar formulario PRINCIPAL (Agregar, Modificar, Eliminar)
-if(isset($_POST["btn_termino"])){ // CORREGIDO: nombre del botón
-    $btn = $_POST["btn_termino"]; // CORREGIDO: nombre del botón
     
     // AGREGAR
     if($btn == "Agregar"){
-        // CORREGIDO: usar los nombres correctos de los campos del formulario
+        $id_termino = $_POST["txtid_termino"];
+        $palabra = $_POST["txtpalabra"];
+        $pronunciacion = $_POST["txtpronunciacion"];
+        $definicion = $_POST["txtdefinicion"];
         $ejemplo_aplicativo = $_POST["txtejemplo"];
         $referencia_bibliogr = $_POST["txtreferencia"];
         $estado = $_POST["txtestado"];
-        $fecha_creacion = $POST["txtfecha_creacion"];
-        $fecha_modificacion = $POST["txtfecha_modificacion"];
+        $fecha_creacion = $_POST["txtfecha_creacion"];
+        $fecha_modificacion = $_POST["txtfecha_modificacion"];
         $id_usuario = $_POST["txtid_usuario"];
         
-        $sql = "INSERT INTO termino (ejemplo_aplicativo, referencia_bibliogr, estado, fecha_creacion, fecha_modificacion, id_Usuario) 
-                VALUES ('$ejemplo_aplicativo','$referencia_bibliogr','$estado', NOW(), NOW(), '$id_usuario')";
+        $sql = "INSERT INTO termino (id_termino, palabra, pronunciacion, definicion, ejemplo_aplicativo, referencia_bibliogr, estado, fecha_creacion, fecha_modificacion, id_Usuario) 
+                VALUES ('$id_termino','$palabra','$pronunciacion','$definicion','$ejemplo_aplicativo','$referencia_bibliogr','$estado', NOW(), NOW(), '$id_usuario')";
         $cs = mysqli_query($cn, $sql);
         if($cs) {
             echo "<script>alert('Término agregado correctamente');</script>";
             // Limpiar campos
-            $id_termino = $ejemplo_aplicativo = $referencia_bibliogr = $estado = $fecha_creacion = $fecha_modificacion = $id_usuario = $txtbus = "";
+            $id_termino = $palabra = $pronunciacion = $definicion = $ejemplo_aplicativo = $referencia_bibliogr = $estado = $fecha_creacion = $fecha_modificacion = $id_usuario = $txtbus = "";
         } else {
             echo "<script>alert('Error al agregar: " . mysqli_error($cn) . "');</script>";
         }
     }
     
     // MODIFICAR
-    if($btn == "Modificar" && !empty($_POST["txtid_termino"])){ // CORREGIDO: nombre del campo
-        $id_termino = $_POST["txtid"]; // CORREGIDO: nombre del campo
+    if($btn == "Modificar"){
+        $id_termino = $_POST["txtid_termino"];
+        $palabra = $_POST["txtpalabra"];
+        $pronunciacion = $_POST["txtpronunciacion"];
+        $definicion = $_POST["txtdefinicion"];
         $ejemplo_aplicativo = $_POST["txtejemplo"];
         $referencia_bibliogr = $_POST["txtreferencia"];
         $estado = $_POST["txtestado"];
+        $fecha_modificacion = $_POST["txtfecha_modificacion"];
         $id_usuario = $_POST["txtid_usuario"];
         
-        $sql = "UPDATE termino SET
-                id_termino = '$id_termino',
+        $sql = "UPDATE termino SET 
+                palabra='$palabra',
+                pronunciacion='$pronunciacion',
+                definicion='$definicion',
                 ejemplo_aplicativo='$ejemplo_aplicativo',
                 referencia_bibliogr='$referencia_bibliogr',
                 estado='$estado',
                 fecha_modificacion=NOW(),
-                id_Usuario='$id_usuario'
-                WHERE id='$id_termino'"; // CORREGIDO: usar 'id' en lugar de 'id_termino'
+                id_Usuario='$id_usuario' 
+                WHERE id_termino='$id_termino'";
         
         $cs = mysqli_query($cn, $sql);
         if($cs) {
@@ -93,15 +102,15 @@ if(isset($_POST["btn_termino"])){ // CORREGIDO: nombre del botón
     }
     
     // ELIMINAR
-    if($btn == "Eliminar" && !empty($_POST["txtid_termino"])){ // CORREGIDO: nombre del campo
-        $id_termino = $_POST["txtid"]; // CORREGIDO: nombre del campo
+    if($btn == "Eliminar"){
+        $id_termino = $_POST["txtid_termino"];
         
-        $sql = "DELETE FROM termino WHERE id='$id_termino'"; // CORREGIDO: usar 'id' en lugar de 'id_termino'
+        $sql = "DELETE FROM termino WHERE id_termino='$id_termino'";
         $cs = mysqli_query($cn, $sql);
         if($cs) {
             echo "<script>alert('Término eliminado correctamente');</script>";
-            // Limpiar campos
-            $id_termino = $ejemplo_aplicativo = $referencia_bibliogr = $estado = $fecha_creacion = $fecha_modificacion = $id_usuario = $txtbus = "";
+            // Limpiar campos después de eliminar
+            $id_termino = $palabra = $pronunciacion = $definicion = $ejemplo_aplicativo = $referencia_bibliogr = $estado = $fecha_creacion = $fecha_modificacion = $id_usuario = $txtbus = "";
         } else {
             echo "<script>alert('Error al eliminar: " . mysqli_error($cn) . "');</script>";
         }
@@ -109,91 +118,174 @@ if(isset($_POST["btn_termino"])){ // CORREGIDO: nombre del botón
 }
 ?>
 
-<h1 class="mb-4 text-primary">Gestión de Términos</h1>
+<div class="container-fluid">
+    <h1 class="mb-4 text-primary">Gestión de Términos</h1>
 
-<div class="card p-4 shadow-sm mb-4 bg-light">
-    <h3 class="card-title text-center text-dark">Formulario de Gestión de Términos</h3>
-    
-    <!-- FORMULARIO SEPARADO PARA BÚSQUEDA -->
-    <form method="POST" class="mb-4 border-bottom pb-3">
-        <div class="row">
-            <div class="col-md-8">
-                <input type="text" class="form-control" name="txtbus" placeholder="ID del término a buscar" 
-                       value="<?php echo htmlspecialchars($txtbus); ?>">
+    <div class="card p-4 shadow-sm mb-4 bg-light">
+        <h3 class="card-title text-center text-dark">Formulario de Gestión de Términos</h3>
+        
+        <div class="card-body p-4">
+            <!-- FORMULARIO SEPARADO PARA BÚSQUEDA -->
+            <div class="search-section mb-4 p-3 bg-light rounded">
+                <form method="POST" class="row g-3 align-items-end">
+                    <div class="col-md-8">
+                        <input type="text" class="form-control" name="txtbus" placeholder="ID del término a buscar" 
+                               value="<?php echo htmlspecialchars($txtbus); ?>">
+                    </div>
+                    <div class="col-md-4">
+                        <button type="submit" class="btn btn-outline-primary w-90" name="btn1" value="Buscar">
+                            <i class="bi bi-search me-2"></i> Buscar
+                        </button>
+                    </div>
+                </form>
             </div>
-            <div class="col-md-4">
-                <button type="submit" class="btn btn-outline-primary w-100" name="btn_buscar" value="Buscar">
-                    <i class="bi bi-search"></i> Buscar
-                </button>
-            </div>
-        </div>
-    </form>
 
-    <!-- FORMULARIO PRINCIPAL PARA CRUD -->
-    <form method="POST">
-        <!-- Campos del formulario -->
-        <div class="row mb-3">
-            <div class="col-md-6">
-                <label class="form-label">ID Término</label>
-                <input type="text" class="form-control" name="txtid_termino" value="<?php echo htmlspecialchars($id_termino); ?>" >
-            </div>
-        </div>
+            <!-- FORMULARIO PRINCIPAL -->
+            <form method="POST">
+                <div class="row g-3">
+                    <!-- Primera fila -->
+                    <div class="col-md-2">
+                        <label class="form-label fw-semibold">ID Término</label>
+                        <input type="text" class="form-control form-control-sm" name="txtid_termino" 
+                               value="<?php echo htmlspecialchars($id_termino); ?>" style="font-size: 0.875rem;">
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label fw-semibold">Palabra</label>
+                        <input type="text" class="form-control form-control-sm" name="txtpalabra" 
+                               value="<?php echo htmlspecialchars($palabra); ?>">
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label fw-semibold">Pronunciación</label>
+                        <input type="text" class="form-control form-control-sm" name="txtpronunciacion" 
+                               value="<?php echo htmlspecialchars($pronunciacion); ?>">
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label fw-semibold">Estado</label>
+                        <select class="form-select form-select-sm" name="txtestado">
+                            <option value="">Seleccionar</option>
+                            <option value="pendiente" <?php echo $estado == 'pendiente' ? 'selected' : ''; ?>>Pendiente</option>
+                            <option value="aprobado" <?php echo $estado == 'aprobado' ? 'selected' : ''; ?>>Aprobado</option>
+                            <option value="rechazado" <?php echo $estado == 'rechazado' ? 'selected' : ''; ?>>Rechazado</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label fw-semibold">Fecha Creación</label>
+                        <input type="date" class="form-control name="txtfecha_creacion" 
+                               value="<?php echo htmlspecialchars($fecha_creacion); ?>" readonly>
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label fw-semibold">Fecha Modificación</label>
+                        <input type="date" class="form-control" name="txtfecha_modificacion" 
+                               value="<?php echo htmlspecialchars($fecha_modificacion); ?>" readonly>
+                    </div>
 
-        <div class="row mb-3">
-            <div class="col-md-12">
-                <label class="form-label">Ejemplo Aplicativo</label>
-                <textarea class="form-control" name="txtejemplo" rows="3" required><?php echo htmlspecialchars($ejemplo_aplicativo); ?></textarea>
-            </div>
-        </div>
+                    <!-- Segunda fila -->
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold">Definición</label>
+                        <textarea class="form-control" name="txtdefinicion" rows="3" placeholder="Ingrese la definición del término"><?php echo htmlspecialchars($definicion); ?></textarea>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold">Ejemplo Aplicativo</label>
+                        <textarea class="form-control" name="txtejemplo" rows="3" placeholder="Ingrese un ejemplo de uso"><?php echo htmlspecialchars($ejemplo_aplicativo); ?></textarea>
+                    </div>
 
-        <div class="row mb-3">
-            <div class="col-md-6">
-                <label class="form-label">Referencia Bibliográfica</label>
-                <input type="text" class="form-control" name="txtreferencia" value="<?php echo htmlspecialchars($referencia_bibliogr); ?>" >
-            </div>
-            <div class="col-md-6">
-                <label class="form-label">Estado</label>
-                <select class="form-select" name="txtestado" required>
-                    <option value="pendiente" <?php echo $estado == 'pendiente' ? 'selected' : ''; ?>>Pendiente</option>
-                    <option value="aprobado" <?php echo $estado == 'aprobado' ? 'selected' : ''; ?>>Aprobado</option>
-                    <option value="rechazado" <?php echo $estado == 'rechazado' ? 'selected' : ''; ?>>Rechazado</option>
-                </select>
-            </div>
-        </div>
+                    <!-- Tercera fila -->
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold">Referencia Bibliográfica</label>
+                        <input type="text" class="form-control" name="txtreferencia" 
+                               value="<?php echo htmlspecialchars($referencia_bibliogr); ?>">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold">ID Usuario</label>
+                        <input type="number" class="form-control form-control-sm" name="txtid_usuario" 
+                               value="<?php echo htmlspecialchars($id_usuario); ?>">
+                    </div>
+                </div>
 
-        <div class="row mb-4">
-            <div class="col-md-6">
-                <label class="form-label">ID Usuario</label>
-                <input type="number" class="form-control" name="txtid_usuario" value="<?php echo htmlspecialchars($id_usuario); ?>" required>
-            </div>
-            <div class="col-md-6">
-                <label class="form-label">Fecha Creación</label>
-                <input type="date" class="form-control" name="fecha_creacion" 
-                       value="<?php echo htmlspecialchars($fecha_creacion); ?>">
-            </div>
+                <!-- Botones de acción -->
+                <div class="text-center mt-4 pt-3 border-top">
+                    <button type="submit" class="btn btn-outline-primary me-2" name="btn1" value="Agregar">
+                        <i class="bi bi-plus-lg me-2"></i> Agregar
+                    </button>
+                    <button type="submit" class="btn btn-outline-primary me-2" name="btn1" value="Mostrar">
+                        <i class="bi bi-eye me-2"></i> Mostrar
+                    </button>
+                    <button type="submit" class="btn btn-outline-primary me-2" name="btn1" value="Modificar"
+                     onclick="return confirm('¿Estás seguro de modificar este término?')">
+                        <i class="bi bi-pencil me-2"></i> Modificar
+                    </button>
+                    <button type="submit" class="btn btn-outline-primary me-2" name="btn1" value="Eliminar" 
+                            onclick="return confirm('¿Estás seguro de eliminar este término?')">
+                        <i class="bi bi-trash me-2"></i> Eliminar
+                    </button>
+                    
+                </div>
+            </form>
         </div>
+    </div>
 
-        <!-- Botones de acción -->
-        <div class="text-center">
-            <button type="submit" class="btn btn-outline-primary me-2" name="btn_termino" value="Agregar">
-                <i class="bi bi-plus-lg"></i> Agregar
-            </button>
-            <button type="submit" class="btn btn-outline-primary me-2" name="btn_termino" value="Modificar">
-                <i class="bi bi-pencil"></i> Modificar
-            </button>
-            <button type="submit" class="btn btn-outline-primary" name="btn_termino" value="Eliminar" 
-                    onclick="return confirm('¿Estás seguro de eliminar este término?')">
-                <i class="bi bi-trash"></i> Eliminar
-            </button>
-        </div>
-    </form>
+    <!-- SECCIÓN PARA MOSTRAR LOS TÉRMINOS -->
+    <div class="data-container mt-4">
+        <?php
+        if(isset($_POST["btn1"])){
+            $btn=$_POST["btn1"];
+        
+            if($btn=="Mostrar"){
+                $sql="SELECT * FROM termino";
+                $cs=mysqli_query($cn,$sql);
+                if($cs && mysqli_num_rows($cs) > 0) {
+                   echo "<div class='contenedor-tabla'>";
+                    echo "<h3 class='titulo-tabla-terminos'>Lista de Términos</h3>";
+                    echo "<div class='table-responsive'>";
+                    echo "<table class='table table-terminos'>";
+                    echo "<thead>
+                            <tr>
+                                <th class='col-id-termino'>ID Término</th>
+                                <th class='col-palabra'>Palabra</th>
+                                <th class='col-pronunciacion'>Pronunciación</th>
+                                <th class='col-definicion'>Definición</th>
+                                <th class='col-ejemplo'>Ejemplo</th>
+                                <th class='col-referencia'>Referencia</th>
+                                <th class='col-estado'>Estado</th>
+                                <th class='col-fecha'>Fecha Creación</th>
+                                <th class='col-fecha'>Fecha Modificación</th>
+                                <th class='col-usuario'>ID Usuario</th>
+                            </tr>
+                        </thead>";
+                    echo "<tbody>";
+                    while($resul=mysqli_fetch_array($cs)){
+                        $id_termino = $resul[0];
+                        $palabra = $resul[1];
+                        $pronunciacion = $resul[2];
+                        $definicion = $resul[3];
+                        $ejemplo_aplicativo = $resul[4];
+                        $referencia_bibliogr = $resul[5];
+                        $estado = $resul[6];
+                        $fecha_creacion = $resul[7];
+                        $fecha_modificacion = $resul[8];
+                        $id_usuario = $resul[9];
+                        
+                        echo "<tr>
+                        <td class='col-id-termino'>$id_termino</td>
+                        <td class='col-palabra'>$palabra</td>
+                        <td class='col-pronunciacion'>$pronunciacion</td>
+                        <td class='col-definicion'>$definicion</td>
+                        <td class='col-ejemplo'>$ejemplo_aplicativo</td>
+                        <td class='col-referencia'>$referencia_bibliogr</td>
+                        <td class='col-estado'><span class='badge-estado badge-$estado'>" . ucfirst($estado) . "</span></td>
+                        <td class='col-fecha'>$fecha_creacion</td>
+                        <td class='col-fecha'>$fecha_modificacion</td>
+                        <td class='col-usuario'>$id_usuario</td>
+                    </tr>";
+            }
+
+            echo "</tbody>";
+            echo "</table>";
+            echo "</div>";
+            echo "</div>";
+            }
+        }
+    }
+        ?>
+    </div>
 </div>
-
-<!-- Mostrar lista de términos -->
-<?php
-$query_terminos = "SELECT t.*, u.nombre as usuario_nombre FROM termino t 
-                   LEFT JOIN usuario u ON t.id_Usuario = u.id 
-                   ORDER BY t.id DESC";
-$result_terminos = mysqli_query($cn, $query_terminos);
-?>
-
