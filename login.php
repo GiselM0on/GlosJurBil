@@ -42,7 +42,7 @@ $error = isset($_GET['error']) ? $_GET['error'] : '';
             height: 100vh;
         }
 
-        /
+       
         .login-card {
             background-color: rgba(255, 255, 255, 0.95);
             padding: 40px;
@@ -75,12 +75,6 @@ $error = isset($_GET['error']) ? $_GET['error'] : '';
             background-color: #f4f4f4;
         }
 
-        .options {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 15px;
-        }
-
         button {
             width: 100%;
             padding: 12px;
@@ -108,7 +102,7 @@ $error = isset($_GET['error']) ? $_GET['error'] : '';
 
 <div class="login-card">
 
-   
+    <!-- LOGO UPED -->
     <div class="avatar">
         <img src="img/logo_uped.jpg" alt="UPED">
     </div>
@@ -137,11 +131,6 @@ $error = isset($_GET['error']) ? $_GET['error'] : '';
                 <option value="docente">Docente</option>
                 <option value="estudiante">Estudiante</option>
             </select>
-        </div>
-
-        <div class="options">
-            <label><input type="checkbox" name="remember"> Recordarme</label>
-            <a href="#">¿Olvidaste tu contraseña?</a>
         </div>
 
         <button type="submit">INICIAR SESIÓN</button>
