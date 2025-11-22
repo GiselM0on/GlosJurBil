@@ -112,29 +112,65 @@ if(isset($_POST["btn_idiomas"])){
             </div>
             <div class="col-md-6">
                 <label class="form-label">Nombre del Idioma</label>
-                <input type="text" class="form-control" name="txtnombre_idioma" value="<?php echo htmlspecialchars($nombre_idioma); ?>" required>
+                <input type="text" class="form-control" name="txtnombre_idioma" value="<?php echo htmlspecialchars($nombre_idioma); ?>" >
             </div>
         </div>
-
-        <!-- Botones de acción -->
-        <div class="text-center">
-            <button type="submit" class="btn btn-outline-primary me-2" name="btn_idiomas" value="Agregar">
-                <i class="bi bi-plus-lg"></i> Agregar
-            </button>
-            <button type="submit" class="btn btn-outline-primary me-2" name="btn_idiomas" value="Modificar">
-                <i class="bi bi-pencil"></i> Modificar
-            </button>
-            <button type="submit" class="btn btn-outline-primary" name="btn_idiomas" value="Eliminar" 
-                    onclick="return confirm('¿Estás seguro de eliminar este idioma?')">
-                <i class="bi bi-trash"></i> Eliminar
-            </button>
-        </div>
+<!-- Botones de acción -->
+<div class="text-center">
+    <button type="submit" class="btn btn-outline-primary me-2" name="btn_idiomas" value="Agregar">
+        <i class="bi bi-plus-lg"></i> Agregar
+    </button>
+    <button type="submit" class="btn btn-outline-primary me-2" name="btn_idiomas" value="Mostrar">
+        <i class="bi bi-eye"></i> Mostrar
+    </button>
+    <button type="submit" class="btn btn-outline-primary me-2" name="btn_idiomas" value="Modificar">
+        <i class="bi bi-pencil"></i> Modificar
+    </button>
+    <button type="submit" class="btn btn-outline-primary" name="btn_idiomas" value="Eliminar" 
+            onclick="return confirm('¿Estás seguro de eliminar este idioma?')">
+        <i class="bi bi-trash"></i> Eliminar
+    </button>
+</div>
     </form>
 </div>
 
-<!-- Mostrar lista de idiomas -->
-<?php
-$query_idiomas = "SELECT * FROM idioma ORDER BY id DESC";
-$result_idiomas = mysqli_query($cn, $query_idiomas);
-?>
+<!-- SECCIÓN PARA MOSTRAR LOS IDIOMAS -->
+<div class="data-container mt-4">
+    <?php
+    if(isset($_POST["btn_idiomas"]) && $_POST["btn_idiomas"] == "Mostrar"){
+        $sql="SELECT * FROM idioma";
+        $cs=mysqli_query($cn,$sql);
+        if($cs && mysqli_num_rows($cs) > 0) {
+           echo "<div class='contenedor-tabla'>";
+            echo "<h3 class='titulo-tabla-terminos mb-4 text-primary'>Lista de Idiomas</h3>";
+            echo "<div class='table-responsive-container'>";
+            echo "<table class='table table-hover mb-0'>";
+            echo "<thead>
+                    <tr>
+                        <th width='100'>ID</th>
+                        <th width='200'>Nombre del Idioma</th>
+                    </tr>
+                </thead>";
+            echo "<tbody>";
+            while($resul=mysqli_fetch_array($cs)){
+                $id_idioma = $resul[0];
+                $nombre_idioma = $resul[1];
+                
+                echo "<tr>
+                <td data-label='ID'><strong>$id_idioma</strong></td>
+                <td data-label='Nombre del Idioma'><strong>$nombre_idioma</strong></td>
+            </tr>";
+            }
+
+            echo "</tbody>";
+            echo "</table>";
+            echo "</div>";
+            echo "</div>";
+        } else {
+            echo "<div class='alert alert-info text-center'>No hay idiomas registrados</div>";
+        }
+    }
+    ?>
+</div>
+
 

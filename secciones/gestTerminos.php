@@ -169,14 +169,14 @@ if(isset($_POST["btn1"])){
                         </select>
                     </div>
                     <div class="col-md-2">
-                        <label class="form-label fw-semibold">Fecha Creación</label>
+                        <label class="form-label ">Fecha Creación</label>
                         <input type="date" class="form-control name="txtfecha_creacion" 
-                               value="<?php echo htmlspecialchars($fecha_creacion); ?>" readonly>
+                               value="<?php echo htmlspecialchars($fecha_creacion); ?>" >
                     </div>
                     <div class="col-md-2">
-                        <label class="form-label fw-semibold">Fecha Modificación</label>
+                        <label class="form-label ">Fecha Modificación</label>
                         <input type="date" class="form-control" name="txtfecha_modificacion" 
-                               value="<?php echo htmlspecialchars($fecha_modificacion); ?>" readonly>
+                               value="<?php echo htmlspecialchars($fecha_modificacion); ?>" >
                     </div>
 
                     <!-- Segunda fila -->
@@ -224,68 +224,75 @@ if(isset($_POST["btn1"])){
         </div>
     </div>
 
-    <!-- SECCIÓN PARA MOSTRAR LOS TÉRMINOS -->
-    <div class="data-container mt-4">
-        <?php
-        if(isset($_POST["btn1"])){
-            $btn=$_POST["btn1"];
-        
-            if($btn=="Mostrar"){
-                $sql="SELECT * FROM termino";
-                $cs=mysqli_query($cn,$sql);
-                if($cs && mysqli_num_rows($cs) > 0) {
-                   echo "<div class='contenedor-tabla'>";
-                    echo "<h3 class='titulo-tabla-terminos'>Lista de Términos</h3>";
-                    echo "<div class='table-responsive'>";
-                    echo "<table class='table table-terminos'>";
-                    echo "<thead>
-                            <tr>
-                                <th class='col-id-termino'>ID Término</th>
-                                <th class='col-palabra'>Palabra</th>
-                                <th class='col-pronunciacion'>Pronunciación</th>
-                                <th class='col-definicion'>Definición</th>
-                                <th class='col-ejemplo'>Ejemplo</th>
-                                <th class='col-referencia'>Referencia</th>
-                                <th class='col-estado'>Estado</th>
-                                <th class='col-fecha'>Fecha Creación</th>
-                                <th class='col-fecha'>Fecha Modificación</th>
-                                <th class='col-usuario'>ID Usuario</th>
-                            </tr>
-                        </thead>";
-                    echo "<tbody>";
-                    while($resul=mysqli_fetch_array($cs)){
-                        $id_termino = $resul[0];
-                        $palabra = $resul[1];
-                        $pronunciacion = $resul[2];
-                        $definicion = $resul[3];
-                        $ejemplo_aplicativo = $resul[4];
-                        $referencia_bibliogr = $resul[5];
-                        $estado = $resul[6];
-                        $fecha_creacion = $resul[7];
-                        $fecha_modificacion = $resul[8];
-                        $id_usuario = $resul[9];
-                        
-                        echo "<tr>
-                        <td class='col-id-termino'>$id_termino</td>
-                        <td class='col-palabra'>$palabra</td>
-                        <td class='col-pronunciacion'>$pronunciacion</td>
-                        <td class='col-definicion'>$definicion</td>
-                        <td class='col-ejemplo'>$ejemplo_aplicativo</td>
-                        <td class='col-referencia'>$referencia_bibliogr</td>
-                        <td class='col-estado'><span class='badge-estado badge-$estado'>" . ucfirst($estado) . "</span></td>
-                        <td class='col-fecha'>$fecha_creacion</td>
-                        <td class='col-fecha'>$fecha_modificacion</td>
-                        <td class='col-usuario'>$id_usuario</td>
-                    </tr>";
-            }
+   <!-- SECCIÓN PARA MOSTRAR LOS TÉRMINOS CON DISEÑO MEJORADO -->
+<div class="data-container mt-4">
+    <?php
+    if(isset($_POST["btn1"])){
+        $btn=$_POST["btn1"];
+    
+        if($btn=="Mostrar"){
+            $sql="SELECT * FROM termino";
+            $cs=mysqli_query($cn,$sql);
+            if($cs && mysqli_num_rows($cs) > 0) {
+               echo "<div class='contenedor-tabla'>";
+                echo "<h3 class='titulo-tabla-terminos mb-4 text-primary'>Lista de Términos</h3>";
+                echo "<div class='table-responsive-container'>";
+                echo "<table class='table table-hover mb-0'>";
+                echo "<thead>
+                        <tr>
+                            <th width='80'>ID</th>
+                            <th width='120'>Palabra</th>
+                            <th width='120'>Pronunciación</th>
+                            <th width='200'>Definición</th>
+                            <th width='200'>Ejemplo</th>
+                            <th width='150'>Referencia</th>
+                            <th width='100'>Estado</th>
+                            <th width='100'>Fecha Creación</th>
+                            <th width='100'>Fecha Modificación</th>
+                            <th width='80'>Usuario</th>
+                        </tr>
+                    </thead>";
+                echo "<tbody>";
+                while($resul=mysqli_fetch_array($cs)){
+                    $id_termino = $resul[0];
+                    $palabra = $resul[1];
+                    $pronunciacion = $resul[2];
+                    $definicion = substr($resul[3], 0, 100) . (strlen($resul[3]) > 100 ? '...' : '');
+                    $ejemplo_aplicativo = substr($resul[4], 0, 100) . (strlen($resul[4]) > 100 ? '...' : '');
+                    $referencia_bibliogr = $resul[5];
+                    $estado = $resul[6];
+                    $fecha_creacion = date('d/m/Y', strtotime($resul[7]));
+                    $fecha_modificacion = date('d/m/Y', strtotime($resul[8]));
+                    $id_usuario = $resul[9];
+                    
+                    // Determinar clase del badge según el estado
+                    $badge_class = '';
+                    if($estado == 'aprobado') $badge_class = 'status-active';
+                    elseif($estado == 'pendiente') $badge_class = 'status-pending';
+                    elseif($estado == 'rechazado') $badge_class = 'badge-estado-rechazado';
+                    
+                    echo "<tr>
+                    <td data-label='ID'><strong>$id_termino</strong></td>
+                    <td data-label='Palabra'><strong>$palabra</strong></td>
+                    <td data-label='Pronunciación'><em>$pronunciacion</em></td>
+                    <td data-label='Definición'><div class='texto-limitado'>$definicion</div></td>
+                    <td data-label='Ejemplo'><div class='texto-limitado'>$ejemplo_aplicativo</div></td>
+                    <td data-label='Referencia'><small>$referencia_bibliogr</small></td>
+                    <td data-label='Estado'><span class='status-badge $badge_class'>" . ucfirst($estado) . "</span></td>
+                    <td data-label='Fecha Creación'><small>$fecha_creacion</small></td>
+                    <td data-label='Fecha Modificación'><small>$fecha_modificacion</small></td>
+                    <td data-label='Usuario'>$id_usuario</td>
+                </tr>";
+                }
 
-            echo "</tbody>";
-            echo "</table>";
-            echo "</div>";
-            echo "</div>";
+                echo "</tbody>";
+                echo "</table>";
+                echo "</div>";
+                echo "</div>";
+            } else {
+                echo "<div class='alert alert-info text-center'>No hay términos registrados</div>";
             }
         }
     }
-        ?>
-    </div>
+    ?>
 </div>

@@ -134,7 +134,7 @@ if(isset($_POST["btn_validaciones"])){
             </div>
             <div class="col-md-6">
                 <label class="form-label">Estado Validación</label>
-                 <input type="text" class="form-control" name="txtestado_validacion" value="<?php echo htmlspecialchars($estado_validacion); ?>" required>
+                 <input type="text" class="form-control" name="txtestado_validacion" value="<?php echo htmlspecialchars($estado_validacion); ?>" >
             
             </div>
         </div>
@@ -146,14 +146,14 @@ if(isset($_POST["btn_validaciones"])){
             </div>
             <div class="col-md-6">
                 <label class="form-label">ID Usuario</label>
-                <input type="number" class="form-control" name="txtid_usuario" value="<?php echo htmlspecialchars($id_usuario); ?>" required>
+                <input type="number" class="form-control" name="txtid_usuario" value="<?php echo htmlspecialchars($id_usuario); ?>" >
             </div>
         </div>
 
         <div class="row mb-4">
             <div class="col-md-12">
                 <label class="form-label">Comentario</label>
-                <textarea class="form-control" name="txtcomentario" rows="3" required><?php echo htmlspecialchars($comentario); ?></textarea>
+                <textarea class="form-control" name="txtcomentario" rows="3" ><?php echo htmlspecialchars($comentario); ?></textarea>
             </div>
         </div>
 
@@ -161,6 +161,9 @@ if(isset($_POST["btn_validaciones"])){
         <div class="text-center">
             <button type="submit" class="btn btn-outline-primary me-2" name="btn_validaciones" value="Agregar">
                 <i class="bi bi-plus-lg"></i> Agregar
+            </button>
+            <button type="submit" class="btn btn-outline-primary me-2" name="btn_validaciones" value="Mostrar">
+                <i class="bi bi-eye"></i> Mostrar
             </button>
             <button type="submit" class="btn btn-outline-primary me-2" name="btn_validaciones" value="Modificar">
                 <i class="bi bi-pencil"></i> Modificar
@@ -173,14 +176,65 @@ if(isset($_POST["btn_validaciones"])){
     </form>
 </div>
 
-<!-- Mostrar lista de validaciones -->
-<?php
-$query_validaciones = "SELECT v.*, t.nombreTer as termino, u.nombre as usuario 
-                       FROM validacion v 
-                       LEFT JOIN termino t ON v.id_Termino = t.id 
-                       LEFT JOIN usuario u ON v.id_Usuario = u.id 
-                       ORDER BY v.id DESC";
-$result_validaciones = mysqli_query($cn, $query_validaciones);
-?>
+<!-- SECCIÓN PARA MOSTRAR LAS VALIDACIONES -->
+<div class="data-container mt-4">
+    <?php
+    if(isset($_POST["btn_validaciones"]) && $_POST["btn_validaciones"] == "Mostrar"){
+        $sql="SELECT v.*, t.palabra as termino, u.nombre as usuario 
+               FROM validacion v 
+               LEFT JOIN termino t ON v.id_Termino = t.id_termino 
+               LEFT JOIN usuario u ON v.id_Usuario = u.id_usuario 
+               ORDER BY v.id_validacion DESC";
+        $cs=mysqli_query($cn,$sql);
+        if($cs && mysqli_num_rows($cs) > 0) {
+           echo "<div class='contenedor-tabla'>";
+            echo "<h3 class='titulo-tabla-terminos mb-4 text-primary'>Lista de Validaciones</h3>";
+            echo "<div class='table-responsive-container'>";
+            echo "<table class='table table-hover mb-0'>";
+            echo "<thead>
+                    <tr>
+                        <th width='80'>ID</th>
+                        <th width='200'>Comentario</th>
+                        <th width='120'>Estado</th>
+                        <th width='120'>Fecha</th>
+                        <th width='120'>Término</th>
+                        <th width='120'>Usuario</th>
+                    </tr>
+                </thead>";
+            echo "<tbody>";
+            while($resul=mysqli_fetch_array($cs)){
+                $id_validacion = $resul[0];
+                $comentario = substr($resul[1], 0, 100) . (strlen($resul[1]) > 100 ? '...' : '');
+                $estado_validacion = $resul[2];
+                $fecha_validacion = date('d/m/Y', strtotime($resul[3]));
+                
+                // Corregido: usando isset() en lugar de ??
+                $termino = isset($resul['termino']) ? $resul['termino'] : 'N/A';
+                $usuario = isset($resul['usuario']) ? $resul['usuario'] : 'N/A';
+                
+                // Determinar clase del badge según el estado
+                $badge_class = '';
+                if($estado_validacion == 'aprobado') $badge_class = 'status-active';
+                elseif($estado_validacion == 'pendiente') $badge_class = 'status-pending';
+                elseif($estado_validacion == 'rechazado') $badge_class = 'badge-estado-rechazado';
+                
+                echo "<tr>
+                <td data-label='ID'><strong>$id_validacion</strong></td>
+                <td data-label='Comentario'><div class='texto-limitado'>$comentario</div></td>
+                <td data-label='Estado'><span class='status-badge $badge_class'>" . ucfirst($estado_validacion) . "</span></td>
+                <td data-label='Fecha'><small>$fecha_validacion</small></td>
+                <td data-label='Término'>$termino</td>
+                <td data-label='Usuario'>$usuario</td>
+            </tr>";
+            }
 
- 
+            echo "</tbody>";
+            echo "</table>";
+            echo "</div>";
+            echo "</div>";
+        } else {
+            echo "<div class='alert alert-info text-center'>No hay validaciones registradas</div>";
+        }
+    }
+    ?>
+</div>

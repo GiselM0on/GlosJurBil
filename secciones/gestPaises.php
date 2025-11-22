@@ -112,29 +112,66 @@ if(isset($_POST["btn_paises"])){
             </div>
             <div class="col-md-6">
                 <label class="form-label">Nombre del País</label>
-                <input type="text" class="form-control" name="txtnombre_pas" value="<?php echo htmlspecialchars($nombre_pas); ?>" required>
+                <input type="text" class="form-control" name="txtnombre_pas" value="<?php echo htmlspecialchars($nombre_pas); ?>" >
             </div>
         </div>
 
-        <!-- Botones de acción -->
-        <div class="text-center">
-            <button type="submit" class="btn btn-outline-primary me-2" name="btn_paises" value="Agregar">
-                <i class="bi bi-plus-lg"></i> Agregar
-            </button>
-            <button type="submit" class="btn btn-outline-primary me-2" name="btn_paises" value="Modificar">
-                <i class="bi bi-pencil"></i> Modificar
-            </button>
-            <button type="submit" class="btn btn-outline-primary" name="btn_paises" value="Eliminar" 
-                    onclick="return confirm('¿Estás seguro de eliminar este país?')">
-                <i class="bi bi-trash"></i> Eliminar
-            </button>
-        </div>
+       <!-- Botones de acción -->
+<div class="text-center">
+    <button type="submit" class="btn btn-outline-primary me-2" name="btn_paises" value="Agregar">
+        <i class="bi bi-plus-lg"></i> Agregar
+    </button>
+    <button type="submit" class="btn btn-outline-primary me-2" name="btn_paises" value="Mostrar">
+        <i class="bi bi-eye"></i> Mostrar
+    </button>
+    <button type="submit" class="btn btn-outline-primary me-2" name="btn_paises" value="Modificar">
+        <i class="bi bi-pencil"></i> Modificar
+    </button>
+    <button type="submit" class="btn btn-outline-primary" name="btn_paises" value="Eliminar" 
+            onclick="return confirm('¿Estás seguro de eliminar este país?')">
+        <i class="bi bi-trash"></i> Eliminar
+    </button>
+</div>
     </form>
 </div>
 
-<!-- Mostrar lista de países -->
-<?php
-$query_paises = "SELECT * FROM pais ORDER BY id DESC";
-$result_paises = mysqli_query($cn, $query_paises);
+<!-- SECCIÓN PARA MOSTRAR LOS PAÍSES -->
+<div class="data-container mt-4">
+    <?php
+    if(isset($_POST["btn_paises"]) && $_POST["btn_paises"] == "Mostrar"){
+        $sql="SELECT * FROM pais";
+        $cs=mysqli_query($cn,$sql);
+        if($cs && mysqli_num_rows($cs) > 0) {
+           echo "<div class='contenedor-tabla'>";
+            echo "<h3 class='titulo-tabla-terminos mb-4 text-primary'>Lista de Países</h3>";
+            echo "<div class='table-responsive-container'>";
+            echo "<table class='table table-hover mb-0'>";
+            echo "<thead>
+                    <tr>
+                        <th width='100'>ID</th>
+                        <th width='200'>Nombre del País</th>
+                    </tr>
+                </thead>";
+            echo "<tbody>";
+            while($resul=mysqli_fetch_array($cs)){
+                $id_pais = $resul[0];
+                $nombre_pas = $resul[1];
+                
+                echo "<tr>
+                <td data-label='ID'><strong>$id_pais</strong></td>
+                <td data-label='Nombre del País'><strong>$nombre_pas</strong></td>
+            </tr>";
+            }
+
+            echo "</tbody>";
+            echo "</table>";
+            echo "</div>";
+            echo "</div>";
+        } else {
+            echo "<div class='alert alert-info text-center'>No hay países registrados</div>";
+        }
+    }
+    ?>
+</div>
 ?>
 

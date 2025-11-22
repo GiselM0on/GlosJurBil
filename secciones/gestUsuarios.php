@@ -39,7 +39,7 @@ if(isset($_POST["btn_buscar"]) && $_POST["btn_buscar"] == "Buscar"){
     }
 }
 
-// Procesar formulario PRINCIPAL (Agregar, Modificar, Eliminar)
+// Procesar formulario PRINCIPAL (Agregar, Modificar, Eliminar, Mostrar)
 if(isset($_POST["btn_usuarios"])){
     $btn = $_POST["btn_usuarios"];
     
@@ -76,7 +76,7 @@ if(isset($_POST["btn_usuarios"])){
                 correo='$correo',
                 contrasena='$contrasena',
                 rol='$rol'
-                WHERE id='$id_usuario'";
+                WHERE id_usuario='$id_usuario'";
         
         $cs = mysqli_query($cn, $sql);
         if($cs) {
@@ -133,18 +133,18 @@ if(isset($_POST["btn_usuarios"])){
             </div>
             <div class="col-md-6">
                 <label class="form-label">Nombre</label>
-                <input type="text" class="form-control" name="txtnombre" value="<?php echo htmlspecialchars($nombre); ?>" required>
+                <input type="text" class="form-control" name="txtnombre" value="<?php echo htmlspecialchars($nombre); ?>" >
             </div>
         </div>
 
         <div class="row mb-3">
             <div class="col-md-6">
                 <label class="form-label">Correo</label>
-                <input type="email" class="form-control" name="txtcorreo" value="<?php echo htmlspecialchars($correo); ?>" required>
+                <input type="email" class="form-control" name="txtcorreo" value="<?php echo htmlspecialchars($correo); ?>" >
             </div>
             <div class="col-md-6">
                 <label class="form-label">Contraseña</label>
-                <input type="password" class="form-control" name="txtcontrasena" value="<?php echo htmlspecialchars($contrasena); ?>" required>
+                <input type="password" class="form-control" name="txtcontrasena" value="<?php echo htmlspecialchars($contrasena); ?>" >
             </div>
         </div>
 
@@ -164,10 +164,13 @@ if(isset($_POST["btn_usuarios"])){
             </div>
         </div>
 
-        <!-- Botones de acción -->
+         <!-- Botones de acción -->
         <div class="text-center">
             <button type="submit" class="btn btn-outline-primary me-2" name="btn_usuarios" value="Agregar">
                 <i class="bi bi-plus-lg"></i> Agregar
+            </button>
+            <button type="submit" class="btn btn-outline-primary me-2" name="btn_usuarios" value="Mostrar">
+                <i class="bi bi-eye"></i> Mostrar
             </button>
             <button type="submit" class="btn btn-outline-primary me-2" name="btn_usuarios" value="Modificar">
                 <i class="bi bi-pencil"></i> Modificar
@@ -177,12 +180,57 @@ if(isset($_POST["btn_usuarios"])){
                 <i class="bi bi-trash"></i> Eliminar
             </button>
         </div>
-    </form>
+
+<!-- SECCIÓN PARA MOSTRAR LOS USUARIOS -->
+<div class="data-container mt-4">
+    <?php
+    if(isset($_POST["btn_usuarios"]) && $_POST["btn_usuarios"] == "Mostrar"){
+        $sql="SELECT * FROM usuario";
+        $cs=mysqli_query($cn,$sql);
+        if($cs && mysqli_num_rows($cs) > 0) {
+           echo "<div class='contenedor-tabla'>";
+            echo "<h3 class='titulo-tabla-terminos mb-4 text-primary'>Lista de Usuarios</h3>";
+            echo "<div class='table-responsive-container'>";
+            echo "<table class='table table-hover mb-0'>";
+            echo "<thead>
+                    <tr>
+                        <th width='80'>ID</th>
+                        <th width='150'>Nombre</th>
+                        <th width='200'>Correo</th>
+                        <th width='120'>Rol</th>
+                        <th width='120'>Fecha Registro</th>
+                    </tr>
+                </thead>";
+            echo "<tbody>";
+            while($resul=mysqli_fetch_array($cs)){
+                $id_usuario = $resul[0];
+                $nombre = $resul[1];
+                $correo = $resul[2];
+                $rol = $resul[4];
+                $fecha_registro = date('d/m/Y', strtotime($resul[5]));
+                
+                // Determinar clase del badge según el rol
+                $badge_class = '';
+                if($rol == 'admin') $badge_class = 'status-active';
+                elseif($rol == 'docente') $badge_class = 'status-pending';
+                elseif($rol == 'estudiante') $badge_class = 'badge-estado-rechazado';
+                
+                echo "<tr>
+                <td data-label='ID'><strong>$id_usuario</strong></td>
+                <td data-label='Nombre'><strong>$nombre</strong></td>
+                <td data-label='Correo'>$correo</td>
+                <td data-label='Rol'><span class='status-badge $badge_class'>" . ucfirst($rol) . "</span></td>
+                <td data-label='Fecha Registro'><small>$fecha_registro</small></td>
+            </tr>";
+            }
+
+            echo "</tbody>";
+            echo "</table>";
+            echo "</div>";
+            echo "</div>";
+        } else {
+            echo "<div class='alert alert-info text-center'>No hay usuarios registrados</div>";
+        }
+    }
+    ?>
 </div>
-
-<!-- Mostrar lista de usuarios -->
-<?php
-$query_usuarios = "SELECT * FROM usuario ORDER BY id DESC";
-$result_usuarios = mysqli_query($cn, $query_usuarios);
-?>
-
