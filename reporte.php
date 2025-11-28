@@ -15,7 +15,7 @@ include "conexion.php";
 $dompdf_loaded = false;
 $dompdf_paths = [
     __DIR__ . "/libreria/dompdf/autoload.inc.php",
-    __DIR__ . "/dompdf/autoload.inc.php",
+    __DIR__ . "/img/logo-uped-snfondo.php",
     "C:/xampp/htdocs/GlosJurBil/libreria/dompdf/autoload.inc.php"
 ];
 
@@ -60,7 +60,9 @@ if (!$result || $result->num_rows === 0) {
     die("❌ No se encontraron términos en la base de datos.");
 }
 
-
+// ---------------------------------------------
+// 5. HTML CON LOGO EN PARTE IZQUIERDA SUPERIOR
+// ---------------------------------------------
 $html = "
 <!DOCTYPE html>
 <html>
@@ -89,6 +91,7 @@ $html = "
 
         .logo-container {
             flex: 0 0 auto;
+            width: 120px;
         }
 
         .logo {
@@ -99,6 +102,13 @@ $html = "
         .header-center {
             flex: 1;
             text-align: center;
+            margin: 0 20px;
+        }
+
+        .header-right {
+            flex: 0 0 auto;
+            width: 120px;
+            text-align: right;
         }
 
         .titulo-general {
@@ -108,11 +118,16 @@ $html = "
             margin: 0;
         }
 
+        .subtitulo {
+            color: #636466;
+            font-size: 14px;
+            margin: 5px 0 0 0;
+        }
+
         .fecha {
             color: #636466;
             font-size: 12px;
             margin: 0;
-            text-align: right;
         }
 
         .termino {
@@ -148,16 +163,25 @@ $html = "
             background: #ddd;
             margin: 10px 0;
         }
+
+        .info-reporte {
+            font-size: 11px;
+            color: #888;
+            margin-top: 5px;
+        }
     </style>
 </head>
 <body>
     <div class='header'>
-        <div class='logo-container'></div>
+       <img src='img/logo-uped-snfondo.png' class='logo' alt='Logo'>
+        
         <div class='header-center'>
-            <h1 class='titulo-general'>Reporte de términos jurídicos</h1>
+            <h1 class='titulo-general'>Reporte de Términos Jurídicos</h1>
         </div>
-        <div class='fecha'>" . date('d/m/Y') . "</div>
+
     </div>
+   
+         
 ";
 
 // ---------------------------------------------

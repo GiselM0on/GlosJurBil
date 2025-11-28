@@ -17,13 +17,7 @@ session_start();
 //conexion a la db
 include ("conexion.php");
 
-// Usuario simulado para pruebas
-$current_user = [
-    'id' => 1,
-    'nombre' => 'Admin',
-    'correo' => 'admin@glosario.com',
-    'rol' => 'admin'
-];
+
 
 // Obtener sección activa
 $seccion = isset($_GET['seccion']) ? $_GET['seccion'] : 'dashboard';

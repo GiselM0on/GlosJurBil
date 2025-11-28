@@ -9,6 +9,7 @@ if (!isset($conn) || $conn->connect_error) {
     die("Error: No se pudo establecer conexión con la base de datos");
 }
 
+
 // Verificar si hay un usuario logueado
 $usuarioLogueado = false;
 $rolUsuario = '';
@@ -19,7 +20,13 @@ if (isset($_SESSION['usuario']) && isset($_SESSION['rol'])) {
     $rolUsuario = $_SESSION['rol'];
     $nombreUsuario = $_SESSION['usuario'];
 }
+// Configurar charset para la conexión
+if (isset($cn) && is_object($cn)) {
+    mysqli_set_charset($cn, "utf8mb4");
+}
+
 ?>
+
 
 <!DOCTYPE html>
 <html lang="es">
@@ -251,7 +258,7 @@ if (isset($_SESSION['usuario']) && isset($_SESSION['rol'])) {
                                     <i class="bi bi-speedometer2"></i> Panel Admin
                                 </a>
                             <?php elseif ($rolUsuario === 'docente'): ?>
-                                <a href="pantallaDocente.php" class="btn dashboard-btn rounded-pill ms-lg-3">
+                                <a href="docente_revision.php" class="btn dashboard-btn rounded-pill ms-lg-3">
                                     <i class="bi bi-speedometer2"></i> Panel Docente
                                 </a>
                             <?php endif; ?>
@@ -274,7 +281,7 @@ if (isset($_SESSION['usuario']) && isset($_SESSION['rol'])) {
             
             <!-- En la navbar, después del botón del dashboard -->
                     <li class="nav-item">
-                        <a href="reporte.php" class="btn report-btn rounded-pill ms-lg-2">
+                        <a href="listar_terminos.php" class="btn report-btn rounded-pill ms-lg-2">
                             <i class="bi bi-graph-up"></i> Reportes
                         </a>
                     </li>
@@ -299,7 +306,7 @@ if (isset($_SESSION['usuario']) && isset($_SESSION['rol'])) {
                 <div class="search-container">
                     <div class="input-group">
                         <input type="text" class="form-control search-input" id="searchTerm" 
-                               placeholder="Buscar término (Ej. 'Demanda' o 'Warrant')..." 
+                               placeholder="Buscar término ..." 
                                aria-label="Buscar término">
                         <button class="btn search-button" type="button" onclick="searchTerms()">
                             <i class="bi bi-search"></i> Buscar
@@ -328,13 +335,11 @@ if (isset($_SESSION['usuario']) && isset($_SESSION['rol'])) {
                 <!-- Los términos se cargarán aquí en formato lista -->
                 <?php 
                 
-                $sql = "SELECT 
+                $sql = "SELECT DISTINCT
                         t.palabra,
                         t.definicion,
-                        t.pronunciacion,
-                        i.nombre_idioma as idioma
+                        t.pronunciacion
                     FROM termino t
-                    JOIN idioma i ON i.id_Idioma = i.id_idioma
                     ORDER BY t.palabra";
 
                 $result = $conn->query($sql);
@@ -349,13 +354,6 @@ if (isset($_SESSION['usuario']) && isset($_SESSION['rol'])) {
                                 <strong class="term-title me-2">' . 
                                     htmlspecialchars($row['palabra']) . 
                                 '</strong>';
-                        
-                        // Mostrar etiqueta de idioma
-                        echo '<span class="badge lang-tag ' . 
-                             (strtolower($row['idioma']) == 'español' ? 'es' : 'en') . 
-                             ' align-self-start">' . 
-                             htmlspecialchars($row['idioma']) . 
-                             '</span>';
                         
                         echo '</div>'; // Cierre del flex container
                         
