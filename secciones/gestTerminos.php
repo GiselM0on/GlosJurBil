@@ -1,8 +1,15 @@
 <?php
-// secciones/gestion_terminos.php
+//session_start();
+
+
 
 // Conexión a la base de datos
 include("conexion.php");
+
+// Configurar charset para la conexión
+if (isset($cn) && is_object($cn)) {
+    mysqli_set_charset($cn, "utf8mb4");
+}
 
 // Variables para los campos
 $id_termino = "";
@@ -130,7 +137,7 @@ if(isset($_POST["btn1"])){
                 <form method="POST" class="row g-3 align-items-end">
                     <div class="col-md-8">
                         <input type="text" class="form-control" name="txtbus" placeholder="ID del término a buscar" 
-                               value="<?php echo htmlspecialchars($txtbus); ?>">
+                               value="<?php echo htmlspecialchars($txtbus, ENT_QUOTES, 'UTF-8'); ?>">
                     </div>
                     <div class="col-md-4">
                         <button type="submit" class="btn btn-outline-primary w-90" name="btn1" value="Buscar">
@@ -147,17 +154,17 @@ if(isset($_POST["btn1"])){
                     <div class="col-md-2">
                         <label class="form-label fw-semibold">ID Término</label>
                         <input type="text" class="form-control form-control-sm" name="txtid_termino" 
-                               value="<?php echo htmlspecialchars($id_termino); ?>" style="font-size: 0.875rem;">
+                               value="<?php echo htmlspecialchars($id_termino, ENT_QUOTES, 'UTF-8'); ?>" style="font-size: 0.875rem;">
                     </div>
                     <div class="col-md-2">
                         <label class="form-label fw-semibold">Palabra</label>
                         <input type="text" class="form-control form-control-sm" name="txtpalabra" 
-                               value="<?php echo htmlspecialchars($palabra); ?>">
+                               value="<?php echo htmlspecialchars($palabra, ENT_QUOTES, 'UTF-8'); ?>">
                     </div>
                     <div class="col-md-2">
                         <label class="form-label fw-semibold">Pronunciación</label>
                         <input type="text" class="form-control form-control-sm" name="txtpronunciacion" 
-                               value="<?php echo htmlspecialchars($pronunciacion); ?>">
+                               value="<?php echo htmlspecialchars($pronunciacion, ENT_QUOTES, 'UTF-8'); ?>">
                     </div>
                     <div class="col-md-2">
                         <label class="form-label fw-semibold">Estado</label>
@@ -169,36 +176,36 @@ if(isset($_POST["btn1"])){
                         </select>
                     </div>
                     <div class="col-md-2">
-                        <label class="form-label ">Fecha Creación</label>
-                        <input type="date" class="form-control name="txtfecha_creacion" 
-                               value="<?php echo htmlspecialchars($fecha_creacion); ?>" >
+                        <label class="form-label">Fecha Creación</label>
+                        <input type="date" class="form-control" name="txtfecha_creacion" 
+                               value="<?php echo htmlspecialchars($fecha_creacion, ENT_QUOTES, 'UTF-8'); ?>">
                     </div>
                     <div class="col-md-2">
-                        <label class="form-label ">Fecha Modificación</label>
+                        <label class="form-label">Fecha Modificación</label>
                         <input type="date" class="form-control" name="txtfecha_modificacion" 
-                               value="<?php echo htmlspecialchars($fecha_modificacion); ?>" >
+                               value="<?php echo htmlspecialchars($fecha_modificacion, ENT_QUOTES, 'UTF-8'); ?>">
                     </div>
 
                     <!-- Segunda fila -->
                     <div class="col-md-6">
                         <label class="form-label fw-semibold">Definición</label>
-                        <textarea class="form-control" name="txtdefinicion" rows="3" placeholder="Ingrese la definición del término"><?php echo htmlspecialchars($definicion); ?></textarea>
+                        <textarea class="form-control" name="txtdefinicion" rows="3" placeholder="Ingrese la definición del término"><?php echo htmlspecialchars($definicion, ENT_QUOTES, 'UTF-8'); ?></textarea>
                     </div>
                     <div class="col-md-6">
                         <label class="form-label fw-semibold">Ejemplo Aplicativo</label>
-                        <textarea class="form-control" name="txtejemplo" rows="3" placeholder="Ingrese un ejemplo de uso"><?php echo htmlspecialchars($ejemplo_aplicativo); ?></textarea>
+                        <textarea class="form-control" name="txtejemplo" rows="3" placeholder="Ingrese un ejemplo de uso"><?php echo htmlspecialchars($ejemplo_aplicativo, ENT_QUOTES, 'UTF-8'); ?></textarea>
                     </div>
 
                     <!-- Tercera fila -->
                     <div class="col-md-6">
                         <label class="form-label fw-semibold">Referencia Bibliográfica</label>
                         <input type="text" class="form-control" name="txtreferencia" 
-                               value="<?php echo htmlspecialchars($referencia_bibliogr); ?>">
+                               value="<?php echo htmlspecialchars($referencia_bibliogr, ENT_QUOTES, 'UTF-8'); ?>">
                     </div>
                     <div class="col-md-6">
                         <label class="form-label fw-semibold">ID Usuario</label>
                         <input type="number" class="form-control form-control-sm" name="txtid_usuario" 
-                               value="<?php echo htmlspecialchars($id_usuario); ?>">
+                               value="<?php echo htmlspecialchars($id_usuario, ENT_QUOTES, 'UTF-8'); ?>">
                     </div>
                 </div>
 
@@ -272,16 +279,16 @@ if(isset($_POST["btn1"])){
                     elseif($estado == 'rechazado') $badge_class = 'badge-estado-rechazado';
                     
                     echo "<tr>
-                    <td data-label='ID'><strong>$id_termino</strong></td>
-                    <td data-label='Palabra'><strong>$palabra</strong></td>
-                    <td data-label='Pronunciación'><em>$pronunciacion</em></td>
-                    <td data-label='Definición'><div class='texto-limitado'>$definicion</div></td>
-                    <td data-label='Ejemplo'><div class='texto-limitado'>$ejemplo_aplicativo</div></td>
-                    <td data-label='Referencia'><small>$referencia_bibliogr</small></td>
-                    <td data-label='Estado'><span class='status-badge $badge_class'>" . ucfirst($estado) . "</span></td>
-                    <td data-label='Fecha Creación'><small>$fecha_creacion</small></td>
-                    <td data-label='Fecha Modificación'><small>$fecha_modificacion</small></td>
-                    <td data-label='Usuario'>$id_usuario</td>
+                    <td data-label='ID'><strong>" . htmlspecialchars($id_termino, ENT_QUOTES, 'UTF-8') . "</strong></td>
+                    <td data-label='Palabra'><strong>" . htmlspecialchars($palabra, ENT_QUOTES, 'UTF-8') . "</strong></td>
+                    <td data-label='Pronunciación'><em>" . htmlspecialchars($pronunciacion, ENT_QUOTES, 'UTF-8') . "</em></td>
+                    <td data-label='Definición'><div class='texto-limitado'>" . htmlspecialchars($definicion, ENT_QUOTES, 'UTF-8') . "</div></td>
+                    <td data-label='Ejemplo'><div class='texto-limitado'>" . htmlspecialchars($ejemplo_aplicativo, ENT_QUOTES, 'UTF-8') . "</div></td>
+                    <td data-label='Referencia'><small>" . htmlspecialchars($referencia_bibliogr, ENT_QUOTES, 'UTF-8') . "</small></td>
+                    <td data-label='Estado'><span class='status-badge $badge_class'>" . ucfirst(htmlspecialchars($estado, ENT_QUOTES, 'UTF-8')) . "</span></td>
+                    <td data-label='Fecha Creación'><small>" . htmlspecialchars($fecha_creacion, ENT_QUOTES, 'UTF-8') . "</small></td>
+                    <td data-label='Fecha Modificación'><small>" . htmlspecialchars($fecha_modificacion, ENT_QUOTES, 'UTF-8') . "</small></td>
+                    <td data-label='Usuario'>" . htmlspecialchars($id_usuario, ENT_QUOTES, 'UTF-8') . "</td>
                 </tr>";
                 }
 

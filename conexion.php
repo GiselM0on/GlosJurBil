@@ -21,8 +21,8 @@ if (!$cn) {
 }
 
 //codigo para mostrar caracteres especiales como la 'ñ'
-$conn->set_charset("utf8mb4");
+$cn->set_charset("utf8mb4");
 
 // Retornar la conexión
-return $conn;
+return $cn;
 ?>

@@ -33,6 +33,8 @@ $seccion = isset($_GET['seccion']) ? $_GET['seccion'] : 'dashboard';
 <html lang="es">
 <head>
     <meta charset="UTF-8">
+    
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pantalla Admin - Glosario Jurídico Bilingüe</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -569,8 +571,8 @@ body {
             <div class="menu-section">
                 <div class="section-title">Términos</div>
                 <ul class="menu-items">
-                    <a href="?seccion=manage_translations" class="menu-item <?php echo $seccion == 'manage_translations' ? 'active' : ''; ?>">
-                        <i class="bi bi-translate"></i> <span>Traducciones</span>
+                   <a href="?seccion=manage_terms" class="menu-item <?php echo $seccion == 'manage_terms' ? 'active' : ''; ?>">
+                        <i class="bi bi-patch-check-fill"></i> <span>Términos</span>
                     </a>
                 </ul>
             </div>
@@ -580,9 +582,6 @@ body {
             <div class="menu-section">
                 <div class="section-title">VALIDACIÓN</div>
                 <ul class="menu-items">
-                    <a href="?seccion=manage_terms" class="menu-item <?php echo $seccion == 'manage_terms' ? 'active' : ''; ?>">
-                        <i class="bi bi-patch-check-fill"></i> <span>Términos</span>
-                    </a>
                     <a href="?seccion=manage_validations" class="menu-item <?php echo $seccion == 'manage_validations' ? 'active' : ''; ?>">
                         <i class="bi bi-clipboard-check"></i> <span>Validaciones</span>
                     </a>
@@ -635,9 +634,6 @@ body {
                 case 'manage_terms':
                     include 'secciones/gestTerminos.php';
                     break;
-                case 'manage_translations':
-                    include 'secciones/gestTraduc.php';
-                    break;
                 case 'manage_countries':
                     include 'secciones/gestPaises.php';
                     break;
@@ -650,7 +646,7 @@ body {
                     break;
                 default:
                     // Por defecto, mostrar la sección de traducciones
-                    include 'secciones/gestTraduc.php';
+                    include 'secciones/gestTerminos.php';
             }
             ?>
         </div>
