@@ -19,7 +19,7 @@ if ($_POST && isset($_POST['accion'])) {
 
     $sql_valid = "INSERT INTO gls_jur_bil_validacion (comentario, estado_validacion, fecha_validacion, id_Termino, id_Usuario) 
                   VALUES (?, ?, NOW(), ?, ?)";
-    $stmt_valid = $conn->prepare($sql_valid);
+    $stmt_valid = $cn->prepare($sql_valid);
 
     $estado_valid = ($accion == 'aprobar') ? 'aprobado' : 'rechazado';
     if ($accion == 'rechazar' && empty($comentario)) {
@@ -30,7 +30,7 @@ if ($_POST && isset($_POST['accion'])) {
     $stmt_valid->execute();
 
     $sql_update = "UPDATE gls_jur_bil_termino SET estado = ?, fecha_modificacion = NOW() WHERE id_Termino = ?";
-    $stmt_update = $conn->prepare($sql_update);
+    $stmt_update = $cn->prepare($sql_update);
     $stmt_update->bind_param("si", $estado_valid, $id_Termino);
     $stmt_update->execute();
 
@@ -47,7 +47,7 @@ $sql = "SELECT t.id_Termino, t.ejemplo_aplicativo, t.referencia_bibliogr, t.fech
         LEFT JOIN gls_jur_bil_traduccion ten ON t.id_Termino = ten.id_Termino AND ten.id_Idioma = 2
         WHERE t.estado = 'pendiente'
         ORDER BY t.fecha_creacion DESC";
-$result = $conn->query($sql);
+$result = $cn->query($sql);
 $terms = [];
 if ($result) {
     while ($row = $result->fetch_assoc()) {
@@ -74,9 +74,11 @@ if ($result) {
             --color-light: #f1f2f2;
         }
         body {
-            background-color: var(--color-background);
+            background: linear-gradient(to bottom, var(--color-accent1), var(--color-primary), var(--color-neutral), var(--color-accent2), var(--color-secondary), var(--color-light));
             font-family: 'Inter', sans-serif;
             min-height: 100vh;
+            margin: 0;
+            padding: 0;
         }
         .sidebar {
             width: 260px;
