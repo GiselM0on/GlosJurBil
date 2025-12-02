@@ -78,7 +78,7 @@ if ($result && $result->num_rows > 0) {
                 header("Location: docente_revision.php");
                 break;
             case 'estudiante':
-                header("Location: estudiante_dashboard.php");
+                header("Location: estudiante_terminos.php");
                 break;
             default:
                 header("Location: login.php");
