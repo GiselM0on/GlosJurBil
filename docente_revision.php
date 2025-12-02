@@ -7,7 +7,7 @@ $sql = "SELECT t.id_Termino, t.palabra, u.nombre AS estudiante
         INNER JOIN usuario u ON u.id_Usuario = t.id_Usuario
         WHERE t.estado = 'pendiente'";
 
-$result = $cn->query($sql);
+$result = $conn->query($sql);
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -16,6 +16,39 @@ $result = $cn->query($sql);
 <title>Revisión de términos</title>
 <link rel="stylesheet" href="libreria/estilos.css">
 <style>
+:root {
+    --color-amarillo: #fff06dff;
+    --color-azul-oscuro: #006694;
+    --color-gris: #636466;
+    --color-gris-claro: #f1f2f2;
+    --color-naranja: #ff9a15;
+    --color-azul-claro: #27a5df;
+}
+
+body {
+    background-color: var(--color-gris-claro);
+    color: var(--color-azul-oscuro);
+    min-height: 100vh;
+    font-family: 'Inter', sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.sidebar {
+    width: 260px;
+    background: linear-gradient(180deg, var(--color-azul-oscuro) 0%, #004466 100%);
+    color: white;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    box-shadow: 4px 0 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    padding: 20px 0;
+}
+
 .modal {
     display: none;
     position: fixed;
