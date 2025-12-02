@@ -12,7 +12,7 @@ $idUsuario = $_SESSION['id_Usuario'];
 
 if (isset($_GET['razon'])) {
     // Fetch razón de rechazo
-    $stmt = $conn->prepare("SELECT v.comentario
+    $stmt = $cn->prepare("SELECT v.comentario
                             FROM validacion v
                             INNER JOIN termino t ON t.id_Termino = v.id_Termino
                             WHERE t.id_Termino = ? AND t.id_Usuario = ? AND t.estado = 'rechazado'");
@@ -36,5 +36,5 @@ if (isset($_GET['razon'])) {
     }
 }
 $stmt->close();
-$conn->close();
+$cn->close();
 ?>

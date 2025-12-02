@@ -5,7 +5,7 @@ session_start();
 $conn = include "conexion.php";       
 
 // Verificar si la conexión se estableció correctamente
-if (!isset($conn) || $conn->connect_error) {
+if (!isset($cn) || $cn->connect_error) {
     die("Error: No se pudo establecer conexión con la base de datos");
 }
 
@@ -254,16 +254,23 @@ if (isset($cn) && is_object($cn)) {
                             </span>
                         </li>
                         <li class="nav-item">
-                            <?php if ($rolUsuario === 'admin'): ?>
+                            <?php if ($rolUsuario === 'administrador'): ?>
                                 <a href="pantallaAdmin.php" class="btn dashboard-btn rounded-pill ms-lg-3">
                                     <i class="bi bi-speedometer2"></i> Panel Admin
                                 </a>
+                                
                             <?php elseif ($rolUsuario === 'docente'): ?>
                                 <a href="docente_revision.php" class="btn dashboard-btn rounded-pill ms-lg-3">
                                     <i class="bi bi-speedometer2"></i> Panel Docente
                                 </a>
+                                 <?php elseif ($rolUsuario === 'estudiante'): ?>
+                                <a href="estudiante_terminos.php" class="btn dashboard-btn rounded-pill ms-lg-3">
+                                    <i class="bi bi-speedometer2"></i> Panel Estudinate
+                                </a>
                             <?php endif; ?>
                         </li>
+
+                        
                      
                         <li class="nav-item">
                             <a href="logout.php" class="btn btn-outline-light rounded-pill ms-lg-2">

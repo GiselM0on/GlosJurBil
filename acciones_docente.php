@@ -25,13 +25,13 @@ $idDocente = $_SESSION['id_Usuario'];
 $fecha = date("Y-m-d H:i:s");
 
 if ($accion === "validar") {
-    $stmt1 = $conn->prepare("INSERT INTO validacion (comentario, estado_validacion, fecha_validacion, id_Termino, id_Usuario)
+    $stmt1 = $cn->prepare("INSERT INTO validacion (comentario, estado_validacion, fecha_validacion, id_Termino, id_Usuario)
                              VALUES (?, 'validado', ?, ?, ?)");
     $empty = '';
     $stmt1->bind_param("ssii", $empty, $fecha, $id, $idDocente);
     $stmt1->execute();
 
-    $stmt2 = $conn->prepare("UPDATE termino SET estado='validado' WHERE id_Termino=?");
+    $stmt2 = $cn->prepare("UPDATE termino SET estado='validado' WHERE id_Termino=?");
     $stmt2->bind_param("i", $id);
     $stmt2->execute();
 
@@ -47,12 +47,12 @@ if ($accion === "rechazar") {
         exit();
     }
 
-    $stmt1 = $conn->prepare("INSERT INTO validacion (comentario, estado_validacion, fecha_validacion, id_Termino, id_Usuario)
+    $stmt1 = $cn->prepare("INSERT INTO validacion (comentario, estado_validacion, fecha_validacion, id_Termino, id_Usuario)
                              VALUES (?, 'rechazado', ?, ?, ?)");
     $stmt1->bind_param("ssii", $motivo, $fecha, $id, $idDocente);
     $stmt1->execute();
 
-    $stmt2 = $conn->prepare("UPDATE termino SET estado='rechazado' WHERE id_Termino=?");
+    $stmt2 = $cn->prepare("UPDATE termino SET estado='rechazado' WHERE id_Termino=?");
     $stmt2->bind_param("i", $id);
     $stmt2->execute();
 

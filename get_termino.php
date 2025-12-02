@@ -8,7 +8,7 @@ if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
 
 $id = intval($_GET['id']);
 
-$stmt = $conn->prepare("SELECT t.palabra, t.definicion, u.nombre AS estudiante
+$stmt = $cn->prepare("SELECT t.palabra, t.definicion, u.nombre AS estudiante
                        FROM termino t
                        INNER JOIN usuario u ON u.id_Usuario = t.id_Usuario
                        WHERE t.id_Termino = ?");
@@ -24,5 +24,5 @@ if ($res->num_rows > 0) {
 }
 
 $stmt->close();
-$conn->close();
+$cn->close();
 ?>

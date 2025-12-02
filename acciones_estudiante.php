@@ -16,10 +16,10 @@ if (!isset($_POST['accion']) || $_POST['accion'] !== 'guardar') {
 $idUsuario = $_SESSION['id_Usuario'];
 $id = intval($_POST['idTermino']);
 $palabra = trim($_POST['palabra']);
-$pronunciacion = trim($_POST['pronunciacion'] ?? '');
+$pronunciacion = trim(isset($_POST['pronunciacion']) ? $_POST['pronunciacion'] : '');
 $definicion = trim($_POST['definicion']);
-$ejemplo = trim($_POST['ejemplo'] ?? '');
-$referencia = trim($_POST['referencia'] ?? '');
+$ejemplo = trim(isset($_POST['ejemplo']) ? $_POST['ejemplo'] : '');
+$referencia = trim(isset($_POST['referencia']) ? $_POST['referencia'] : '');
 $fecha = date("Y-m-d H:i:s");
 
 if (empty($palabra) || empty($definicion)) {
@@ -30,14 +30,14 @@ if (empty($palabra) || empty($definicion)) {
 
 if ($id == 0) {
     // Agregar nuevo
-    $stmt = $conn->prepare("INSERT INTO termino (palabra, pronunciacion, definicion, ejemplo_aplicativo, referencia_bibliogr, estado, fecha_creacion, fecha_modificacion, id_Usuario)
-                            VALUES (?, ?, ?, ?, ?, 'pendiente', ?, ?, ?)");
+    $stmt = $cn->prepare("INSERT INTO termino (palabra, pronunciacion, definicion, ejemplo_aplicativo, referencia_bibliogr, estado, fecha_creacion, fecha_modificacion, id_Usuario)
+                            VALUES ($palabra, $pronunciacion, $ejemplo, $referencia, ?, 'pendiente', ?, ?, ?)");
     $stmt->bind_param("ssssssss", $palabra, $pronunciacion, $definicion, $ejemplo, $referencia, $fecha, $fecha, $idUsuario);
     $stmt->execute();
     $_SESSION['success'] = "Término agregado y enviado a revisión.";
 } else {
     // Modificar 
-    $stmtCheck = $conn->prepare("SELECT id_Termino FROM termino WHERE id_Termino = ? AND id_Usuario = ? AND estado != 'validado'");
+    $stmtCheck = $cn->prepare("SELECT id_Termino FROM termino WHERE id_Termino = ? AND id_Usuario = ? AND estado != 'validado'");
     $stmtCheck->bind_param("ii", $id, $idUsuario);
     $stmtCheck->execute();
     if ($stmtCheck->get_result()->num_rows == 0) {
@@ -46,9 +46,9 @@ if ($id == 0) {
         exit();
     }
 
-    $stmt = $conn->prepare("UPDATE termino SET palabra=?, pronunciacion=?, definicion=?, ejemplo_aplicativo=?, referencia_bibliogr=?, estado='pendiente', fecha_modificacion=?
+    $stmt = $cn->prepare("UPDATE termino SET palabra=?, pronunciacion=?, definicion=?, ejemplo_aplicativo=?, referencia_bibliogr=?, estado='pendiente', fecha_modificacion=?
                             WHERE id_Termino=?");
-    $stmt->bind_param("sssssss", $palabra, $pronunciacion, $definicion, $ejemplo, $referencia, $fecha, $id);
+    $stmt->bind_param("ssssssi", $palabra, $pronunciacion, $definicion, $ejemplo, $referencia, $fecha, $id);
     $stmt->execute();
     $_SESSION['success'] = "Término modificado y reenviado a revisión.";
 }
