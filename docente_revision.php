@@ -225,18 +225,14 @@ if ($result) {
        
         <nav class="sidebar-nav">
             <!-- Dashboard -->
-            <div class="menu-section">
-                <a href="?seccion=dashboard" class="menu-item <?php echo $seccion == 'dashboard' ? 'active' : ''; ?>">
-                    <i class="bi bi-grid-fill"></i> <span>Panel</span>
-                </a>
-            </div>
+           
            
             <!-- Términos -->
             <div class="menu-section">
                 <div class="section-title">Términos</div>
                 <ul class="menu-items">
-                    <a href="?seccion=manage_translations" class="menu-item <?php echo $seccion == 'manage_translations' ? 'active' : ''; ?>">
-                        <i class="bi bi-translate"></i> <span>Traducciones</span>
+                 <a href="?seccion=manage_terms" class="menu-item <?php echo $seccion == 'manage_terms' ? 'active' : ''; ?>">
+                        <i class="bi bi-patch-check-fill"></i> <span>Términos</span>
                     </a>
                 </ul>
             </div>
@@ -248,7 +244,7 @@ if ($result) {
                     <a href="?seccion=revision_terminos" class="menu-item <?php echo $seccion == 'revision_terminos' ? 'active' : ''; ?>">
                         <i class="bi bi-patch-check-fill"></i> <span>Revisar Términos</span>
                     </a>
-                    <a href="?seccion=manage_validations" class="menu-item <?php echo $seccion == 'manage_validations' ? 'active' : ''; ?>">
+                   <a href="?seccion=manage_validations" class="menu-item <?php echo $seccion == 'manage_validations' ? 'active' : ''; ?>">
                         <i class="bi bi-clipboard-check"></i> <span>Validaciones</span>
                     </a>
                 </ul>
