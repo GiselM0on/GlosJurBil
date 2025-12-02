@@ -2,6 +2,11 @@
 include "conexion.php";
 session_start();
 
+// Configurar charset para la conexión
+if (isset($cn) && is_object($cn)) {
+    mysqli_set_charset($cn, "utf8mb4");
+}
+
 if (!isset($_SESSION['id_Usuario']) || $_SESSION['rol'] !== 'docente') {
     header("Location: login.php");
     exit();

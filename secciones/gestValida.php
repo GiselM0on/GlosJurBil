@@ -4,6 +4,12 @@
 //conexion del db
 include ("conexion.php");
 
+
+// Configurar charset para la conexión
+if (isset($cn) && is_object($cn)) {
+    mysqli_set_charset($cn, "utf8mb4");
+}
+
 // Variables para los campos
 $id_validacion = "";
 $comentario = "";

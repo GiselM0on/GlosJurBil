@@ -4,6 +4,12 @@
 //conexion del db
 include ("conexion.php");
 
+
+// Configurar charset para la conexión
+if (isset($cn) && is_object($cn)) {
+    mysqli_set_charset($cn, "utf8mb4");
+}
+
 // Variables para los campos
 $id_pais = "";
 $nombre_pas = "";
@@ -53,15 +59,15 @@ if(isset($_POST["btn_paises"])){
     // MODIFICAR
     if($btn == "Modificar" && !empty($_POST["txtid_pais"])){
         $id_pais = $_POST["txtid"];
-        $nombre_pas = $_POST["txtnombre_pas"];
+        $nombre_pas = $_POST["txtnombre_pais"];
         
-        $sql = "UPDATE pais SET nombre_pas='$nombre_pas' WHERE id='$id_pais'";
+        $sql = "UPDATE pais SET nombre_pais='$nombre_pas' WHERE id='$id_pais'";
         
-        $cs = mysqli_query($cn, $sql);
+        $cs = mysqli_query($conn, $sql);
         if($cs) {
             echo "<script>alert('País modificado correctamente');</script>";
         } else {
-            echo "<script>alert('Error al modificar: " . mysqli_error($cn) . "');</script>";
+            echo "<script>alert('Error al modificar: " . mysqli_error($conn) . "');</script>";
         }
     }
     
@@ -74,7 +80,7 @@ if(isset($_POST["btn_paises"])){
         if($cs) {
             echo "<script>alert('País eliminado correctamente');</script>";
             // Limpiar campos
-            $id_pais = $nombre_pas = $txtbus = "";
+            $id_pais = $nombre_pais = $txtbus = "";
         } else {
             echo "<script>alert('Error al eliminar: " . mysqli_error($cn) . "');</script>";
         }
