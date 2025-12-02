@@ -20,15 +20,15 @@ if ($correo === '' || $contrasena === '' || $rol_seleccionado === '') {
 
 
 include("conexion.php");
-if (!isset($conn)) {
+if (!isset($cn)) {
     die("Error: no se encontró la conexión a la base de datos.");
 }
 
 
 $sql = "SELECT * FROM usuario WHERE correo = ? LIMIT 1";
-$stmt = $conn->prepare($sql);
+$stmt = $cn->prepare($sql);
 if (!$stmt) {
-    die("Error en la consulta: " . $conn->error);
+    die("Error en la consulta: " . $cn->error);
 }
 
 $stmt->bind_param("s", $correo);
@@ -72,10 +72,10 @@ if ($result && $result->num_rows > 0) {
        
         switch ($rol_bd) {
             case 'administrador':
-                header("Location: admin_dashboard.php");
+                header("Location: pantallaAdmin.php");
                 break;
             case 'docente':
-                header("Location: docente_dashboard.php");
+                header("Location: docente_revision.php");
                 break;
             case 'estudiante':
                 header("Location: estudiante_dashboard.php");
@@ -99,5 +99,5 @@ if ($result && $result->num_rows > 0) {
 
 // Cerrar recursos
 if (isset($stmt) && $stmt) $stmt->close();
-if (isset($conn) && $conn) $conn->close();
+if (isset($conn) && $cn) $cn->close();
 ?>
