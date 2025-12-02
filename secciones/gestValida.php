@@ -58,7 +58,7 @@ if(isset($_POST["btn_validaciones"])){
         $id_usuario = $_POST["txtid_usuario"];
         
         $sql = "INSERT INTO validacion (id_validacion,comentario, estado_validacion, fecha_validacion, id_Termino, id_Usuario) 
-                VALUES ('$id_validacion','$comentario','$estado_validacion', NOW(), '$id_termino','$id_usuario')";
+                 VALUES ('$id_validacion','$comentario','$estado_validacion', NOW(), '$id_termino','$id_usuario')";
         $cs = mysqli_query($cn, $sql);
         if($cs) {
             echo "<script>alert('Validación agregada correctamente');</script>";
@@ -70,34 +70,38 @@ if(isset($_POST["btn_validaciones"])){
     }
     
     // MODIFICAR
+    // CAMBIO 1: Se usa txtid_validacion para la clave
     if($btn == "Modificar" && !empty($_POST["txtid_validacion"])){
-        $id_validacion = $_POST["txtid_validacion"];
+        $id_validacion = $_POST["txtid_validacion"]; // <-- Usar el ID del formulario para identificar
         $comentario = $_POST["txtcomentario"];
         $estado_validacion = $_POST["txtestado_validacion"];
         $id_termino = $_POST["txtid_termino"];
         $id_usuario = $_POST["txtid_usuario"];
         
         $sql = "UPDATE validacion SET 
-                comentario='$comentario',
-                estado_validacion='$estado_validacion',
-                fecha_validacion=NOW(),
-                id_Termino='$id_termino',
-                id_Usuario='$id_usuario'
-                WHERE id='$id_validacion'";
+                 comentario='$comentario',
+                 estado_validacion='$estado_validacion',
+                 fecha_validacion=NOW(),
+                 id_Termino='$id_termino',
+                 id_Usuario='$id_usuario'
+                 WHERE id_validacion='$id_validacion'"; // <-- CLÁUSULA WHERE CORREGIDA: Usar id_validacion
         
         $cs = mysqli_query($cn, $sql);
         if($cs) {
             echo "<script>alert('Validación modificada correctamente');</script>";
+            // Limpiar campos
+            $id_validacion = $comentario = $estado_validacion = $fecha_validacion = $id_termino = $id_usuario = $txtbus = "";
         } else {
             echo "<script>alert('Error al modificar: " . mysqli_error($cn) . "');</script>";
         }
     }
     
     // ELIMINAR
+    // CAMBIO 2: Se usa txtid_validacion para la clave
     if($btn == "Eliminar" && !empty($_POST["txtid_validacion"])){
-        $id_validacion = $_POST["txtid"];
+        $id_validacion = $_POST["txtid_validacion"]; // <-- Usar el ID del formulario para identificar
         
-        $sql = "DELETE FROM validacion WHERE id='$id_validacion'";
+        $sql = "DELETE FROM validacion WHERE id_validacion='$id_validacion'"; // <-- CLÁUSULA WHERE CORREGIDA: Usar id_validacion
         $cs = mysqli_query($cn, $sql);
         if($cs) {
             echo "<script>alert('Validación eliminada correctamente');</script>";
@@ -115,12 +119,11 @@ if(isset($_POST["btn_validaciones"])){
 <div class="card p-4 shadow-sm mb-4 bg-light">
     <h3 class="card-title text-center text-dark">Formulario de Gestión de Validaciones</h3>
     
-    <!-- FORMULARIO SEPARADO PARA BÚSQUEDA -->
     <form method="POST" class="mb-4 border-bottom pb-3">
         <div class="row">
             <div class="col-md-8">
                 <input type="text" class="form-control" name="txtbus" placeholder="ID de la validación a buscar" 
-                       value="<?php echo htmlspecialchars($txtbus); ?>">
+                        value="<?php echo htmlspecialchars($txtbus); ?>">
             </div>
             <div class="col-md-4">
                 <button type="submit" class="btn btn-outline-primary w-100" name="btn_buscar" value="Buscar">
@@ -130,13 +133,12 @@ if(isset($_POST["btn_validaciones"])){
         </div>
     </form>
 
-    <!-- FORMULARIO PRINCIPAL PARA CRUD -->
     <form method="POST">
-        <!-- Campos del formulario -->
         <div class="row mb-3">
             <div class="col-md-6">
                 <label class="form-label">ID Validación</label>
-                <input type="text" class="form-control" name="txtid_validacion" value="<?php echo htmlspecialchars($id_validacion); ?>" readonly>
+                <input type="text" class="form-control" name="txtid_validacion" value="<?php echo htmlspecialchars($id_validacion); ?>" 
+                readonly  style="background-color: #e9ecef; cursor: not-allowed;">
             </div>
             <div class="col-md-6">
                 <label class="form-label">Estado Validación</label>
@@ -163,7 +165,6 @@ if(isset($_POST["btn_validaciones"])){
             </div>
         </div>
 
-        <!-- Botones de acción -->
         <div class="text-center">
             <button type="submit" class="btn btn-outline-primary me-2" name="btn_validaciones" value="Agregar">
                 <i class="bi bi-plus-lg"></i> Agregar
@@ -182,15 +183,14 @@ if(isset($_POST["btn_validaciones"])){
     </form>
 </div>
 
-<!-- SECCIÓN PARA MOSTRAR LAS VALIDACIONES -->
 <div class="data-container mt-4">
     <?php
     if(isset($_POST["btn_validaciones"]) && $_POST["btn_validaciones"] == "Mostrar"){
         $sql="SELECT v.*, t.palabra as termino, u.nombre as usuario 
-               FROM validacion v 
-               LEFT JOIN termino t ON v.id_Termino = t.id_termino 
-               LEFT JOIN usuario u ON v.id_Usuario = u.id_usuario 
-               ORDER BY v.id_validacion DESC";
+              FROM validacion v 
+              LEFT JOIN termino t ON v.id_Termino = t.id_termino 
+              LEFT JOIN usuario u ON v.id_Usuario = u.id_usuario 
+              ORDER BY v.id_validacion DESC";
         $cs=mysqli_query($cn,$sql);
         if($cs && mysqli_num_rows($cs) > 0) {
            echo "<div class='contenedor-tabla'>";

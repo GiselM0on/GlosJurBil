@@ -83,7 +83,7 @@ if ($id == 0) {
     $stmt = $cn->prepare("UPDATE termino SET palabra = ?, pronunciacion = ?, definicion = ?, ejemplo_aplicativo = ?, referencia_bibliogr = ?, estado = 'pendiente', fecha_modificacion = ? 
                           WHERE id_Termino = ?");
     
-    $stmt->bind_param("ssssssi", $palabra, $pronunciacion, $definicion, $ejemplo, $referencia, $fecha, $id);
+    $stmt->bind_param("si", $palabra, $pronunciacion, $definicion, $ejemplo, $referencia, $fecha, $id);
     
     if ($stmt->execute()) {
         $_SESSION['success'] = "Término modificado exitosamente y reenviado para revisión.";

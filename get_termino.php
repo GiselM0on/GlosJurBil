@@ -1,48 +1,78 @@
 <?php
 // get_termino.php
+session_start(); // Añadir session_start() si necesitas verificar sesión
+
+// Configurar cabeceras para JSON y UTF-8
+header('Content-Type: application/json; charset=UTF-8');
+
+// Permitir CORS si es necesario (para desarrollo)
+header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
+header('Access-Control-Allow-Headers: Content-Type');
+
 include "conexion.php";
 
 // Configurar charset para la conexión
-if (isset($cn) && is_object($cn)) {
-    mysqli_set_charset($cn, "utf8mb4");
+if ($cn) {
+    $cn->set_charset("utf8");
 }
 
-// Activar errores
+// Activar errores para depuración
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
+// Verificar que el ID sea válido
 if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
-    echo json_encode(['error' => 'ID inválido']);
+    echo json_encode(['error' => 'ID inválido o no proporcionado']);
     exit();
 }
 
 $id = intval($_GET['id']);
 
-echo "<!-- DEPURACIÓN: ID recibido: $id -->\n";
+// Verificar conexión
+if (!$cn) {
+    echo json_encode(['error' => 'Error de conexión a la base de datos']);
+    exit();
+}
 
-$stmt = $cn->prepare("SELECT t.palabra, t.definicion, u.nombre AS estudiante
-                       FROM termino t
-                       INNER JOIN usuario u ON u.id_Usuario = t.id_Usuario
-                       WHERE t.id_Termino = ?");
-                       
+// Preparar y ejecutar la consulta
+$sql = "SELECT t.palabra, t.definicion, u.nombre AS estudiante
+        FROM termino t
+        INNER JOIN usuario u ON u.id_Usuario = t.id_Usuario
+        WHERE t.id_Termino = ?";
+        
+$stmt = $cn->prepare($sql);
+
 if (!$stmt) {
-    echo json_encode(['error' => 'Error al preparar consulta: ' . $cn->error]);
+    // Registrar error para depuración
+    error_log("Error preparando consulta: " . $cn->error);
+    echo json_encode(['error' => 'Error al preparar la consulta']);
     exit();
 }
 
 $stmt->bind_param("i", $id);
 $stmt->execute();
-$res = $stmt->get_result();
+$result = $stmt->get_result();
 
-echo "<!-- DEPURACIÓN: Filas encontradas: " . $res->num_rows . " -->\n";
-
-if ($res->num_rows > 0) {
-    $data = $res->fetch_assoc();
-    echo "<!-- DEPURACIÓN: Datos - Palabra: " . $data['palabra'] . " -->\n";
-    echo "<!-- DEPURACIÓN: Datos - Estudiante: " . $data['estudiante'] . " -->\n";
-    echo json_encode($data);
+if ($result->num_rows > 0) {
+    $row = $result->fetch_assoc();
+    
+    // Verificar que los campos existan
+    if (!isset($row['definicion'])) {
+        $row['definicion'] = "No hay definición disponible";
+    }
+    
+    if (!isset($row['palabra'])) {
+        $row['palabra'] = "Sin título";
+    }
+    
+    if (!isset($row['estudiante'])) {
+        $row['estudiante'] = "Desconocido";
+    }
+    
+    echo json_encode($row, JSON_UNESCAPED_UNICODE);
 } else {
-    echo json_encode(['error' => 'Término no encontrado']);
+    echo json_encode(['error' => 'Término no encontrado en la base de datos']);
 }
 
 $stmt->close();

@@ -385,22 +385,22 @@ if (isset($cn) && is_object($cn)) {
                     echo '</div>'; // Cierre del terms-container
                     
                 } else {
-                    echo "<!-- Error: " . ($conn->error ? $conn->error : 'No hay datos') . " -->";
+                    echo "<!-- Error: " . ($cn->error ? $cn->error : 'No hay datos') . " -->";
                     echo '<div class="col-12">
                             <div class="no-results">
                                 <i class="bi bi-exclamation-triangle display-1 text-danger mb-3"></i>
                                 <h3 class="text-danger">Error al cargar términos</h3>
                                 <p class="text-muted">No se pudieron cargar los términos de la base de datos</p>';
                     
-                    if ($conn->error) {
-                        echo '<p class="text-danger small">Error: ' . htmlspecialchars($conn->error) . '</p>';
+                    if ($cn->error) {
+                        echo '<p class="text-danger small">Error: ' . htmlspecialchars($cn->error) . '</p>';
                     }
                     
                     echo '</div>
                         </div>';
                 }
                 
-                $conn->close();
+                $cn->close();
                 ?>
             </div>
         </div>

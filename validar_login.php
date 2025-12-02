@@ -3,10 +3,6 @@ session_start();
 
 
 // Prueba
-// if (!isset($_SESSION['rol']) || $_SESSION['rol'] !== 'estudiante' || !isset($_SESSION['id_Usuario'])) {
-//     header("Location: login.php");
-//     exit();
-// }
 
 
 $correo = isset($_POST['correo']) ? trim($_POST['correo']) : '';
@@ -18,6 +14,7 @@ if ($correo === '' || $contrasena === '' || $rol_seleccionado === '') {
     header("Location: login.php?error=Por favor completa todos los campos");
     exit();
 }
+
 
 
 include("conexion.php");

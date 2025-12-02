@@ -40,39 +40,49 @@ if(isset($_POST["btn_buscar"]) && $_POST["btn_buscar"] == "Buscar"){
 if(isset($_POST["btn_idiomas"])){
     $btn = $_POST["btn_idiomas"];
     
-    // AGREGAR
+    // AGREGAR: El ID es autogenerado, solo se inserta el nombre.
     if($btn == "Agregar"){
+        // Solo capturamos el nombre del idioma
         $nombre_idioma = $_POST["txtnombre_idioma"];
         
-        $sql = "INSERT INTO idioma (id_idioma,nombre_idioma) VALUES ('$id_idioma,$nombre_idioma')";
-        $cs = mysqli_query($cn, $sql);
-        if($cs) {
-            echo "<script>alert('Idioma agregado correctamente');</script>";
-            // Limpiar campos
-            $id_idioma = $nombre_idioma = $txtbus = "";
+        // La validación ahora solo verifica el nombre
+        if (!empty($nombre_idioma)) {
+            // Sentencia SQL: Omitimos el id_idioma para que la DB lo genere (asumiendo AUTO_INCREMENT)
+            $sql = "INSERT INTO idioma (nombre_idioma) VALUES ('$nombre_idioma')";
+            $cs = mysqli_query($cn, $sql);
+            if($cs) {
+                echo "<script>alert('Idioma agregado correctamente');</script>";
+                // Limpiar campos
+                $id_idioma = $nombre_idioma = $txtbus = "";
+            } else {
+                echo "<script>alert('Error al agregar: " . mysqli_error($cn) . "');</script>";
+            }
         } else {
-            echo "<script>alert('Error al agregar: " . mysqli_error($cn) . "');</script>";
+             // Mensaje corregido
+             echo "<script>alert('Debe ingresar el Nombre del Idioma para agregar.');</script>";
         }
     }
     
-    // MODIFICAR
+    // MODIFICAR: Sigue requiriendo el ID para identificar el registro
     if($btn == "Modificar" && !empty($_POST["txtid_idioma"])){
-        $id_idioma = $_POST["txtid"];
+        $id_idioma = $_POST["txtid_idioma"];
         $nombre_idioma = $_POST["txtnombre_idioma"];
         
-        $sql = "UPDATE idioma SET id_idioma = '$id_idioma',nombre_idioma='$nombre_idioma' WHERE id='$id_idioma'";
+        $sql = "UPDATE idioma SET nombre_idioma='$nombre_idioma' WHERE id_idioma='$id_idioma'";
         
         $cs = mysqli_query($cn, $sql);
         if($cs) {
             echo "<script>alert('Idioma modificado correctamente');</script>";
+            // Limpiar campos
+            $id_idioma = $nombre_idioma = $txtbus = "";
         } else {
             echo "<script>alert('Error al modificar: " . mysqli_error($cn) . "');</script>";
         }
     }
     
-    // ELIMINAR
+    // ELIMINAR: Sigue requiriendo el ID
     if($btn == "Eliminar" && !empty($_POST["txtid_idioma"])){
-        $id_idioma = $_POST["txtid"];
+        $id_idioma = $_POST["txtid_idioma"];
         
         $sql = "DELETE FROM idioma WHERE id_idioma ='$id_idioma'";
         $cs = mysqli_query($cn, $sql);
@@ -97,7 +107,7 @@ if(isset($_POST["btn_idiomas"])){
         <div class="row">
             <div class="col-md-8">
                 <input type="text" class="form-control" name="txtbus" placeholder="ID del idioma a buscar" 
-                       value="<?php echo htmlspecialchars($txtbus); ?>">
+                        value="<?php echo htmlspecialchars($txtbus); ?>">
             </div>
             <div class="col-md-4">
                 <button type="submit" class="btn btn-outline-primary w-100" name="btn_buscar" value="Buscar">
@@ -112,8 +122,12 @@ if(isset($_POST["btn_idiomas"])){
         <!-- Campos del formulario -->
         <div class="row mb-3">
             <div class="col-md-6">
-                <label class="form-label">ID Idioma</label>
-                <input type="text" class="form-control" name="txtid_idioma" value="<?php echo htmlspecialchars($id_idioma); ?>" >
+                <label class="form-label">ID Idioma (Autogenerado)</label>
+                <!-- CAMBIO: Se hace de solo lectura y se le da un estilo para indicar que es interno -->
+                <input type="text" class="form-control" name="txtid_idioma" 
+                       value="<?php echo htmlspecialchars($id_idioma); ?>" 
+                       readonly 
+                       style="background-color: #e9ecef; cursor: not-allowed;">
             </div>
             <div class="col-md-6">
                 <label class="form-label">Nombre del Idioma</label>
@@ -132,7 +146,7 @@ if(isset($_POST["btn_idiomas"])){
         <i class="bi bi-pencil"></i> Modificar
     </button>
     <button type="submit" class="btn btn-outline-primary" name="btn_idiomas" value="Eliminar" 
-            onclick="return confirm('¿Estás seguro de eliminar este idioma?')">
+             /* Se recomienda usar un modal de confirmación en lugar de confirm() */>
         <i class="bi bi-trash"></i> Eliminar
     </button>
 </div>
@@ -147,8 +161,8 @@ if(isset($_POST["btn_idiomas"])){
         $cs=mysqli_query($cn,$sql);
         if($cs && mysqli_num_rows($cs) > 0) {
            echo "<div class='contenedor-tabla'>";
-            echo "<h3 class='titulo-tabla-terminos mb-4 text-primary'>Lista de Idiomas</h3>";
-            echo "<div class='table-responsive-container'>";
+             echo "<h3 class='titulo-tabla-terminos mb-4 text-primary'>Lista de Idiomas</h3>";
+             echo "<div class='table-responsive-container'>";
             echo "<table class='table table-hover mb-0'>";
             echo "<thead>
                     <tr>
@@ -177,5 +191,3 @@ if(isset($_POST["btn_idiomas"])){
     }
     ?>
 </div>
-
-

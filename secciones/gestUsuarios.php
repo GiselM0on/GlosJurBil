@@ -135,7 +135,9 @@ if(isset($_POST["btn_usuarios"])){
         <div class="row mb-3">
             <div class="col-md-6">
                 <label class="form-label">ID Usuario</label>
-                <input type="text" class="form-control" name="txtid_usuario" value="<?php echo htmlspecialchars($id_usuario); ?>" >
+                <input type="text" class="form-control" name="txtid_usuario" value="<?php echo htmlspecialchars($id_usuario); ?>" 
+                readonly 
+                       style="background-color: #e9ecef; cursor: not-allowed;">
             </div>
             <div class="col-md-6">
                 <label class="form-label">Nombre</label>

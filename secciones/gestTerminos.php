@@ -152,7 +152,9 @@ if(isset($_POST["btn1"])){
                     <div class="col-md-2">
                         <label class="form-label fw-semibold">ID Término</label>
                         <input type="text" class="form-control form-control-sm" name="txtid_termino" 
-                               value="<?php echo htmlspecialchars($id_termino, ENT_QUOTES, 'UTF-8'); ?>" style="font-size: 0.875rem;">
+                               value="<?php echo htmlspecialchars($id_termino, ENT_QUOTES, 'UTF-8'); ?>" readonly 
+                       style="background-color: #e9ecef; cursor: not-allowed;"
+                               >
                     </div>
                     <div class="col-md-2">
                         <label class="form-label fw-semibold">Palabra</label>

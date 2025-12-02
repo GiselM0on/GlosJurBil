@@ -3,14 +3,37 @@ session_start();
 include "conexion.php";
 
 
-
-// VERIFICACIÓN DE SESIÓN 
-/*if (!isset($_SESSION['id_Usuario']) || $_SESSION['rol'] !== 'estudiante') {
+/*// Verificar que el usuario esté logueado y sea estudiante
+if (!isset($_SESSION['id_usuario']) || $_SESSION['rol'] !== 'estudiante') {
+    header("Location: login.php");
     exit();
+}*/
+
+
+
+// Para insertar un término relacionado con este usuario:
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['termino'])) {
+    include("conexion.php");
+    
+    $termino = $_POST['termino'];
+    $descripcion = $_POST['descripcion'];
+    
+    $sql = "INSERT INTO terminos (id_usuario, termino, descripcion, fecha_creacion) 
+            VALUES (?, ?, ?, NOW())";
+    
+    $stmt = $cn->prepare($sql);
+    $stmt->bind_param("iss", $id_usuario, $termino, $descripcion);
+    
+    if ($stmt->execute()) {
+        echo "<p>Término agregado exitosamente!</p>";
+    } else {
+        echo "<p>Error al agregar término: " . $stmt->error . "</p>";
+    }
+    
+    $stmt->close();
+    $cn->close();
 }
 
-// OBTENER ID DEL USUARIO 
-$idUsuario = $_SESSION['id_Usuario'];*/
 
 // Obtener términos del estudiante
 $sql = "SELECT t.id_Termino, t.palabra, t.estado
@@ -577,6 +600,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['accion']) && $_POST['a
                 <input type="text" class="form-control" name="referencia" id="referencia"
                        placeholder="Fuente bibliográfica (opcional)">
             </div>
+
+            <div class="col-md-6 mb-3">
+                        <label class="form-label fw-semibold">ID Usuario</label>
+                        <input type="number" class="form-control form-control-sm" name="txtid_usuario" 
+                               value="<?php echo htmlspecialchars($id_usuario, ENT_QUOTES, 'UTF-8'); ?>">
+                    </div>
+                </div>
 
             <div class="d-flex gap-2 mt-4">
                 <button type="submit" class="btn btn-primary">

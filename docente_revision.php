@@ -1,5 +1,8 @@
 <?php
 session_start();
+// Configurar cabeceras para UTF-8 al inicio del archivo
+header('Content-Type: text/html; charset=UTF-8');
+
 include "conexion.php";
 
 // Verificar que el docente esté logueado
@@ -7,6 +10,8 @@ include "conexion.php";
     header("Location: login.php");
     exit();
 }*/
+
+
 
 // Asegurar que la conexión use UTF-8
 if ($cn) {
@@ -411,14 +416,14 @@ body {
     
     <?php if (isset($_SESSION['error'])): ?>
         <div class="alert alert-danger alert-dismissible fade show" role="alert">
-            <?php  echo htmlspecialchars($_SESSION['error'], ENT_QUOTES, 'UTF-8'); $_SESSION['error']; unset($_SESSION['error']) ; ?>
+            <?php echo htmlspecialchars($_SESSION['error'], ENT_QUOTES, 'UTF-8'); unset($_SESSION['error']); ?>
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     <?php endif; ?>
     
     <?php if (isset($_SESSION['success'])): ?>
         <div class="alert alert-success alert-dismissible fade show" role="alert">
-            <?php  echo htmlspecialchars($_SESSION['error'], ENT_QUOTES, 'UTF-8'); $_SESSION['success']; unset($_SESSION['success']); ?>
+            <?php echo htmlspecialchars($_SESSION['success'], ENT_QUOTES, 'UTF-8'); unset($_SESSION['success']); ?>
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     <?php endif; ?>
@@ -446,7 +451,7 @@ body {
                         <?php while($row = $result->fetch_assoc()): ?>
                         <tr>
                             <td><?php echo $row['id_Termino']; ?></td>
-                            <td class="texto-limitado"><?php echo htmlspecialchars($row['palabra'],  ENT_QUOTES, 'UTF-8'); ?></td>
+                            <td class="texto-limitado"><?php echo htmlspecialchars($row['palabra'], ENT_QUOTES, 'UTF-8'); ?></td>
                             <td><?php echo htmlspecialchars($row['estudiante'], ENT_QUOTES, 'UTF-8'); ?></td>
                             <td><?php echo date('d/m/Y H:i', strtotime($row['fecha_creacion'])); ?></td>
                             <td>
@@ -507,6 +512,70 @@ body {
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
 <script>
+
+    // Agregar estas funciones después de los event listeners existentes
+function actualizarTabla() {
+    fetch('docente_revision.php')
+        .then(response => response.text())
+        .then(html => {
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(html, 'text/html');
+            const tablaBody = doc.querySelector('tbody');
+            document.querySelector('tbody').innerHTML = tablaBody.innerHTML;
+            
+            // Volver a asignar eventos a los nuevos botones
+            const botones = document.querySelectorAll('.revisar-btn');
+            botones.forEach(boton => {
+                boton.addEventListener('click', function() {
+                    const id = this.getAttribute('data-id');
+                    abrirModal(id);
+                });
+            });
+        })
+        .catch(error => console.error('Error al actualizar tabla:', error));
+}
+
+// Modificar la función abrirModal para manejar errores
+function abrirModal(id) {
+    console.log("Abriendo modal para término ID:", id);
+    
+    // Mostrar indicador de carga
+    document.getElementById("modalRevision").style.display = "flex";
+    document.getElementById("tituloTermino").innerHTML = "<i class='bi bi-spinner'></i> Cargando...";
+    
+    fetch("get_termino.php?id=" + id)
+        .then(res => {
+            if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+            return res.json();
+        })
+        .then(data => {
+            if (data.error) {
+                mostrarErrorModal(data.error);
+                return;
+            }
+            
+            // Actualizar contenido del modal
+            document.getElementById("tituloTermino").textContent = data.palabra || "Sin título";
+            document.getElementById("descTermino").textContent = data.definicion || "Sin definición";
+            document.getElementById("nombreEstudiante").textContent = data.estudiante || "Desconocido";
+            document.getElementById("idTerminoInput").value = id;
+            
+            // Limpiar campos
+            document.getElementById("motivo").value = "";
+            document.getElementById("btnRechazar").disabled = true;
+        })
+        .catch(error => {
+            console.error("Error al cargar término:", error);
+            mostrarErrorModal("Error al cargar el término. Por favor, inténtelo nuevamente.");
+        });
+}
+
+function mostrarErrorModal(mensaje) {
+    document.getElementById("tituloTermino").innerHTML = "Error";
+    document.getElementById("descTermino").innerHTML = `
+        <div class="alert alert-danger">${mensaje}</div>
+    `;
+}
 // Función para abrir el modal
 function abrirModal(id) {
     console.log("Abriendo modal para término ID:", id);
