@@ -5,12 +5,12 @@ include "conexion.php";
 
 
 // VERIFICACIÓN DE SESIÓN 
-if (!isset($_SESSION['id_Usuario']) || $_SESSION['rol'] !== 'estudiante') {
+/*if (!isset($_SESSION['id_Usuario']) || $_SESSION['rol'] !== 'estudiante') {
     exit();
 }
 
 // OBTENER ID DEL USUARIO 
-$idUsuario = $_SESSION['id_Usuario'];
+$idUsuario = $_SESSION['id_Usuario'];*/
 
 // Obtener términos del estudiante
 $sql = "SELECT t.id_Termino, t.palabra, t.estado
