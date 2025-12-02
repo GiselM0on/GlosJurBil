@@ -7,7 +7,7 @@ $sql = "SELECT t.id_Termino, t.palabra, u.nombre AS estudiante
         INNER JOIN usuario u ON u.id_Usuario = t.id_Usuario
         WHERE t.estado = 'pendiente'";
 
-$result = $conn->query($sql);
+$result = $cn->query($sql);
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -34,54 +34,6 @@ $result = $conn->query($sql);
 </style>
 </head>
 <body>
-<<<<<<< HEAD
-    <!-- Sidebar -->
-    <div class="sidebar">
-        <div class="logo">
-            <h1><i class="bi bi-shield-lock-fill"></i> <span>Docente Panel</span></h1>
-        </div>
-       
-        <nav class="sidebar-nav">
-            <!-- Dashboard -->
-           
-           
-            <!-- Términos -->
-            <div class="menu-section">
-                <div class="section-title">Términos</div>
-                <ul class="menu-items">
-                 <a href="?seccion=manage_terms" class="menu-item <?php echo $seccion == 'manage_terms' ? 'active' : ''; ?>">
-                        <i class="bi bi-patch-check-fill"></i> <span>Términos</span>
-                    </a>
-                </ul>
-            </div>
-           
-            <!-- Validación -->
-            <div class="menu-section">
-                <div class="section-title">VALIDACIÓN</div>
-                <ul class="menu-items">
-                    <a href="?seccion=revision_terminos" class="menu-item <?php echo $seccion == 'revision_terminos' ? 'active' : ''; ?>">
-                        <i class="bi bi-patch-check-fill"></i> <span>Revisar Términos</span>
-                    </a>
-                   <a href="?seccion=manage_validations" class="menu-item <?php echo $seccion == 'manage_validations' ? 'active' : ''; ?>">
-                        <i class="bi bi-clipboard-check"></i> <span>Validaciones</span>
-                    </a>
-                </ul>
-            </div>
-           
-            <!-- Navegación -->
-            <div class="menu-section nav-section">
-                <div class="section-title">NAVEGACIÓN</div>
-                <ul class="menu-items">
-                    <a href="index.php" class="menu-item">
-                        <i class="bi bi-house-door-fill me-2"></i> <span>Página Principal</span>
-                    </a>
-                    <a href="#" class="menu-item" onclick="confirmLogout()">
-                        <i class="bi bi-box-arrow-right me-2"></i> <span>Cerrar Sesión</span>
-                    </a>
-                </ul>
-            </div>
-        </nav>
-=======
 
 <h1>Términos pendientes de revisión</h1>
 
@@ -127,7 +79,6 @@ $result = $conn->query($sql);
 
         <br>
         <button onclick="cerrarModal()">Cerrar</button>
->>>>>>> 0d542a15febb66417dae9ee93a5b11a08084e71e
     </div>
 </div>
 
