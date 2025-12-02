@@ -16,6 +16,39 @@ $result = $conn->query($sql);
 <title>Revisión de términos</title>
 <link rel="stylesheet" href="libreria/estilos.css">
 <style>
+:root {
+    --color-amarillo: #fff06dff;
+    --color-azul-oscuro: #006694;
+    --color-gris: #636466;
+    --color-gris-claro: #f1f2f2;
+    --color-naranja: #ff9a15;
+    --color-azul-claro: #27a5df;
+}
+
+body {
+    background-color: var(--color-gris-claro);
+    color: var(--color-azul-oscuro);
+    min-height: 100vh;
+    font-family: 'Inter', sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.sidebar {
+    width: 260px;
+    background: linear-gradient(180deg, var(--color-azul-oscuro) 0%, #004466 100%);
+    color: white;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    box-shadow: 4px 0 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    padding: 20px 0;
+}
+
 .modal {
     display: none;
     position: fixed;
@@ -34,54 +67,6 @@ $result = $conn->query($sql);
 </style>
 </head>
 <body>
-<<<<<<< HEAD
-    <!-- Sidebar -->
-    <div class="sidebar">
-        <div class="logo">
-            <h1><i class="bi bi-shield-lock-fill"></i> <span>Docente Panel</span></h1>
-        </div>
-       
-        <nav class="sidebar-nav">
-            <!-- Dashboard -->
-           
-           
-            <!-- Términos -->
-            <div class="menu-section">
-                <div class="section-title">Términos</div>
-                <ul class="menu-items">
-                 <a href="?seccion=manage_terms" class="menu-item <?php echo $seccion == 'manage_terms' ? 'active' : ''; ?>">
-                        <i class="bi bi-patch-check-fill"></i> <span>Términos</span>
-                    </a>
-                </ul>
-            </div>
-           
-            <!-- Validación -->
-            <div class="menu-section">
-                <div class="section-title">VALIDACIÓN</div>
-                <ul class="menu-items">
-                    <a href="?seccion=revision_terminos" class="menu-item <?php echo $seccion == 'revision_terminos' ? 'active' : ''; ?>">
-                        <i class="bi bi-patch-check-fill"></i> <span>Revisar Términos</span>
-                    </a>
-                   <a href="?seccion=manage_validations" class="menu-item <?php echo $seccion == 'manage_validations' ? 'active' : ''; ?>">
-                        <i class="bi bi-clipboard-check"></i> <span>Validaciones</span>
-                    </a>
-                </ul>
-            </div>
-           
-            <!-- Navegación -->
-            <div class="menu-section nav-section">
-                <div class="section-title">NAVEGACIÓN</div>
-                <ul class="menu-items">
-                    <a href="index.php" class="menu-item">
-                        <i class="bi bi-house-door-fill me-2"></i> <span>Página Principal</span>
-                    </a>
-                    <a href="#" class="menu-item" onclick="confirmLogout()">
-                        <i class="bi bi-box-arrow-right me-2"></i> <span>Cerrar Sesión</span>
-                    </a>
-                </ul>
-            </div>
-        </nav>
-=======
 
 <h1>Términos pendientes de revisión</h1>
 
@@ -127,7 +112,6 @@ $result = $conn->query($sql);
 
         <br>
         <button onclick="cerrarModal()">Cerrar</button>
->>>>>>> 0d542a15febb66417dae9ee93a5b11a08084e71e
     </div>
 </div>
 
