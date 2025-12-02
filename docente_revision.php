@@ -1,11 +1,19 @@
 <?php
+session_start();
 include "conexion.php";
 
-// Obtener términos pendientes
-$sql = "SELECT t.id_Termino, t.palabra, u.nombre AS estudiante
+// Verificar que el docente esté logueado
+/*if (!isset($_SESSION['id_Usuario']) || $_SESSION['rol'] !== 'docente') {
+    header("Location: login.php");
+    exit();
+}*/
+
+// Obtener términos pendientes de revisión
+$sql = "SELECT t.id_Termino, t.palabra, u.nombre AS estudiante, t.fecha_creacion
         FROM termino t
         INNER JOIN usuario u ON u.id_Usuario = t.id_Usuario
-        WHERE t.estado = 'pendiente'";
+        WHERE t.estado = 'pendiente'
+        ORDER BY t.fecha_creacion ASC";
 
 $result = $cn->query($sql);
 ?>
@@ -13,10 +21,9 @@ $result = $cn->query($sql);
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>Revisión de términos</title>
+<title>Revisión de términos - Panel Docente</title>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-<link rel="stylesheet" href="libreria/estilos.css">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -108,12 +115,6 @@ body {
     color: white;
 }
 
-.menu-item i {
-    margin-right: 10px;
-    width: 20px;
-    text-align: center;
-}
-
 .nav-section {
     margin-top: 30px;
     border-top: 1px solid rgba(255, 255, 255, 0.1);
@@ -160,7 +161,6 @@ body {
 }
 
 .table-responsive-container table {
-    min-width: 800px;
     width: 100%;
     margin-bottom: 0;
     font-size: 0.875rem;
@@ -196,7 +196,7 @@ body {
     white-space: nowrap;
 }
 
-/* ESTILOS MODAL CORREGIDOS */
+/* ESTILOS MODAL */
 .modal {
     display: none;
     position: fixed;
@@ -348,6 +348,18 @@ body {
     border-color: #1e8bc4;
     color: white;
 }
+
+.alert-success {
+    background-color: rgba(0, 102, 148, 0.1);
+    border-color: var(--color-azul-oscuro);
+    color: var(--color-azul-oscuro);
+}
+
+.alert-danger {
+    background-color: rgba(220, 53, 69, 0.1);
+    border-color: #dc3545;
+    color: #dc3545;
+}
 </style>
 </head>
 <body>
@@ -358,26 +370,30 @@ body {
     </div>
     
     <nav class="sidebar-nav">
-        <!-- Validación -->
         <div class="menu-section">
             <div class="section-title">VALIDACIÓN</div>
             <ul class="menu-items">
-                <a href="docente_revision.php" class="menu-item active">
-                    <i class="bi bi-clipboard-check"></i> <span>Revisión de Términos</span>
-                </a>
+                <li>
+                    <a href="docente_revision.php" class="menu-item active">
+                        <i class="bi bi-clipboard-check"></i> <span>Revisión de Términos</span>
+                    </a>
+                </li>
             </ul>
         </div>
         
-        <!-- Navegación -->
         <div class="menu-section nav-section">
             <div class="section-title">NAVEGACIÓN</div>
             <ul class="menu-items">
-                <a href="index.php" class="menu-item">
-                    <i class="bi bi-house-door-fill me-2"></i> <span>Página Principal</span>
-                </a>
-                <a href="#" class="menu-item" onclick="confirmLogout()">
-                    <i class="bi bi-box-arrow-right me-2"></i> <span>Cerrar Sesión</span>
-                </a>
+                <li>
+                    <a href="index.php" class="menu-item">
+                        <i class="bi bi-house-door-fill"></i> <span>Página Principal</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="menu-item" onclick="confirmLogout()">
+                        <i class="bi bi-box-arrow-right"></i> <span>Cerrar Sesión</span>
+                    </a>
+                </li>
             </ul>
         </div>
     </nav>
@@ -386,34 +402,49 @@ body {
 <div id="content">
     <h1 class="titulo-tabla-terminos">Términos pendientes de revisión</h1>
     
+    <?php if (isset($_SESSION['error'])): ?>
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <?php echo $_SESSION['error']; unset($_SESSION['error']); ?>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    <?php endif; ?>
+    
+    <?php if (isset($_SESSION['success'])): ?>
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <?php echo $_SESSION['success']; unset($_SESSION['success']); ?>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    <?php endif; ?>
+    
     <div class="contenedor-tabla">
         <div class="table-responsive-container">
             <table class="table table-hover mb-0">
                 <thead>
                     <tr>
+                        <th>ID</th>
                         <th>Palabra</th>
                         <th>Estudiante</th>
+                        <th>Fecha de Envío</th>
                         <th>Acción</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <?php 
-                    // Agrega debug para verificar que hay datos
-                    if ($result->num_rows == 0): 
-                    ?>
+                    <?php if ($result->num_rows == 0): ?>
                         <tr>
-                            <td colspan="3" class="text-center text-muted py-4">
+                            <td colspan="5" class="text-center text-muted py-4">
                                 No hay términos pendientes de revisión.
                             </td>
                         </tr>
                     <?php else: ?>
                         <?php while($row = $result->fetch_assoc()): ?>
                         <tr>
-                            <td class="texto-limitado"><?= htmlspecialchars($row['palabra']) ?></td>
-                            <td><?= htmlspecialchars($row['estudiante']) ?></td>
+                            <td><?php echo $row['id_Termino']; ?></td>
+                            <td class="texto-limitado"><?php echo htmlspecialchars($row['palabra']); ?></td>
+                            <td><?php echo htmlspecialchars($row['estudiante']); ?></td>
+                            <td><?php echo date('d/m/Y H:i', strtotime($row['fecha_creacion'])); ?></td>
                             <td>
                                 <button class="btn btn-info btn-sm revisar-btn" 
-                                        data-id="<?= $row['id_Termino'] ?>">
+                                        data-id="<?php echo $row['id_Termino']; ?>">
                                     <i class="bi bi-eye"></i> Revisar
                                 </button>
                             </td>
@@ -426,7 +457,7 @@ body {
     </div>
 </div>
 
-<!-- MODAL - ESTE ES EL CONTENEDOR QUE FALTABA -->
+<!-- MODAL DE REVISIÓN -->
 <div id="modalRevision" class="modal">
     <div class="modal-contenido">
         <h2 id="tituloTermino">Cargando...</h2>
@@ -437,7 +468,8 @@ body {
         </div>
         
         <div class="mb-3">
-            <strong>Enviado por:</strong> <span id="nombreEstudiante" class="badge bg-secondary">Cargando...</span>
+            <strong>Enviado por:</strong> 
+            <span id="nombreEstudiante" class="badge bg-secondary">Cargando...</span>
         </div>
 
         <form action="acciones_docente.php" method="POST" id="formValidacion">
@@ -470,16 +502,20 @@ body {
 <script>
 // Función para abrir el modal
 function abrirModal(id) {
-    console.log("Intentando abrir modal con ID:", id);
+    console.log("Abriendo modal para término ID:", id);
     
-    // Mostrar el modal inmediatamente
+    // Mostrar el modal
     document.getElementById("modalRevision").style.display = "flex";
     document.getElementById("tituloTermino").innerText = "Cargando...";
     document.getElementById("descTermino").innerText = "";
     document.getElementById("nombreEstudiante").innerText = "Cargando...";
     document.getElementById("idTerminoInput").value = id;
     
-    // Hacer la petición AJAX
+    // Limpiar textarea
+    document.getElementById("motivo").value = "";
+    document.getElementById("btnRechazar").disabled = true;
+    
+    // Hacer la petición AJAX para obtener detalles
     fetch("get_termino.php?id=" + id)
         .then(res => {
             if (!res.ok) {
@@ -517,19 +553,20 @@ function cerrarModal() {
 }
 
 // Habilitar botón de rechazar cuando se escribe en el textarea
-document.getElementById('motivo').addEventListener('input', function() {
-    const texto = this.value.trim();
-    document.getElementById("btnRechazar").disabled = texto === "";
-});
-
-// Asignar eventos a los botones de revisar
 document.addEventListener('DOMContentLoaded', function() {
+    const motivoTextarea = document.getElementById('motivo');
+    if (motivoTextarea) {
+        motivoTextarea.addEventListener('input', function() {
+            const texto = this.value.trim();
+            document.getElementById("btnRechazar").disabled = texto === "";
+        });
+    }
+    
     // Asignar evento a todos los botones de revisar
     const botones = document.querySelectorAll('.revisar-btn');
     botones.forEach(boton => {
         boton.addEventListener('click', function() {
             const id = this.getAttribute('data-id');
-            console.log("Botón clicado, ID:", id);
             abrirModal(id);
         });
     });
@@ -548,9 +585,6 @@ document.addEventListener('DOMContentLoaded', function() {
             cerrarModal();
         }
     });
-    
-    // Mensaje de depuración
-    console.log("Documento cargado. Botones de revisar encontrados:", botones.length);
 });
 
 // Función para cerrar sesión
@@ -563,3 +597,6 @@ function confirmLogout() {
 
 </body>
 </html>
+<?php
+$cn->close();
+?>

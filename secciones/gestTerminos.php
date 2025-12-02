@@ -11,41 +11,31 @@ if (isset($cn) && is_object($cn)) {
     mysqli_set_charset($cn, "utf8mb4");
 }
 
-// Variables para los campos
-$id_termino = "";
-$palabra = "";
-$pronunciacion = "";
-$definicion = "";
-$ejemplo_aplicativo = "";
-$referencia_bibliogr = "";
-$estado = "";
-$fecha_creacion = "";
-$fecha_modificacion = "";
-$id_usuario = "";
-$txtbus = "";
+// Función para sanitizar inputs
+function sanitize($input, $connection) {
+    if (is_string($input)) {
+        return trim($connection->real_escape_string($input));
+    }
+    return $input;
+}
 
-// Procesar todas las acciones con un solo botón
+// Variables
+$id_termino = $palabra = $pronunciacion = $definicion = $ejemplo_aplicativo = $referencia_bibliogr = "";
+$estado = $fecha_creacion = $fecha_modificacion = $id_usuario = $txtbus = "";
+
 if(isset($_POST["btn1"])){
     $btn = $_POST["btn1"];
     
     // BÚSQUEDA
     if($btn == "Buscar" && isset($_POST["txtbus"])){
-        $txtbus = $_POST["txtbus"];
+        $txtbus = sanitize($_POST["txtbus"], $cn);
         
         $sql = "SELECT * FROM termino WHERE id_termino='$txtbus'"; 
         $cs = mysqli_query($cn, $sql);
         if($cs && mysqli_num_rows($cs) > 0) {
             while($resul = mysqli_fetch_array($cs)){
-                $id_termino = $resul[0];
-                $palabra = $resul[1];
-                $pronunciacion = $resul[2];
-                $definicion = $resul[3];
-                $ejemplo_aplicativo = $resul[4];
-                $referencia_bibliogr = $resul[5];
-                $estado = $resul[6];
-                $fecha_creacion = $resul[7];
-                $fecha_modificacion = $resul[8];
-                $id_usuario = $resul[9];
+                list($id_termino, $palabra, $pronunciacion, $definicion, $ejemplo_aplicativo, 
+                     $referencia_bibliogr, $estado, $fecha_creacion, $fecha_modificacion, $id_usuario) = $resul;
             }
         } else {
             echo "<script>alert('No se encontró ningún término con ese ID');</script>";
@@ -54,26 +44,34 @@ if(isset($_POST["btn1"])){
     
     // AGREGAR
     if($btn == "Agregar"){
-        $id_termino = $_POST["txtid_termino"];
-        $palabra = $_POST["txtpalabra"];
-        $pronunciacion = $_POST["txtpronunciacion"];
-        $definicion = $_POST["txtdefinicion"];
-        $ejemplo_aplicativo = $_POST["txtejemplo"];
-        $referencia_bibliogr = $_POST["txtreferencia"];
-        $estado = $_POST["txtestado"];
-        $fecha_creacion = $_POST["txtfecha_creacion"];
-        $fecha_modificacion = $_POST["txtfecha_modificacion"];
-        $id_usuario = $_POST["txtid_usuario"];
+        // Sanitizar todos los inputs
+        $id_termino = sanitize($_POST["txtid_termino"], $cn);
+        $palabra = sanitize($_POST["txtpalabra"], $cn);
+        $pronunciacion = sanitize($_POST["txtpronunciacion"], $cn);
+        $definicion = sanitize($_POST["txtdefinicion"], $cn);
+        $ejemplo_aplicativo = sanitize($_POST["txtejemplo"], $cn);
+        $referencia_bibliogr = sanitize($_POST["txtreferencia"], $cn);
+        $estado = sanitize($_POST["txtestado"], $cn);
+        $id_usuario = sanitize($_POST["txtid_usuario"], $cn);
         
-        $sql = "INSERT INTO termino (id_termino, palabra, pronunciacion, definicion, ejemplo_aplicativo, referencia_bibliogr, estado, fecha_creacion, fecha_modificacion, id_Usuario) 
-                VALUES ('$id_termino','$palabra','$pronunciacion','$definicion','$ejemplo_aplicativo','$referencia_bibliogr','$estado', NOW(), NOW(), '$id_usuario')";
-        $cs = mysqli_query($cn, $sql);
-        if($cs) {
-            echo "<script>alert('Término agregado correctamente');</script>";
-            // Limpiar campos
-            $id_termino = $palabra = $pronunciacion = $definicion = $ejemplo_aplicativo = $referencia_bibliogr = $estado = $fecha_creacion = $fecha_modificacion = $id_usuario = $txtbus = "";
+        // Validación
+        if (empty($palabra) || empty($definicion)) {
+            echo "<script>alert('Palabra y definición son obligatorios');</script>";
         } else {
-            echo "<script>alert('Error al agregar: " . mysqli_error($cn) . "');</script>";
+            $sql = "INSERT INTO termino (id_termino, palabra, pronunciacion, definicion, ejemplo_aplicativo, 
+                    referencia_bibliogr, estado, fecha_creacion, fecha_modificacion, id_Usuario) 
+                    VALUES ('$id_termino','$palabra','$pronunciacion','$definicion','$ejemplo_aplicativo',
+                    '$referencia_bibliogr','$estado', NOW(), NOW(), '$id_usuario')";
+            
+            $cs = mysqli_query($cn, $sql);
+            if($cs) {
+                echo "<script>alert('Término agregado correctamente');</script>";
+                // Limpiar campos
+                $id_termino = $palabra = $pronunciacion = $definicion = $ejemplo_aplicativo = 
+                $referencia_bibliogr = $estado = $fecha_creacion = $fecha_modificacion = $id_usuario = $txtbus = "";
+            } else {
+                echo "<script>alert('Error al agregar: " . addslashes(mysqli_error($cn)) . "');</script>";
+            }
         }
     }
     

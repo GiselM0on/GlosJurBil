@@ -1,4 +1,5 @@
 <?php
+// get_termino_estudiante.php
 include "conexion.php";
 session_start();
 
@@ -11,7 +12,7 @@ $id = intval($_GET['id']);
 $idUsuario = $_SESSION['id_Usuario'];
 
 if (isset($_GET['razon'])) {
-    // Fetch razón de rechazo
+    // Obtener razón de rechazo
     $stmt = $cn->prepare("SELECT v.comentario
                             FROM validadon v
                             INNER JOIN termino t ON t.id_Termino = v.id_Termino
@@ -20,8 +21,14 @@ if (isset($_GET['razon'])) {
     $stmt->bind_param("ii", $id, $idUsuario);
     $stmt->execute();
     $res = $stmt->get_result();
-    $data = $res->fetch_assoc() ?? ['comentario' => 'No disponible'];
-    echo json_encode($data);
+    
+    if ($res->num_rows > 0) {
+        $data = $res->fetch_assoc();
+        echo json_encode($data);
+    } else {
+        echo json_encode(['comentario' => 'No hay razón especificada.']);
+    }
+    
 } else {
     // Obtener datos del término para edición
     $stmt = $cn->prepare("SELECT palabra, pronunciacion, definicion, ejemplo_aplicativo, referencia_bibliogr

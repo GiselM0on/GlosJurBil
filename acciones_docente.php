@@ -1,13 +1,14 @@
 <?php
-include "conexion.php";
 session_start();
+include "conexion.php";
 
-// Configurar charset para la conexión
-if (isset($cn) && is_object($cn)) {
-    mysqli_set_charset($cn, "utf8mb4");
-}
+// Activar errores para debug
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 
+// Verificar que el docente esté logueado
 if (!isset($_SESSION['id_Usuario']) || $_SESSION['rol'] !== 'docente') {
+    $_SESSION['error'] = "Debes iniciar sesión como docente.";
     header("Location: login.php");
     exit();
 }
@@ -20,51 +21,90 @@ if (!isset($_POST['idTermino']) || !isset($_POST['accion'])) {
 
 $id = intval($_POST['idTermino']);
 $accion = $_POST['accion'];
-$motivo = $_POST['motivo'] ? $_POST['motivo'] : '';
+$motivo = isset($_POST['motivo']) ? trim($_POST['motivo']) : '';
 $idDocente = $_SESSION['id_Usuario'];
 $fecha = date("Y-m-d H:i:s");
 
-if ($accion === "validar") {
-    // CORRECCIÓN: La tabla se llama validadon (no validacion)
-    $stmt1 = $cn->prepare("INSERT INTO validadon (comentario, estado_validadon, fecha_validadon, id_Termino, id_Usuario)
-                             VALUES (?, 'validado', ?, ?, ?)");
-    $empty = '';
-    $stmt1->bind_param("ssii", $empty, $fecha, $id, $idDocente);
-    $stmt1->execute();
+// Validar que el término existe
+$stmtCheck = $cn->prepare("SELECT id_Termino FROM termino WHERE id_Termino = ? AND estado = 'pendiente'");
+$stmtCheck->bind_param("i", $id);
+$stmtCheck->execute();
+$resultCheck = $stmtCheck->get_result();
 
-    $stmt2 = $cn->prepare("UPDATE termino SET estado='validado' WHERE id_Termino=?");
-    $stmt2->bind_param("i", $id);
-    $stmt2->execute();
-
-    $_SESSION['success'] = "Término validado exitosamente.";
+if ($resultCheck->num_rows == 0) {
+    $_SESSION['error'] = "El término no existe o ya fue revisado.";
+    $stmtCheck->close();
     header("Location: docente_revision.php");
     exit();
 }
+$stmtCheck->close();
 
-if ($accion === "rechazar") {
-    if (empty(trim($motivo))) {
+if ($accion === "validar") {
+    // VALIDAR TÉRMINO
+    $stmt1 = $cn->prepare("INSERT INTO validadon (comentario, estado_validadon, fecha_validadon, id_Termino, id_Usuario) 
+                           VALUES (?, 'validado', ?, ?, ?)");
+    $comentarioVacio = 'Término validado correctamente.';
+    $stmt1->bind_param("ssii", $comentarioVacio, $fecha, $id, $idDocente);
+    
+    if (!$stmt1->execute()) {
+        $_SESSION['error'] = "Error al registrar validación: " . $stmt1->error;
+        $stmt1->close();
+        header("Location: docente_revision.php");
+        exit();
+    }
+    $stmt1->close();
+    
+    // Actualizar estado del término
+    $stmt2 = $cn->prepare("UPDATE termino SET estado = 'validado' WHERE id_Termino = ?");
+    $stmt2->bind_param("i", $id);
+    
+    if ($stmt2->execute()) {
+        $_SESSION['success'] = "Término validado exitosamente.";
+    } else {
+        $_SESSION['error'] = "Error al actualizar término: " . $stmt2->error;
+    }
+    $stmt2->close();
+    
+} elseif ($accion === "rechazar") {
+    // RECHAZAR TÉRMINO
+    if (empty($motivo)) {
         $_SESSION['error'] = "Debes escribir una razón para rechazar.";
         header("Location: docente_revision.php");
         exit();
     }
-
-    // CORRECCIÓN: Usar $cn en lugar de $conn
-    $stmt1 = $cn->prepare("INSERT INTO validadon (comentario, estado_validadon, fecha_validadon, id_Termino, id_Usuario)
-                             VALUES (?, 'rechazado', ?, ?, ?)");
+    
+    // Registrar validación con motivo
+    $stmt1 = $cn->prepare("INSERT INTO validadon (comentario, estado_validadon, fecha_validadon, id_Termino, id_Usuario) 
+                           VALUES (?, 'rechazado', ?, ?, ?)");
     $stmt1->bind_param("ssii", $motivo, $fecha, $id, $idDocente);
-    $stmt1->execute();
-
-    $stmt2 = $cn->prepare("UPDATE termino SET estado='rechazado' WHERE id_Termino=?");
+    
+    if (!$stmt1->execute()) {
+        $_SESSION['error'] = "Error al registrar rechazo: " . $stmt1->error;
+        $stmt1->close();
+        header("Location: docente_revision.php");
+        exit();
+    }
+    $stmt1->close();
+    
+    // Actualizar estado del término
+    $stmt2 = $cn->prepare("UPDATE termino SET estado = 'rechazado' WHERE id_Termino = ?");
     $stmt2->bind_param("i", $id);
-    $stmt2->execute();
-
-    $_SESSION['success'] = "Término rechazado exitosamente.";
-    header("Location: docente_revision.php");
-    exit();
+    
+    if ($stmt2->execute()) {
+        $_SESSION['success'] = "✅ Término rechazado exitosamente. El estudiante podrá ver el motivo.";
+    } else {
+        $_SESSION['error'] = "Error al actualizar término: " . $stmt2->error;
+    }
+    $stmt2->close();
+    
+} else {
+    $_SESSION['error'] = "Acción no reconocida.";
 }
 
-// Si llega aquí sin acción válida
-$_SESSION['error'] = "Acción no reconocida.";
+// Cerrar conexión
+$cn->close();
+
+// Redirigir de vuelta
 header("Location: docente_revision.php");
 exit();
 ?>
