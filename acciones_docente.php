@@ -1,142 +1,58 @@
 <?php
 include "conexion.php";
+session_start();
 
-// Obtener términos pendientes
-$sql = "SELECT t.id_Termino, t.palabra, u.nombre AS estudiante
-        FROM termino t
-        INNER JOIN usuario u ON u.id_Usuario = t.id_Usuario
-        WHERE t.estado = 'pendiente'";
+if (!isset($_SESSION['id_Usuario']) || $_SESSION['rol'] !== 'docente') {
+    header("Location: login.php");
+    exit();
+}
 
-$result = $conn->query($sql);
+if (!isset($_POST['idTermino']) || !isset($_POST['accion'])) {
+    $_SESSION['error'] = "Datos inválidos.";
+    header("Location: docente_revision.php");
+    exit();
+}
+
+$id = intval($_POST['idTermino']);
+$accion = $_POST['accion'];
+$motivo = $_POST['motivo'] ?? '';
+$idDocente = $_SESSION['id_Usuario'];
+$fecha = date("Y-m-d H:i:s");
+
+if ($accion === "validar") {
+    $stmt1 = $conn->prepare("INSERT INTO validacion (comentario, estado_validacion, fecha_validacion, id_Termino, id_Usuario)
+                             VALUES (?, 'validado', ?, ?, ?)");
+    $empty = '';
+    $stmt1->bind_param("ssii", $empty, $fecha, $id, $idDocente);
+    $stmt1->execute();
+
+    $stmt2 = $conn->prepare("UPDATE termino SET estado='validado' WHERE id_Termino=?");
+    $stmt2->bind_param("i", $id);
+    $stmt2->execute();
+
+    $_SESSION['success'] = "Término validado exitosamente.";
+    header("Location: docente_revision.php");
+    exit();
+}
+
+if ($accion === "rechazar") {
+    if (empty(trim($motivo))) {
+        $_SESSION['error'] = "Debes escribir una razón para rechazar.";
+        header("Location: docente_revision.php");
+        exit();
+    }
+
+    $stmt1 = $conn->prepare("INSERT INTO validacion (comentario, estado_validacion, fecha_validacion, id_Termino, id_Usuario)
+                             VALUES (?, 'rechazado', ?, ?, ?)");
+    $stmt1->bind_param("ssii", $motivo, $fecha, $id, $idDocente);
+    $stmt1->execute();
+
+    $stmt2 = $conn->prepare("UPDATE termino SET estado='rechazado' WHERE id_Termino=?");
+    $stmt2->bind_param("i", $id);
+    $stmt2->execute();
+
+    $_SESSION['success'] = "Término rechazado exitosamente.";
+    header("Location: docente_revision.php");
+    exit();
+}
 ?>
-<!DOCTYPE html>
-<html lang="es">
-<head>
-<meta charset="UTF-8">
-<title>Revisión de términos</title>
-<link rel="stylesheet" href="libreria/estilos.css">
-<style>
-:root {
-    --color-amarillo: #fff06dff;
-    --color-azul-oscuro: #006694;
-    --color-gris: #636466;
-    --color-gris-claro: #f1f2f2;
-    --color-naranja: #ff9a15;
-    --color-azul-claro: #27a5df;
-}
-
-body {
-    background-color: var(--color-gris-claro);
-    color: var(--color-azul-oscuro);
-    min-height: 100vh;
-    font-family: 'Inter', sans-serif;
-    margin: 0;
-    padding: 0;
-}
-
-.sidebar {
-    width: 260px;
-    background: linear-gradient(180deg, var(--color-azul-oscuro) 0%, #004466 100%);
-    color: white;
-    height: 100vh;
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: 1000;
-    box-shadow: 4px 0 10px rgba(0, 0, 0, 0.1);
-    display: flex;
-    flex-direction: column;
-    padding: 20px 0;
-}
-
-.modal {
-    display: none;
-    position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    background: rgba(0,0,0,0.5);
-    justify-content: center;
-    align-items: center;
-}
-.modal-contenido {
-    background: white;
-    padding: 20px;
-    width: 500px;
-    border-radius: 12px;
-}
-</style>
-</head>
-<body>
-
-<h1>Términos pendientes de revisión</h1>
-
-<table border="1" cellpadding="10">
-<tr>
-    <th>Palabra</th>
-    <th>Estudiante</th>
-    <th>Acción</th>
-</tr>
-
-<?php while($row = $result->fetch_assoc()) { ?>
-<tr>
-    <td><?= $row['palabra'] ?></td>
-    <td><?= $row['estudiante'] ?></td>
-    <td><button onclick="abrirModal(<?= $row['id_Termino'] ?>)">Revisar</button></td>
-</tr>
-<?php } ?>
-</table>
-
-<!-- MODAL -->
-<div id="modalRevision" class="modal">
-    <div class="modal-contenido">
-        
-        <h2 id="tituloTermino"></h2>
-        <p id="descTermino"></p>
-        <p><strong>Enviado por:</strong> <span id="nombreEstudiante"></span></p>
-
-        <form action="acciones_docente.php" method="POST">
-
-            <input type="hidden" name="idTermino" id="idTermino">
-
-            <label><b>Motivo del rechazo</b> (obligatorio si rechaza):</label>
-            <textarea id="motivo" name="motivo" rows="3"
-            placeholder="Escribe aquí el motivo del rechazo..."
-            oninput="habilitar()"></textarea>
-
-            <br><br>
-
-            <button type="submit" name="accion" value="validar">Validar</button>
-            <button type="submit" name="accion" value="rechazar" id="btnRechazar" disabled>Rechazar</button>
-
-        </form>
-
-        <br>
-        <button onclick="cerrarModal()">Cerrar</button>
-    </div>
-</div>
-
-<script>
-function abrirModal(id) {
-    fetch("get_termino.php?id=" + id)
-        .then(res => res.json())
-        .then(data => {
-            document.getElementById("tituloTermino").innerText = data.palabra;
-            document.getElementById("descTermino").innerText = data.definicion;
-            document.getElementById("nombreEstudiante").innerText = data.estudiante;
-            document.getElementById("idTermino").value = id;
-            document.getElementById("modalRevision").style.display = "flex";
-        });
-}
-
-function cerrarModal() {
-    document.getElementById("modalRevision").style.display = "none";
-}
-
-function habilitar() {
-    let texto = document.getElementById("motivo").value.trim();
-    document.getElementById("btnRechazar").disabled = texto === "";
-}
-</script>
-
-</body>
-</html>
