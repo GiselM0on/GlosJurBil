@@ -13,28 +13,31 @@ $idUsuario = $_SESSION['id_Usuario'];
 if (isset($_GET['razon'])) {
     // Fetch razón de rechazo
     $stmt = $cn->prepare("SELECT v.comentario
-                            FROM validacion v
+                            FROM validadon v
                             INNER JOIN termino t ON t.id_Termino = v.id_Termino
-                            WHERE t.id_Termino = ? AND t.id_Usuario = ? AND t.estado = 'rechazado'");
+                            WHERE t.id_Termino = ? AND t.id_Usuario = ? AND t.estado = 'rechazado'
+                            ORDER BY v.fecha_validadon DESC LIMIT 1");
     $stmt->bind_param("ii", $id, $idUsuario);
     $stmt->execute();
     $res = $stmt->get_result();
     $data = $res->fetch_assoc() ?? ['comentario' => 'No disponible'];
     echo json_encode($data);
 } else {
-    
-    $stmt = $conn->prepare("SELECT t.palabra, t.pronunciacion, t.definicion, t.ejemplo_aplicativo, t.referencia_bibliogr
-                            FROM termino t
-                            WHERE t.id_Termino = ? AND t.id_Usuario = ?");
+    // Obtener datos del término para edición
+    $stmt = $cn->prepare("SELECT palabra, pronunciacion, definicion, ejemplo_aplicativo, referencia_bibliogr
+                            FROM termino
+                            WHERE id_Termino = ? AND id_Usuario = ?");
     $stmt->bind_param("ii", $id, $idUsuario);
     $stmt->execute();
     $res = $stmt->get_result();
+    
     if ($res->num_rows > 0) {
         echo json_encode($res->fetch_assoc());
     } else {
-        echo json_encode(['error' => 'Término no encontrado o no tuyo']);
+        echo json_encode(['error' => 'Término no encontrado o no tienes permisos']);
     }
 }
+
 $stmt->close();
 $cn->close();
 ?>

@@ -126,242 +126,14 @@ body {
     padding: 10px 0;
 }
 
-.sidebar-footer {
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-    padding: 15px 0;
-    margin-top: auto;
-}
-
 #content {
     margin-left: 260px;
-    padding: 20px;
+    padding: 30px;
     min-height: 100vh;
     transition: all 0.3s;
     background-color: var(--color-gris-claro);
 }
 
-.admin-card {
-    border-radius: 1rem;
-    background-color: white;
-    transition: transform 0.3s, box-shadow 0.3s;
-    cursor: pointer;
-    min-height: 180px;
-    border: 1px solid var(--color-gris);
-    color: var(--color-azul-oscuro);
-    border-left: 5px solid var(--color-amarillo);
-}
-
-.admin-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 20px rgba(255, 160, 109, 0.2);
-    border-color: var(--color-amarillo);
-}
-
-.icon-large {
-    font-size: 3rem;
-    color: var(--color-amarillo);
-    opacity: 0.9;
-}
-
-.table-responsive {
-    border-radius: 0.75rem;
-    overflow: hidden;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
-    background-color: white;
-    border: 1px solid var(--color-gris);
-}
-
-.table thead {
-    background-color: var(--color-azul-oscuro);
-    color: white;
-}
-
-.table th, .table td {
-    vertical-align: middle;
-    color: var(--color-azul-oscuro);
-}
-
-.table tbody tr:hover {
-    background-color: rgba(255, 160, 109, 0.1);
-}
-
-/* BOTONES CON AMARILLO DESTACADO */
-.btn-primary {
-    background-color: var(--color-amarillo);
-    border-color: var(--color-amarillo);
-    color: var(--color-azul-oscuro);
-    font-weight: 600;
-}
-
-.btn-primary:hover {
-    background-color: #ff8a3d;
-    border-color: #ff8a3d;
-    color: var(--color-azul-oscuro);
-}
-
-.btn-warning {
-    background-color: var(--color-naranja);
-    border-color: var(--color-naranja);
-    color: white;
-    font-weight: 600;
-}
-
-.btn-warning:hover {
-    background-color: #e88a10;
-    border-color: #e88a10;
-    color: white;
-}
-
-.btn-info {
-    background-color: var(--color-azul-claro);
-    border-color: var(--color-azul-claro);
-    color: white;
-}
-
-.btn-info:hover {
-    background-color: #1e8bc4;
-    border-color: #1e8bc4;
-}
-
-.alert-info {
-    background-color: rgba(255, 160, 109, 0.1);
-    border-color: var(--color-amarillo);
-    color: var(--color-azul-oscuro);
-}
-
-.alert-warning {
-    background-color: rgba(255, 154, 21, 0.1);
-    border-color: var(--color-naranja);
-    color: var(--color-azul-oscuro);
-}
-
-.alert-success {
-    background-color: rgba(0, 102, 148, 0.1);
-    border-color: var(--color-azul-oscuro);
-    color: var(--color-azul-oscuro);
-}
-
-.badge-primary {
-    background-color: var(--color-amarillo);
-    color: var(--color-azul-oscuro);
-}
-
-.badge-warning {
-    background-color: var(--color-naranja);
-    color: white;
-}
-
-.badge-info {
-    background-color: var(--color-azul-claro);
-    color: white;
-}
-
-.text-primary {
-    color: var(--color-azul-oscuro) !important;
-}
-
-.text-warning {
-    color: var(--color-amarillo) !important;
-}
-
-.text-info {
-    color: var(--color-azul-claro) !important;
-}
-
-.card {
-    border: 1px solid var(--color-gris);
-    background-color: white;
-}
-
-.card-header {
-    background-color: var(--color-azul-oscuro);
-    color: white;
-    border-bottom: 1px solid var(--color-gris);
-}
-
-.form-control:focus {
-    border-color: var(--color-amarillo);
-    box-shadow: 0 0 0 0.2rem rgba(255, 160, 109, 0.25);
-}
-
-.nav-pills .nav-link.active {
-    background-color: var(--color-amarillo);
-    color: var(--color-azul-oscuro);
-}
-
-.pagination .page-item.active .page-link {
-    background-color: var(--color-amarillo);
-    border-color: var(--color-amarillo);
-    color: var(--color-azul-oscuro);
-}
-
-.pagination .page-link {
-    color: var(--color-azul-oscuro);
-}
-
-.pagination .page-link:hover {
-    color: var(--color-amarillo);
-}
-
-/* ESTILOS ADICIONALES PARA BOTONES DE ACCIÓN */
-.btn-action {
-    background-color: var(--color-amarillo);
-    border-color: var(--color-amarillo);
-    color: var(--color-azul-oscuro);
-    font-weight: 600;
-    transition: all 0.3s;
-}
-
-.btn-action:hover {
-    background-color: #ff8a3d;
-    border-color: #ff8a3d;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(255, 160, 109, 0.3);
-}
-
-/* ESTILOS ESPECÍFICOS PARA TABLA RESPONSIVA */
-.table-responsive-container {
-    position: relative;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    border-radius: 0.75rem;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
-    background-color: white;
-    border: 1px solid var(--color-gris);
-}
-
-.table-responsive-container table {
-    min-width: 800px;
-    width: 100%;
-    margin-bottom: 0;
-    font-size: 0.875rem;
-}
-
-/* ENCABEZADOS VISIBLES SIEMPRE */
-.table-responsive-container thead {
-    background-color: var(--color-azul-oscuro);
-}
-
-.table-responsive-container th {
-    color: var (--color-azul-claro);
-    font-weight: 600;
-    padding: 0.75rem 0.5rem;
-    border-bottom: 2px solid var(--color-azul-claro);
-    white-space: nowrap;
-}
-
-.table-responsive-container td {
-    padding: 0.75rem 0.5rem;
-    border-bottom: 1px solid var(--color-gris-claro);
-    color: var(--color-azul-oscuro);
-    vertical-align: top;
-}
-
-.table-responsive-container tbody tr:hover {
-    background-color: rgba(255, 160, 109, 0.1);
-}
-
-/* ESTILOS MEJORADOS PARA LA TABLA DE TÉRMINOS */
 .contenedor-tabla {
     margin-top: 2rem;
     background: white;
@@ -378,34 +150,45 @@ body {
     margin-bottom: 1.5rem !important;
 }
 
-/* ESTADOS SIMPLIFICADOS - SOLO COLOR DE TEXTO */
-.status-badge {
-    padding: 0.4em 0.8em;
-    border-radius: 0.5rem;
+.table-responsive-container {
+    position: relative;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    border-radius: 0.75rem;
+    background-color: white;
+    border: 1px solid var(--color-gris);
+}
+
+.table-responsive-container table {
+    min-width: 800px;
+    width: 100%;
+    margin-bottom: 0;
+    font-size: 0.875rem;
+}
+
+.table-responsive-container thead {
+    background-color: var(--color-azul-oscuro);
+}
+
+.table-responsive-container th {
+    color: white;
     font-weight: 600;
-    font-size: 0.75rem;
-    display: inline-block;
-    text-align: center;
-    min-width: 80px;
+    padding: 0.75rem 0.5rem;
+    border-bottom: 2px solid var(--color-azul-claro);
+    white-space: nowrap;
 }
 
-/* Solo color de texto para los estados */
-.status-active {
-    color: var(--color-azul-claro); /* Un solo azul */
-    font-weight: bold;
+.table-responsive-container td {
+    padding: 0.75rem 0.5rem;
+    border-bottom: 1px solid var(--color-gris-claro);
+    color: var(--color-azul-oscuro);
+    vertical-align: middle;
 }
 
-.status-pending {
-    color: var(--color-naranja);
-    font-weight: bold;
+.table-responsive-container tbody tr:hover {
+    background-color: rgba(255, 160, 109, 0.1);
 }
 
-.badge-estado-rechazado {
-    color: #dc3545;
-    font-weight: bold;
-}
-
-/* Para textos largos */
 .texto-limitado {
     max-width: 250px;
     overflow: hidden;
@@ -413,104 +196,122 @@ body {
     white-space: nowrap;
 }
 
-/* MEJORAS RESPONSIVE - ENCABEZADOS SIEMPRE VISIBLES */
-@media (max-width: 768px) {
-    .table-responsive-container {
-        border-radius: 0.5rem;
-        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-        font-size: 0.8rem;
-    }
-    
-    .table-responsive-container table {
-        min-width: 100%;
-    }
-    
-    /* ENCABEZADOS COMPACTOS EN MÓVIL PERO VISIBLES */
-    .table-responsive-container th {
-        padding: 0.5rem 0.3rem;
-        font-size: 0.75rem;
-    }
-    
-    .table-responsive-container td {
-        padding: 0.5rem 0.3rem;
-    }
-    
-    .texto-limitado {
-        max-width: 150px;
-        font-size: 0.75rem;
-    }
-    
-    .status-badge {
-        min-width: 60px;
-        font-size: 0.7rem;
-        padding: 0.3em 0.6em;
-    }
-    
-    .contenedor-tabla {
-        padding: 1rem;
-        margin: 1rem -0.5rem;
-        border-radius: 0.5rem;
-    }
+/* ESTILOS MODAL CORREGIDOS */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1050;
+    justify-content: center;
+    align-items: center;
 }
 
-/* Para pantallas muy pequeñas */
-@media (max-width: 576px) {
-    .table-responsive-container {
-        font-size: 0.75rem;
-    }
-    
-    .table-responsive-container th,
-    .table-responsive-container td {
-        padding: 0.4rem 0.2rem;
-    }
-    
-    .texto-limitado {
-        max-width: 120px;
-    }
+.modal-contenido {
+    background: white;
+    padding: 30px;
+    width: 90%;
+    max-width: 500px;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+    position: relative;
+    border: 1px solid var(--color-gris-claro);
 }
 
-/* Para pantallas grandes - efectos hover */
-@media (min-width: 769px) {
-    .texto-limitado:hover {
-        white-space: normal;
-        overflow: visible;
-        position: relative;
-        z-index: 10;
-        background: white;
-        box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-        padding: 5px;
-        border-radius: 4px;
-    }
-}
-
-/* Asegurar que los badges se vean bien en móviles */
-.table-responsive-container .badge {
-    font-size: 0.75rem;
-    padding: 0.4em 0.8em;
-}
-
-/* Mejoras para la paginación en móviles */
-@media (max-width: 768px) {
-    .d-flex.justify-content-between.align-items-center.mt-3 {
-        flex-direction: column;
-        gap: 1rem;
-        text-align: center;
-    }
-    
-    .pagination {
-        flex-wrap: wrap;
-        justify-content: center;
-    }
-}
-
-/* Estilos para fechas y IDs */
-.table-responsive-container td small {
-    color: var(--color-gris);
-    font-size: 0.8rem;
-}
-
-.table-responsive-container td strong {
+.modal-contenido h2 {
     color: var(--color-azul-oscuro);
+    font-size: 20px;
+    margin-bottom: 15px;
+    border-bottom: 2px solid var(--color-amarillo);
+    padding-bottom: 10px;
+}
+
+.modal-contenido p {
+    font-size: 14px;
+    margin-bottom: 10px;
+    line-height: 1.5;
+    color: var(--color-azul-oscuro);
+}
+
+.modal-contenido label {
+    display: block;
+    font-size: 14px;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: var(--color-azul-oscuro);
+}
+
+.modal-contenido textarea {
+    width: 100%;
+    border: 1px solid var(--color-gris-claro);
+    padding: 10px;
+    border-radius: 4px;
+    font-size: 14px;
+    resize: vertical;
+    min-height: 80px;
+    margin-bottom: 20px;
+}
+
+.modal-botones {
+    display: flex;
+    gap: 10px;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.btn-validar {
+    background: var(--color-azul-claro);
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    flex: 1;
+}
+
+.btn-validar:hover {
+    background: var(--color-azul-oscuro);
+}
+
+.btn-rechazar {
+    background: var(--color-naranja);
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    flex: 1;
+}
+
+.btn-rechazar:hover {
+    background: #e68913;
+}
+
+.btn-rechazar:disabled {
+    background: var(--color-gris);
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.btn-cerrar {
+    background: var(--color-gris-claro);
+    color: var(--color-azul-oscuro);
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    width: 100%;
+    margin-top: 10px;
+}
+
+.btn-cerrar:hover {
+    background: #e0e0e0;
 }
 
 @media (max-width: 992px) {
@@ -518,10 +319,10 @@ body {
         width: 70px;
     }
     .sidebar .menu-item span,
-    .sidebar-section {
+    .section-title {
         display: none;
     }
-    .sidebar .menu-item {
+    .menu-item {
         text-align: center;
         padding: 15px 5px;
         justify-content: center;
@@ -534,102 +335,18 @@ body {
     }
 }
 
-/* Modal Styles */
-.modal {
-    display: none;
-    position: fixed;
-    top: 0; 
-    left: 0;
-    width: 100%; 
-    height: 100%;
-    background: rgba(0,0,0,0.5);
-    justify-content: center;
-    align-items: center;
-    z-index: 2000;
-}
-
-.modal-contenido {
-    background: white;
-    padding: 30px;
-    width: 500px;
-    border-radius: 12px;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.2);
-    position: relative;
-    border: 1px solid var(--color-gris-claro);
-}
-
-.modal-contenido h2 {
-    color: var(--color-azul-oscuro);
-    font-size: 20px;
-    margin-bottom: 15px;
-}
-
-.modal-contenido p {
-    font-size: 14px;
-    margin-bottom: 10px;
-    line-height: 1.5;
-}
-
-.modal-contenido label {
-    display: block;
-    font-size: 14px;
-    margin-bottom: 8px;
-    font-weight: 500;
-}
-
-.modal-contenido textarea {
-    width: 100%;
-    border: 1px solid var(--color-gris-claro);
-    padding: 10px;
-    border-radius: 4px;
-    font-size: 14px;
-    resize: vertical;
-    min-height: 80px;
-}
-
-.modal-contenido form button {
-    margin-top: 20px;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 14px;
-    transition: background 0.3s;
-}
-
-.modal-contenido button[name="accion"][value="validar"] {
-    background: var(--color-azul-claro);
+.btn-info {
+    background-color: var(--color-azul-claro);
+    border-color: var(--color-azul-claro);
     color: white;
-    margin-right: 10px;
+    padding: 5px 15px;
+    font-size: 0.875rem;
 }
 
-.modal-contenido button[name="accion"][value="validar"]:hover {
-    background: var(--color-azul-oscuro);
-}
-
-.modal-contenido button[name="accion"][value="rechazar"] {
-    background: var(--color-naranja);
+.btn-info:hover {
+    background-color: #1e8bc4;
+    border-color: #1e8bc4;
     color: white;
-}
-
-.modal-contenido button[name="accion"][value="rechazar"]:hover {
-    background: #e68913;
-}
-
-.modal-contenido button[name="accion"][value="rechazar"]:disabled {
-    background: var(--color-gris);
-    cursor: not-allowed;
-}
-
-.modal-contenido button:last-child {
-    background: var(--color-gris-claro);
-    color: var(--color-azul-oscuro);
-    margin-top: 10px;
-    width: 100%;
-}
-
-.modal-contenido button:last-child:hover {
-    background: #e0e0e0;
 }
 </style>
 </head>
@@ -668,6 +385,7 @@ body {
 
 <div id="content">
     <h1 class="titulo-tabla-terminos">Términos pendientes de revisión</h1>
+    
     <div class="contenedor-tabla">
         <div class="table-responsive-container">
             <table class="table table-hover mb-0">
@@ -679,71 +397,165 @@ body {
                     </tr>
                 </thead>
                 <tbody>
-                    <?php while($row = $result->fetch_assoc()) { ?>
-                    <tr>
-                        <td class="texto-limitado"><?= htmlspecialchars($row['palabra']) ?></td>
-                        <td><?= htmlspecialchars($row['estudiante']) ?></td>
-                        <td><button class="btn btn-info btn-sm" onclick="abrirModal(<?= $row['id_Termino'] ?>)">Revisar</button></td>
-                    </tr>
-                    <?php } ?>
+                    <?php 
+                    // Agrega debug para verificar que hay datos
+                    if ($result->num_rows == 0): 
+                    ?>
+                        <tr>
+                            <td colspan="3" class="text-center text-muted py-4">
+                                No hay términos pendientes de revisión.
+                            </td>
+                        </tr>
+                    <?php else: ?>
+                        <?php while($row = $result->fetch_assoc()): ?>
+                        <tr>
+                            <td class="texto-limitado"><?= htmlspecialchars($row['palabra']) ?></td>
+                            <td><?= htmlspecialchars($row['estudiante']) ?></td>
+                            <td>
+                                <button class="btn btn-info btn-sm revisar-btn" 
+                                        data-id="<?= $row['id_Termino'] ?>">
+                                    <i class="bi bi-eye"></i> Revisar
+                                </button>
+                            </td>
+                        </tr>
+                        <?php endwhile; ?>
+                    <?php endif; ?>
                 </tbody>
             </table>
         </div>
     </div>
 </div>
 
-<!-- MODAL -->
+<!-- MODAL - ESTE ES EL CONTENEDOR QUE FALTABA -->
 <div id="modalRevision" class="modal">
     <div class="modal-contenido">
-        <h2 id="tituloTermino"></h2>
-        <p id="descTermino"></p>
-        <p><strong>Enviado por:</strong> <span id="nombreEstudiante"></span></p>
+        <h2 id="tituloTermino">Cargando...</h2>
+        
+        <div class="mb-3">
+            <strong>Definición:</strong>
+            <p id="descTermino" style="background: #f8f9fa; padding: 10px; border-radius: 5px; margin-top: 5px;"></p>
+        </div>
+        
+        <div class="mb-3">
+            <strong>Enviado por:</strong> <span id="nombreEstudiante" class="badge bg-secondary">Cargando...</span>
+        </div>
 
-        <form action="acciones_docente.php" method="POST">
-            <input type="hidden" name="idTermino" id="idTermino">
+        <form action="acciones_docente.php" method="POST" id="formValidacion">
+            <input type="hidden" name="idTermino" id="idTerminoInput">
 
-            <label><b>Motivo del rechazo</b> (obligatorio si rechaza):</label>
-            <textarea id="motivo" name="motivo" rows="3"
-            placeholder="Escribe aquí el motivo del rechazo..."
-            oninput="habilitar()"></textarea>
+            <div class="mb-3">
+                <label for="motivo"><b>Motivo del rechazo</b> (obligatorio si rechaza):</label>
+                <textarea id="motivo" name="motivo" rows="3"
+                        placeholder="Escribe aquí el motivo del rechazo..."
+                        class="form-control"></textarea>
+            </div>
 
-            <button type="submit" name="accion" value="validar">Validar</button>
-            <button type="submit" name="accion" value="rechazar" id="btnRechazar" disabled>Rechazar</button>
+            <div class="modal-botones">
+                <button type="submit" name="accion" value="validar" class="btn-validar">
+                    <i class="bi bi-check-circle"></i> Validar
+                </button>
+                <button type="submit" name="accion" value="rechazar" id="btnRechazar" class="btn-rechazar" disabled>
+                    <i class="bi bi-x-circle"></i> Rechazar
+                </button>
+            </div>
+            
+            <button type="button" onclick="cerrarModal()" class="btn-cerrar">
+                <i class="bi bi-x-lg"></i> Cancelar
+            </button>
         </form>
-
-        <button onclick="cerrarModal()">Cerrar</button>
     </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
 <script>
+// Función para abrir el modal
 function abrirModal(id) {
+    console.log("Intentando abrir modal con ID:", id);
+    
+    // Mostrar el modal inmediatamente
+    document.getElementById("modalRevision").style.display = "flex";
+    document.getElementById("tituloTermino").innerText = "Cargando...";
+    document.getElementById("descTermino").innerText = "";
+    document.getElementById("nombreEstudiante").innerText = "Cargando...";
+    document.getElementById("idTerminoInput").value = id;
+    
+    // Hacer la petición AJAX
     fetch("get_termino.php?id=" + id)
-        .then(res => res.json())
+        .then(res => {
+            if (!res.ok) {
+                throw new Error('Error en la petición: ' + res.status);
+            }
+            return res.json();
+        })
         .then(data => {
-            document.getElementById("tituloTermino").innerText = data.palabra;
-            document.getElementById("descTermino").innerText = data.definicion;
-            document.getElementById("nombreEstudiante").innerText = data.estudiante;
-            document.getElementById("idTermino").value = id;
-            document.getElementById("modalRevision").style.display = "flex";
+            console.log("Datos recibidos:", data);
+            
+            if (data.error) {
+                alert("Error: " + data.error);
+                cerrarModal();
+                return;
+            }
+            
+            // Actualizar el modal con los datos
+            document.getElementById("tituloTermino").innerText = data.palabra || "Sin título";
+            document.getElementById("descTermino").innerText = data.definicion || "Sin definición";
+            document.getElementById("nombreEstudiante").innerText = data.estudiante || "Desconocido";
+        })
+        .catch(error => {
+            console.error("Error al cargar término:", error);
+            alert("Error al cargar el término. Verifica la consola para más detalles.");
+            document.getElementById("tituloTermino").innerText = "Error";
+            document.getElementById("descTermino").innerText = "No se pudo cargar la información.";
         });
 }
 
+// Función para cerrar el modal
 function cerrarModal() {
     document.getElementById("modalRevision").style.display = "none";
     document.getElementById("motivo").value = "";
     document.getElementById("btnRechazar").disabled = true;
 }
 
-function habilitar() {
-    let texto = document.getElementById("motivo").value.trim();
+// Habilitar botón de rechazar cuando se escribe en el textarea
+document.getElementById('motivo').addEventListener('input', function() {
+    const texto = this.value.trim();
     document.getElementById("btnRechazar").disabled = texto === "";
-}
+});
+
+// Asignar eventos a los botones de revisar
+document.addEventListener('DOMContentLoaded', function() {
+    // Asignar evento a todos los botones de revisar
+    const botones = document.querySelectorAll('.revisar-btn');
+    botones.forEach(boton => {
+        boton.addEventListener('click', function() {
+            const id = this.getAttribute('data-id');
+            console.log("Botón clicado, ID:", id);
+            abrirModal(id);
+        });
+    });
+    
+    // Cerrar modal al hacer clic fuera
+    const modal = document.getElementById("modalRevision");
+    window.addEventListener('click', function(event) {
+        if (event.target === modal) {
+            cerrarModal();
+        }
+    });
+    
+    // Cerrar con ESC
+    document.addEventListener('keydown', function(event) {
+        if (event.key === 'Escape') {
+            cerrarModal();
+        }
+    });
+    
+    // Mensaje de depuración
+    console.log("Documento cargado. Botones de revisar encontrados:", botones.length);
+});
 
 // Función para cerrar sesión
 function confirmLogout() {
     if (confirm('¿Estás seguro de que quieres cerrar sesión?')) {
-        // Aquí iría la lógica real de logout, por ejemplo:
         window.location.href = 'logout.php';
     }
 }

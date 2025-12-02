@@ -20,12 +20,13 @@ if (!isset($_POST['idTermino']) || !isset($_POST['accion'])) {
 
 $id = intval($_POST['idTermino']);
 $accion = $_POST['accion'];
-$motivo = $_POST['motivo'] ?? '';
+$motivo = $_POST['motivo'] ? $_POST['motivo'] : '';
 $idDocente = $_SESSION['id_Usuario'];
 $fecha = date("Y-m-d H:i:s");
 
 if ($accion === "validar") {
-    $stmt1 = $cn->prepare("INSERT INTO validacion (comentario, estado_validacion, fecha_validacion, id_Termino, id_Usuario)
+    // CORRECCIÓN: La tabla se llama validadon (no validacion)
+    $stmt1 = $cn->prepare("INSERT INTO validadon (comentario, estado_validadon, fecha_validadon, id_Termino, id_Usuario)
                              VALUES (?, 'validado', ?, ?, ?)");
     $empty = '';
     $stmt1->bind_param("ssii", $empty, $fecha, $id, $idDocente);
@@ -47,7 +48,8 @@ if ($accion === "rechazar") {
         exit();
     }
 
-    $stmt1 = $cn->prepare("INSERT INTO validacion (comentario, estado_validacion, fecha_validacion, id_Termino, id_Usuario)
+    // CORRECCIÓN: Usar $cn en lugar de $conn
+    $stmt1 = $cn->prepare("INSERT INTO validadon (comentario, estado_validadon, fecha_validadon, id_Termino, id_Usuario)
                              VALUES (?, 'rechazado', ?, ?, ?)");
     $stmt1->bind_param("ssii", $motivo, $fecha, $id, $idDocente);
     $stmt1->execute();
@@ -60,4 +62,9 @@ if ($accion === "rechazar") {
     header("Location: docente_revision.php");
     exit();
 }
+
+// Si llega aquí sin acción válida
+$_SESSION['error'] = "Acción no reconocida.";
+header("Location: docente_revision.php");
+exit();
 ?>

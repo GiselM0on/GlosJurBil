@@ -31,28 +31,46 @@ if (empty($palabra) || empty($definicion)) {
 if ($id == 0) {
     // Agregar nuevo
     $stmt = $cn->prepare("INSERT INTO termino (palabra, pronunciacion, definicion, ejemplo_aplicativo, referencia_bibliogr, estado, fecha_creacion, fecha_modificacion, id_Usuario)
-                            VALUES ($palabra, $pronunciacion, $ejemplo, $referencia, ?, 'pendiente', ?, ?, ?)");
-    $stmt->bind_param("ssssssss", $palabra, $pronunciacion, $definicion, $ejemplo, $referencia, $fecha, $fecha, $idUsuario);
-    $stmt->execute();
-    $_SESSION['success'] = "Término agregado y enviado a revisión.";
+                            VALUES (?, ?, ?, ?, ?, 'pendiente', ?, ?, ?)");
+    $stmt->bind_param("sssssssi", $palabra, $pronunciacion, $definicion, $ejemplo, $referencia, $fecha, $fecha, $idUsuario);
+    
+    if ($stmt->execute()) {
+        $_SESSION['success'] = "Término agregado y enviado a revisión.";
+    } else {
+        $_SESSION['error'] = "Error al agregar término: " . $stmt->error;
+    }
+    $stmt->close();
 } else {
-    // Modificar 
+    // Modificar existente
     $stmtCheck = $cn->prepare("SELECT id_Termino FROM termino WHERE id_Termino = ? AND id_Usuario = ? AND estado != 'validado'");
     $stmtCheck->bind_param("ii", $id, $idUsuario);
     $stmtCheck->execute();
-    if ($stmtCheck->get_result()->num_rows == 0) {
-        $_SESSION['error'] = "No puedes modificar este término.";
+    $resultCheck = $stmtCheck->get_result();
+    
+    if ($resultCheck->num_rows == 0) {
+        $_SESSION['error'] = "No puedes modificar este término (ya está validado o no te pertenece).";
         header("Location: estudiante_terminos.php");
         exit();
     }
+    $stmtCheck->close();
 
+    // Actualizar término
     $stmt = $cn->prepare("UPDATE termino SET palabra=?, pronunciacion=?, definicion=?, ejemplo_aplicativo=?, referencia_bibliogr=?, estado='pendiente', fecha_modificacion=?
                             WHERE id_Termino=?");
     $stmt->bind_param("ssssssi", $palabra, $pronunciacion, $definicion, $ejemplo, $referencia, $fecha, $id);
-    $stmt->execute();
-    $_SESSION['success'] = "Término modificado y reenviado a revisión.";
+    
+    if ($stmt->execute()) {
+        $_SESSION['success'] = "Término modificado y reenviado a revisión.";
+    } else {
+        $_SESSION['error'] = "Error al modificar término: " . $stmt->error;
+    }
+    $stmt->close();
 }
 
+// Cerrar conexión
+$cn->close();
+
+// Redirigir
 header("Location: estudiante_terminos.php");
 exit();
 ?>
