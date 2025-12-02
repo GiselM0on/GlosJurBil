@@ -6,11 +6,11 @@ include "conexion.php";
 
 // Verificar si la conexión se estableció correctamente
 if (!isset($cn) || $cn->connect_error) {
-    die("Error de conexión a la base de datos: " . $cn->connect_error);
+    die("Error de conexión a la base de datos: " . $conn->connect_error);
 }
 
 // Establecer charset UTF-8
-$cn->set_charset("utf8");
+$conn->set_charset("utf8");
 
 // Consulta a la base de datos
 $sql = "SELECT id_termino, palabra FROM termino ORDER BY palabra";
@@ -260,7 +260,7 @@ if (!$result) {
 </html>
 <?php
 // Cerrar conexión
-if (isset($cn)) {
-    $cn->close();
+if (isset($conn)) {
+    $conn->close();
 }
 ?>
