@@ -8,10 +8,10 @@ if (isset($_SESSION['rol'])) {
             header("Location: admin_dashboard.php");
             exit();
         case 'docente':
-            header("Location: docente_dashboard.php");
+            header("Location: docente_revision.php");
             exit();
         case 'estudiante':
-            header("Location: estudiante_dashboard.php");
+            header("Location: estudiante_terminos.php");
             exit();
     }
 }

@@ -24,5 +24,5 @@ if (!$cn) {
 $cn->set_charset("utf8mb4");
 
 // Retornar la conexión
-return $conn;
+return $cn;
 ?>

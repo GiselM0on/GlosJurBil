@@ -7,7 +7,7 @@ $sql = "SELECT t.id_Termino, t.palabra, u.nombre AS estudiante
         INNER JOIN usuario u ON u.id_Usuario = t.id_Usuario
         WHERE t.estado = 'pendiente'";
 
-$result = $conn->query($sql);
+$result = $cn->query($sql);
 ?>
 <!DOCTYPE html>
 <html lang="es">
