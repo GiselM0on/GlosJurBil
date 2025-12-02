@@ -2,10 +2,11 @@
 session_start();
 
 
-if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    header("Location: login.php");
-    exit();
-}
+// Prueba
+// if (!isset($_SESSION['rol']) || $_SESSION['rol'] !== 'estudiante' || !isset($_SESSION['id_Usuario'])) {
+//     header("Location: login.php");
+//     exit();
+// }
 
 
 $correo = isset($_POST['correo']) ? trim($_POST['correo']) : '';
