@@ -8,6 +8,11 @@ include "conexion.php";
     exit();
 }*/
 
+// Asegurar que la conexión use UTF-8
+if ($cn) {
+    $cn->set_charset("utf8");
+}
+
 // Obtener términos pendientes de revisión
 $sql = "SELECT t.id_Termino, t.palabra, u.nombre AS estudiante, t.fecha_creacion
         FROM termino t
@@ -21,6 +26,8 @@ $result = $cn->query($sql);
 <html lang="es">
 <head>
 <meta charset="UTF-8">
+   <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Revisión de términos - Panel Docente</title>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
@@ -404,14 +411,14 @@ body {
     
     <?php if (isset($_SESSION['error'])): ?>
         <div class="alert alert-danger alert-dismissible fade show" role="alert">
-            <?php echo $_SESSION['error']; unset($_SESSION['error']); ?>
+            <?php  echo htmlspecialchars($_SESSION['error'], ENT_QUOTES, 'UTF-8'); $_SESSION['error']; unset($_SESSION['error']) ; ?>
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     <?php endif; ?>
     
     <?php if (isset($_SESSION['success'])): ?>
         <div class="alert alert-success alert-dismissible fade show" role="alert">
-            <?php echo $_SESSION['success']; unset($_SESSION['success']); ?>
+            <?php  echo htmlspecialchars($_SESSION['error'], ENT_QUOTES, 'UTF-8'); $_SESSION['success']; unset($_SESSION['success']); ?>
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     <?php endif; ?>
@@ -439,8 +446,8 @@ body {
                         <?php while($row = $result->fetch_assoc()): ?>
                         <tr>
                             <td><?php echo $row['id_Termino']; ?></td>
-                            <td class="texto-limitado"><?php echo htmlspecialchars($row['palabra']); ?></td>
-                            <td><?php echo htmlspecialchars($row['estudiante']); ?></td>
+                            <td class="texto-limitado"><?php echo htmlspecialchars($row['palabra'],  ENT_QUOTES, 'UTF-8'); ?></td>
+                            <td><?php echo htmlspecialchars($row['estudiante'], ENT_QUOTES, 'UTF-8'); ?></td>
                             <td><?php echo date('d/m/Y H:i', strtotime($row['fecha_creacion'])); ?></td>
                             <td>
                                 <button class="btn btn-info btn-sm revisar-btn" 

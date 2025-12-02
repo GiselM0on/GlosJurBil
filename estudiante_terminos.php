@@ -2,7 +2,9 @@
 session_start();
 include "conexion.php";
 
-// VERIFICACIÓN DE SESIÓN (DESCOMENTAR)
+
+
+// VERIFICACIÓN DE SESIÓN 
 if (!isset($_SESSION['id_Usuario']) || $_SESSION['rol'] !== 'estudiante') {
     exit();
 }

@@ -2,6 +2,11 @@
 // get_termino.php
 include "conexion.php";
 
+// Configurar charset para la conexión
+if (isset($cn) && is_object($cn)) {
+    mysqli_set_charset($cn, "utf8mb4");
+}
+
 // Activar errores
 error_reporting(E_ALL);
 ini_set('display_errors', 1);

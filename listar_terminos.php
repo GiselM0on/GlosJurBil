@@ -10,7 +10,7 @@ if (!isset($cn) || $cn->connect_error) {
 }
 
 // Establecer charset UTF-8
-$conn->set_charset("utf8");
+$cn->set_charset("utf8");
 
 // Consulta a la base de datos
 $sql = "SELECT id_termino, palabra FROM termino ORDER BY palabra";
@@ -260,7 +260,7 @@ if (!$result) {
 </html>
 <?php
 // Cerrar conexión
-if (isset($conn)) {
-    $conn->close();
+if (isset($cn)) {
+    $cn->close();
 }
 ?>
