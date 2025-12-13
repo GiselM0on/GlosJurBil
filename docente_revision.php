@@ -1,5 +1,6 @@
 <?php
 session_start();
+
 // Configurar cabeceras para UTF-8 al inicio del archivo
 header('Content-Type: text/html; charset=UTF-8');
 

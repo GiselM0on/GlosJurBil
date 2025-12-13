@@ -12,7 +12,7 @@ if (isset($cn) && is_object($cn)) {
 
 // Variables para los campos
 $id_pais = "";
-$nombre_pais = ""; // <<-- CORREGIDO: Se usará siempre 'nombre_pais'
+$nombre_pais = ""; // 
 $txtbus = "";
 
 // Procesar BÚSQUEDA (formulario separado)
@@ -26,7 +26,7 @@ if(isset($_POST["btn_buscar"]) && $_POST["btn_buscar"] == "Buscar"){
         if($cs && mysqli_num_rows($cs) > 0) {
             $resul = mysqli_fetch_array($cs);
             $id_pais = $resul[0];
-            $nombre_pais = $resul[1]; // <<-- CORREGIDO
+            $nombre_pais = $resul[1]; 
             echo "<script>alert('País encontrado');</script>";
         } else {
             echo "<script>alert('País no encontrado');</script>";
@@ -38,7 +38,7 @@ if(isset($_POST["btn_buscar"]) && $_POST["btn_buscar"] == "Buscar"){
     }
 }
 
-// Procesar formulario PRINCIPAL (Agregar, Modificar, Eliminar)
+// Procesar formulario PRINCIPAL de CRUD
 if(isset($_POST["btn_paises"])){
     $btn = $_POST["btn_paises"];
     

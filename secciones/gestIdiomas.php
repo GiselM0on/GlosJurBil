@@ -36,7 +36,7 @@ if(isset($_POST["btn_buscar"]) && $_POST["btn_buscar"] == "Buscar"){
     }
 }
 
-// Procesar formulario PRINCIPAL (Agregar, Modificar, Eliminar)
+// Procesar formulario PRINCIPAL de CRUD
 if(isset($_POST["btn_idiomas"])){
     $btn = $_POST["btn_idiomas"];
     
@@ -122,7 +122,7 @@ if(isset($_POST["btn_idiomas"])){
         <!-- Campos del formulario -->
         <div class="row mb-3">
             <div class="col-md-6">
-                <label class="form-label">ID Idioma (Autogenerado)</label>
+                <label class="form-label">ID Idioma </label>
                 <!-- CAMBIO: Se hace de solo lectura y se le da un estilo para indicar que es interno -->
                 <input type="text" class="form-control" name="txtid_idioma" 
                        value="<?php echo htmlspecialchars($id_idioma); ?>" 

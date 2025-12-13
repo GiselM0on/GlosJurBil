@@ -608,7 +608,7 @@ body {
                     <a href="index.php" class="menu-item">
                         <i class="bi bi-house-door-fill me-2"></i> <span>Página Principal</span>
                     </a>
-                    <a href="#" class="menu-item" onclick="confirmLogout()">
+                    <a href="logout.php" class="menu-item" onclick="confirmLogout()">
                         <i class="bi bi-box-arrow-right me-2"></i> <span>Cerrar Sesión</span>
                     </a>
                 </ul>

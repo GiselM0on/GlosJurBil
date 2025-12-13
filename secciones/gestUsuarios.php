@@ -45,7 +45,7 @@ if(isset($_POST["btn_buscar"]) && $_POST["btn_buscar"] == "Buscar"){
     }
 }
 
-// Procesar formulario PRINCIPAL (Agregar, Modificar, Eliminar, Mostrar)
+// Procesar formulario PRINCIPAL de CRUD
 if(isset($_POST["btn_usuarios"])){
     $btn = $_POST["btn_usuarios"];
     

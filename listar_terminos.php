@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-// Conexión a la base de datos - RUTA CORRECTA
+// Conexión a la base de datos 
 include "conexion.php";
 
 // Verificar si la conexión se estableció correctamente

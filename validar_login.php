@@ -2,8 +2,6 @@
 session_start();
 
 
-// Prueba
-
 
 $correo = isset($_POST['correo']) ? trim($_POST['correo']) : '';
 $contrasena = isset($_POST['contrasena']) ? $_POST['contrasena'] : '';

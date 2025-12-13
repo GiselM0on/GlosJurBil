@@ -1,0 +1,23 @@
+# 1. Archivos de Configuración y Credenciales 
+# Archivo de conexión a la Base de Datos con credenciales:
+conexion.php 
+config.php
+*.env
+
+# 2. Archivos de Entorno de Desarrollo (XAMPP/Sistemas)
+# Archivos generados por el sistema operativo y el editor.
+.DS_Store
+Thumbs.db
+.vscode/
+*.bak
+*~
+
+# 3. Archivos de Caché, Sesión y Temporales
+/cache/
+/logs/
+/temp/
+/sessions/
+
+# 4. Dependencias de PHP 
+/vendor/
+composer.lock

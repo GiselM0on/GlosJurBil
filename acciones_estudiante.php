@@ -35,7 +35,7 @@ if (empty($palabra) || empty($definicion)) {
     exit();
 }
 
-// Validar longitud
+// Validar longitud de la palabra
 if (strlen($palabra) > 150) {
     $_SESSION['error'] = "La palabra no puede tener más de 150 caracteres.";
     header("Location: estudiante_terminos.php");

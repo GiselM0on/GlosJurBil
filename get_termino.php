@@ -1,6 +1,6 @@
 <?php
 // get_termino.php
-session_start(); // Añadir session_start() si necesitas verificar sesión
+session_start(); 
 
 // Configurar cabeceras para JSON y UTF-8
 header('Content-Type: application/json; charset=UTF-8');

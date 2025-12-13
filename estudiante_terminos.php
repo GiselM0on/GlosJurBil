@@ -10,7 +10,6 @@ if (!isset($_SESSION['id_usuario']) || $_SESSION['rol'] !== 'estudiante') {
 }*/
 
 
-
 // Para insertar un término relacionado con este usuario:
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['termino'])) {
     include("conexion.php");

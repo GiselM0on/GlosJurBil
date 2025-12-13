@@ -45,7 +45,7 @@ if(isset($_POST["btn_buscar"]) && $_POST["btn_buscar"] == "Buscar"){
     }
 }
 
-// Procesar formulario PRINCIPAL (Agregar, Modificar, Eliminar)
+// Procesar formulario PRINCIPAL de CRUD
 if(isset($_POST["btn_validaciones"])){
     $btn = $_POST["btn_validaciones"];
     
@@ -84,7 +84,7 @@ if(isset($_POST["btn_validaciones"])){
                  fecha_validacion=NOW(),
                  id_Termino='$id_termino',
                  id_Usuario='$id_usuario'
-                 WHERE id_validacion='$id_validacion'"; // <-- CLÁUSULA WHERE CORREGIDA: Usar id_validacion
+                 WHERE id_validacion='$id_validacion'"; 
         
         $cs = mysqli_query($cn, $sql);
         if($cs) {
@@ -101,7 +101,7 @@ if(isset($_POST["btn_validaciones"])){
     if($btn == "Eliminar" && !empty($_POST["txtid_validacion"])){
         $id_validacion = $_POST["txtid_validacion"]; // <-- Usar el ID del formulario para identificar
         
-        $sql = "DELETE FROM validacion WHERE id_validacion='$id_validacion'"; // <-- CLÁUSULA WHERE CORREGIDA: Usar id_validacion
+        $sql = "DELETE FROM validacion WHERE id_validacion='$id_validacion'"; 
         $cs = mysqli_query($cn, $sql);
         if($cs) {
             echo "<script>alert('Validación eliminada correctamente');</script>";

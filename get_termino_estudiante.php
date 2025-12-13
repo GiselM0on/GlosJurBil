@@ -1,5 +1,6 @@
 <?php
 // get_termino_estudiante.php
+
 include "conexion.php";
 session_start();
 
