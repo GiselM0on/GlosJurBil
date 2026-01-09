@@ -35,7 +35,7 @@ Frontend: HTML5, CSS3, Bootstrap 5.3.3
 
 Reportes: dompdf
 
-##Roles y Credenciales de Prueba
+## Roles y Credenciales de Prueba
 El sistema implementa un control de acceso basado en roles
 | Nombre | Correo | Contraseña | Rol |
 | :--- | :--- | :--- | :--- |
@@ -45,24 +45,24 @@ El sistema implementa un control de acceso basado en roles
 
 ## Instalación y Configuración
 
-Clonar el repositorio: Copia el proyecto dentro de tu carpeta htdocs de XAMPP:
+* Clonar el repositorio: Copia el proyecto dentro de tu carpeta htdocs de XAMPP:
 
-git clone https://github.com/GiselM0on/GlosJurBil.git
-Configurar la Base de Datos:
+* git clone https://github.com/GiselM0on/GlosJurBil.git
+* **Configurar la Base de Datos:**
 
-Abre el panel de control de XAMPP e inicia Apache y MySQL.
+* 1. Abre el panel de control de XAMPP e inicia Apache y MySQL.
 
-Ve a http://localhost/phpmyadmin/.
+* 2. Ve a http://localhost/phpmyadmin/.
 
-Crea una nueva base de datos llamada gls_jur_bil.
+* 3. Crea una nueva base de datos llamada gls_jur_bil.
 
-Haz clic en la pestaña Importar y selecciona el archivo que está en: /db/gls_jur_bil.sql.
+* 4. Haz clic en la pestaña Importar y selecciona el archivo que está en: /db/gls_jur_bil.sql.
 
-Configurar la conexión en PHP:
+* **Configurar la conexión en PHP:**
 
-Localiza tu archivo de conexión ( conexion.php).
+* Localiza tu archivo de conexión ( conexion.php).
 
-Asegúrate de que los parámetros coincidan con tu XAMPP:
+* **Asegúrate de que los parámetros coincidan con tu XAMPP:**
 
 PHP
 
