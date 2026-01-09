@@ -24,7 +24,7 @@ El sistema implementa un control de acceso basado en roles para garantizar la in
 * **Generador de Reportes Personalizados:** Módulo de exportación que permite al usuario seleccionar términos específicos y generar documentos descargables (PDF) para estudio fuera de línea.
 * **Auditoría de Cambios:** Registro de historial para que los administradores supervisen las validaciones realizadas por los docentes.
 
- ##Tecnologías Utilizadas
+ ## Tecnologías Utilizadas
 Servidor Local: XAMPP v3.2.2
 
 Backend: PHP 5.6.32
@@ -37,11 +37,11 @@ Reportes: dompdf
 
 ##Roles y Credenciales de Prueba
 El sistema implementa un control de acceso basado en roles
-
-Nombre, 	Correo,	Contraseña, 	Rol
-admin,	admin@gmail.com,	ad123,	Administrador
-docente,	docente@gmail.com,	doc123,	Docente
-estudiante,	estudiante@gmail.com,	est123,	Estudiante
+| Nombre | Correo | Contraseña | Rol |
+| :--- | :--- | :--- | :--- |
+| **admin** | admin@gmail.com | ad123 | Administrador |
+| **docente** | docente@gmail.com | doc123 | Docente |
+| **estudiante** | estudiante@gmail.com | est123 | Estudiante |
 
 ## Instalación y Configuración
 
