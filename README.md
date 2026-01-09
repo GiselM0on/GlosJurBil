@@ -42,7 +42,7 @@ El sistema implementa un control de acceso basado en roles para garantizar la in
 Copia el proyecto dentro de tu carpeta `htdocs` de XAMPP:
 ```bash
 git clone [https://github.com/GiselM0on/GlosJurBil.git](https://github.com/GiselM0on/GlosJurBil.git)
-
+--- 
 ### 2. Configurar la Base de Datos
 Abre el panel de control de XAMPP e inicia Apache y MySQL.
 
@@ -51,7 +51,7 @@ Ve a http://localhost/phpmyadmin/.
 Crea una nueva base de datos llamada gls_jur_bil.
 
 Haz clic en la pestaña Importar y selecciona el archivo localizado en: /db/gls_jur_bil.sql.
-
+---
 ### 3. Configurar la conexión en PHP
 Localiza tu archivo de conexión (conexion.php) y asegúrate de que los parámetros coincidan con tu entorno local:
 
@@ -65,5 +65,7 @@ $database = "gls_jur_bil";
 
 $conexion = mysqli_connect($host, $user, $password, $database);
 ?>
+
+---
 ### 4. Acceso al sistema
 Abre tu navegador y escribe: http://localhost/GlosJurBil
